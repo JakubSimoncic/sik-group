@@ -1,0 +1,19 @@
+{
+  "global": {
+    "phone": "732 520 715",
+    "email": "info@sik-group.cz",
+    "instagram": "https://www.instagram.com/group_sik/",
+    "facebook": "#",
+    "youtube": "https://www.youtube.com/@Group_SIK_Czech"
+  },
+  "home": {
+    "heroTitle": "FILMING WITHOUT LIMITS",
+    "heroSubtitle": "Prémiové FPV záběry a vývoj dronů na míru.",
+    "aboutTitle": "O NÁS",
+    "aboutText": "Jsme tým profesionálních FPV pilotů specializovaných na filmové záběry a vývoj FPV techniky."
+  },
+  "eshop": {
+    "mainTitle": "CHCETE LÉTAT JAKO MY?",
+    "mainSubtitle": "Co postavíme to i prodáme. Ready to fly."
+  }
+}

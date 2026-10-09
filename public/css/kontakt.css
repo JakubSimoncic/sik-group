@@ -1,0 +1,342 @@
+/* ==========================================================================
+   GLOBÁLNÍ NASTAVENÍ STRÁNKY
+   ========================================================================== */
+.subpage-main {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  padding-top: 60px;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+/* ==========================================================================
+   VIZUÁL SEKCE: NÁŠ TÝM (ZÁKLAD / DESKTOP)
+   ========================================================================== */
+.team-rows-container {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  margin-top: 80px;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  position: relative;
+}
+
+.team-row:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.team-img-col {
+  flex: 0 0 450px;
+  height: 500px;
+  position: relative;
+}
+
+.team-member-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.5s ease, transform 0.5s ease;
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to right, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+}
+
+.team-row:nth-child(even) .team-member-img {
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+}
+
+.team-info-col {
+  flex: 1;
+}
+
+.team-role {
+  color: #00f0ff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.member-name {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+  letter-spacing: -1px;
+}
+
+.team-bio {
+  color: #8c8c8c;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0 0 30px 0;
+  max-width: 600px;
+}
+
+.specialization-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 0;
+  width: 100%;
+}
+
+.specialization-tags span {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.03); 
+  color: #e0e0e0;                        
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  padding: 6px 14px; 
+  border-radius: 4px;                    
+  font-size: 0.8rem; 
+  font-weight: 500;
+  text-transform: uppercase;             
+  letter-spacing: 1px;                   
+  transition: all 0.3s ease;
+}
+
+.team-row:hover .specialization-tags span {
+  border-color: rgba(0, 240, 255, 0.25);  
+  background: rgba(0, 240, 255, 0.02);   
+}
+
+.specialization-tags span:hover {
+  border-color: #00f0ff !important;      
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); 
+  transform: translateY(-2px);           
+}
+
+@media (min-width: 1025px) {
+  .team-row:hover .team-member-img {
+    filter: grayscale(0%) brightness(0.8) contrast(100%);
+    transform: scale(1.02);
+  }
+}
+
+/* ==========================================================================
+   VIZUÁL SEKCE: FAQ (OPRAVENÁ ČISTÁ VERZE S ANIMACÍ)
+   ========================================================================== */
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: #0a0a0a;
+  border: 1px solid #141414;
+  margin-bottom: 12px;
+  border-radius: 0;
+  transition: border-color 0.3s ease;
+}
+
+.faq-item.active {
+  border-color: #1f1f1f;
+}
+
+.faq-question {
+  padding: 20px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.faq-question::after {
+  content: '+';
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #00f0ff;
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question::after {
+  transform: translateY(-50%) rotate(45deg);
+  color: #888;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  /* Vyladěná křivka pro hladký filmový rozjezd a dojezd */
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-answer p {
+  padding: 0 25px 20px 25px;
+  margin: 0;
+  color: #aaaaaa;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   VIZUÁL SEKCE: KONTAKTY
+   ========================================================================== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  background: #0a0a0a;
+  border: 1px solid #141414;
+  padding: 40px;
+  border-radius: 0;
+}
+
+.contact-block.line-accent {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .contact-block.line-accent::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: #141414;
+  }
+}
+
+.block-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  color: #ffffff;
+  border-left: 2px solid #00f0ff;
+  padding-left: 10px;
+}
+
+.contact-row {
+  margin-bottom: 20px;
+}
+
+.contact-row:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #555555;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.contact-link {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-text {
+  color: #aaaaaa;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.font-bold {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.contact-grid-sub {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* ==========================================================================
+   JEDNOTNÁ OPTIMALIZACE PRO MOBILY A TABLETY (POD 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .subpage-main {
+    padding-top: 120px;
+  }
+  
+  .section-container {
+    padding: 40px 15px;
+  }
+  
+  .team-rows-container {
+    gap: 60px;
+  }
+  
+  .team-row, .team-row:nth-child(even) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+  }
+  
+  .team-img-col {
+    width: 100%;
+    height: 300px;
+    flex: none;
+  }
+  
+  .team-member-img, .team-row:nth-child(even) .team-member-img {
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+    filter: grayscale(0%) brightness(0.7);
+  }
+  
+  .member-name {
+    font-size: 2.2rem;
+    color: #ffffff !important; 
+  }
+
+  .specialization-tags {
+    gap: 6px;
+    margin-top: 15px;
+    justify-content: flex-start;
+  }
+
+  .specialization-tags span {
+    width: auto !important;
+    padding: 4px 10px !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.5px;
+    border-color: rgba(0, 240, 255, 0.35) !important;
+    background: rgba(0, 240, 255, 0.03) !important;
+    color: #e0e0e0 !important; 
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .specialization-tags span:hover {
+    border-color: rgba(0, 240, 255, 0.35) !important;
+    background: rgba(0, 240, 255, 0.03) !important;
+    color: #e0e0e0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .contact-grid {
+    padding: 25px 15px;
+    gap: 30px;
+  }
+}

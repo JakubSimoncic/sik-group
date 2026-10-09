@@ -1,0 +1,809 @@
+/* ==========================================================================
+   HIGH-TECH E-SHOP WRAPPER (APPLE / DJI STYLE)
+   ========================================================================== */
+.tech-shop-wrapper {
+  padding-top: 180px;
+  padding-bottom: 160px;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.shop-container {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 4%;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   TOP BAR (ZÁHLAVIE)
+   ========================================================================== */
+.tech-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #151515;
+  margin-bottom: 60px;
+}
+
+.tech-main-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+}
+
+.tech-subtitle {
+  font-size: 0.9rem;
+  color: #666666;
+  margin: 0;
+}
+
+.tech-controls {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.tech-btn-filter {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+}
+
+.filter-indicator {
+  width: 6px;
+  height: 6px;
+  background-color: #00D1C7;
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   PREMIUM CUSTOM DROPDOWN
+   ========================================================================== */
+.tech-sort-box {
+  position: relative;
+  user-select: none;
+}
+
+.tech-dropdown-toggle {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  transition: color 0.2s ease;
+}
+
+.tech-dropdown-toggle:hover {
+  color: #00D1C7;
+}
+
+.tech-dropdown-toggle .dropdown-arrow {
+  font-size: 0.65rem;
+  color: #666666;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), color 0.2s ease;
+}
+
+.tech-sort-box.dropdown-open .dropdown-arrow {
+  transform: rotate(180deg);
+  color: #00D1C7;
+}
+
+.tech-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #0a0a0a;
+  border: 1px solid #151515;
+  list-style: none;
+  padding: 6px 0;
+  margin: 10px 0 0 0;
+  width: 200px;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+              visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
+              transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.tech-sort-box.dropdown-open .tech-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.tech-dropdown-menu li {
+  padding: 12px 18px;
+  font-size: 0.8rem;
+  color: #666666;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+
+.tech-dropdown-menu li:hover {
+  color: #ffffff;
+  background: #111111;
+}
+
+.tech-dropdown-menu li.active {
+  color: #00D1C7;
+  background: #111111;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   LAYOUT STRUCT & RESET BUTTONS
+   ========================================================================== */
+.tech-layout {
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+.tech-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 120px;
+}
+
+.tech-sidebar-top {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #151515;
+}
+
+.tech-btn-reset-all,
+.tech-btn-reset-price {
+  background: transparent;
+  border: 1px solid #222222;
+  color: #777777;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.tech-btn-reset-price {
+  margin-top: 8px;
+}
+
+.tech-btn-reset-all:hover,
+.tech-btn-reset-price:hover {
+  border-color: #00D1C7;
+  color: #00D1C7;
+  background-color: rgba(0, 209, 199, 0.05);
+}
+
+.tech-filter-group {
+  margin-bottom: 40px;
+}
+
+.tech-filter-caption {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: 1px;
+  margin: 0 0 20px 0;
+}
+
+.tech-filter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tech-filter-list li {
+  margin-bottom: 14px;
+}
+
+.tech-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: #888888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.tech-checkbox-label:hover {
+  color: #ffffff;
+}
+
+.tech-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.custom-box {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #333333;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tech-checkbox-label input[type="checkbox"]:checked + .custom-box {
+  background-color: #00D1C7;
+  border-color: #00D1C7;
+}
+
+.tech-layout.filters-hidden .tech-sidebar {
+  display: none !important;
+}
+
+/* ==========================================================================
+   DUÁLNÍ CENOVÝ POSUVNÍK (OD - DO)
+   ========================================================================== */
+.tech-price-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.price-display {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #00D1C7;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.range-slider-container {
+  position: relative;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.slider-track {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #222222;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.tech-range-input {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  margin: 0;
+  z-index: 2;
+}
+
+.tech-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #00D1C7;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 10px rgba(0, 209, 199, 0.6);
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tech-range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  background: #ffffff;
+  box-shadow: 0 0 14px rgba(0, 209, 199, 0.9);
+}
+
+.tech-range-input::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: #00D1C7;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 10px rgba(0, 209, 199, 0.6);
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tech-range-input::-moz-range-thumb:hover {
+  transform: scale(1.25);
+  background: #ffffff;
+  box-shadow: 0 0 14px rgba(0, 209, 199, 0.9);
+}
+
+.price-limits {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #555555;
+  font-family: monospace;
+}
+
+/* ==========================================================================
+   PRODUKTOVÉ KARTY
+   ========================================================================== */
+.tech-grid {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 60px 40px;
+}
+
+.tech-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.tech-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #111111;
+  transition: border-color 0.3s ease;
+}
+
+.tech-img-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.tech-card-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tech-card-overlay span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #00D1C7;
+  color: #00D1C7;
+  padding-bottom: 2px;
+  font-weight: 600;
+}
+
+.tech-card:hover .tech-img-wrapper {
+  border-color: #333333;
+}
+
+.tech-card:hover .tech-img-wrapper img {
+  transform: scale(1.03);
+}
+
+.tech-card:hover .tech-card-overlay {
+  opacity: 1;
+}
+
+.tech-card-meta {
+  padding-top: 20px;
+}
+
+.tech-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.tech-spec-tag {
+  font-size: 0.75rem;
+  color: #666666;
+  font-family: monospace;
+}
+
+.tech-card-price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.tech-card-title {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #b3b3b3;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.tech-card:hover .tech-card-title {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   HIGH-TECH MODÁLNÍ OKNO (ČISTÝ & RYCHLÝ STYL BEZ ZBYTOČNÝCH EFEKTOV)
+   ========================================================================== */
+.tech-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.tech-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tech-modal-card {
+  position: relative;
+  background: #050505;
+  border: 1px solid #1a1a1a;
+  border-top: 2px solid #00D1C7;
+  border-radius: 8px;
+  max-width: 920px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 44px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+}
+
+/* Zjednodušené tlačidlo na zatvorenie */
+.tech-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: 1px solid #222222;
+  color: #777777;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
+}
+
+.tech-modal-close:hover {
+  border-color: #00D1C7;
+  color: #00D1C7;
+}
+
+.tech-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 44px;
+  align-items: start;
+}
+
+.tech-modal-media {
+  position: relative;
+  background: #000000;
+  border: 1px solid #141414;
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+/* Obrázok v okne sa po najedení NIBLÍŽI (efekt vypnutý) */
+.tech-modal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tech-modal-img-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 209, 199, 0.3);
+  color: #00D1C7;
+  font-size: 0.7rem;
+  font-family: monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.tech-modal-tag {
+  font-size: 0.75rem;
+  color: #00D1C7;
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tech-modal-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.tech-modal-price {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 22px;
+  letter-spacing: -0.5px;
+}
+
+.tech-modal-price .price-eur {
+  font-size: 0.95rem;
+  color: #00D1C7;
+  font-weight: 600;
+  font-family: monospace;
+  margin-left: 8px;
+}
+
+.tech-modal-desc {
+  font-size: 0.9rem;
+  color: #999999;
+  line-height: 1.7;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+
+.tech-specs-heading {
+  font-size: 0.75rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+
+.tech-specs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.tech-specs-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #141414;
+}
+
+.tech-specs-list li span.spec-name {
+  color: #888888;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tech-specs-list li span.spec-dots {
+  flex: 1;
+  border-bottom: 1px dotted #222222;
+  margin: 0 12px;
+  height: 1px;
+}
+
+.tech-specs-list li span.spec-val {
+  color: #00D1C7;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.tech-modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #00D1C7;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 16px 28px;
+  border-radius: 4px;
+  transition: background 0.2s ease, color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.tech-modal-btn .btn-arrow {
+  color: #00D1C7;
+  transition: transform 0.2s ease;
+}
+
+.tech-modal-btn:hover {
+  background: #00D1C7;
+  color: #000000;
+}
+
+.tech-modal-btn:hover .btn-arrow {
+  color: #000000;
+  transform: translateX(4px);
+}
+
+/* ==========================================================================
+   RESPONZIVITA
+   ========================================================================== */
+@media (max-width: 992px) {
+  .tech-shop-wrapper {
+    padding-top: 130px;
+  }
+
+  .shop-container {
+    padding: 0 24px;
+  }
+
+  .tech-layout {
+    flex-direction: column;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .tech-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    position: relative;
+    top: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .tech-sidebar-top {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .tech-btn-reset-all,
+  .tech-btn-reset-price {
+    width: auto;
+    display: inline-block;
+  }
+
+  .tech-filter-group {
+    margin-bottom: 0;
+  }
+
+  .tech-filter-caption {
+    font-size: 0.75rem;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+  }
+
+  .tech-filter-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tech-filter-list li {
+    margin-bottom: 0;
+  }
+
+  .tech-sidebar .custom-box {
+    display: none !important;
+  }
+
+  .tech-sidebar .tech-checkbox-label {
+    background: #0d0d0d;
+    border: 1px solid #222222;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tech-sidebar .tech-checkbox-label:has(input[type="checkbox"]:checked) {
+    background: #00D1C7;
+    border-color: #00D1C7;
+    color: #000000;
+    font-weight: 600;
+  }
+
+  .tech-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .tech-controls {
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 20px;
+    width: 100%;
+  }
+
+  .tech-modal-card {
+    padding: 28px 20px;
+  }
+
+  .tech-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+}

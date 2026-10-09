@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIK-GROUP | drony neco neco</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <header>
+        <div id="nav-wrapper">
+            <nav id="main-nav" class="global-container">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
+                    </a>
+                </div>
+                
+                <div class="menu-toggle" id="mobile-menu">
+                    <span class="bar b1"></span>
+                    <span class="bar b2"></span>
+                </div>
+            </nav>
+
+            <div class="nav-drop-panel" id="nav-panel">
+                <div class="panel-grid">
+                    <div class="panel-main">
+                        <ul class="nav-list">
+                            <li class="active"><a href="index.html">Domů</a></li>
+                            <li><a href="propagace.html">Propagační videa</a></li>
+                            <li><a href="osobni_akce.html">Osobní akce</a></li>
+                            <li><a href="firemni_akce.html">Firemní akce</a></li>
+                            <li><a href="./pages/e-shop.html">E-shop</a></li>
+                            <li><a href="./pages/kontakt.html#tym">Náš tým</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="panel-side">
+                        <div class="side-block">
+                            <span>Email</span>
+                            <a href="mailto:info@sik-group.cz" class="side-email">info@sik-group.cz</a>
+                            <span>Telefon</span>
+                            <a href="tel:732520715" class="side-phone">732 520 715</a>
+                        </div>
+                        <div class="side-block">
+                            <span>Sociální sítě</span>
+                            <div class="side-socials">
+                                <a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a>
+                                <a href="#" target="_blank">Facebook</a>
+                                <a href="https://youtube.com/@group-sik?si=j6Kayqpmj36YLkRi" target="_blank">YouTube</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-dim-overlay" id="nav-overlay"></div>
+    </header>
+
+    <main class="index-main">
+        <section class="hero-fullscreen">
+            <div class="hero-video-bg">
+                <video id="heroVideo" autoplay muted loop playsinline poster="img/hero-poster.jpg">
+                    <source src="/video/drone-hero.mp4" type="video/mp4">
+                </video>
+                <div class="hero-video-overlay"></div>
+            </div>
+
+            <div class="hero-content-centered global-container">
+                <div class="hero-main-text">
+                    <h1 class="hero-title">Jeden tým pro celý záběr</h1>
+                    <div class="hero-cta-group">
+                        <a href="#ukazka" class="btn-drone-minimal">Drony</a>
+                        <a href="./pages/kontakt.html#kontakt" class="btn-drone-minimal outline">FPV</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-bottom-fade"></div>
+        </section>
+
+        <section id="ukazka" class="divisions-section global-container">
+            <div class="section-meta">
+                <h2>Naše specializace</h2>
+            </div>
+
+            <div class="cinematic-showcase-list">
+                <div class="showcase-row">
+                    <div class="showcase-media">
+                        <a href="propagace.html" class="media-container">
+                            <img src="img/drone.png" alt="Propagační videa" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
+                            <div class="media-overlay"></div>
+                            <span class="media-badge">nazev 123</span>
+                        </a>
+                    </div>
+                    <div class="showcase-text">
+                        <div class="huge-bg-number">01</div>
+                        <h3 class="row-title"><a href="propagace.html">Propagační videa</a></h3>
+                        <p class="row-description">Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální 
+                            sítě, video na web nebo rovnou kompletní obsah pro prezentaci vašeho projektu?
+                            Postaráme se o natáčení, střih i finální podobu videa.
+                        </p>
+                        <a href="propagace.html" class="btn-drone-action">
+                            <span>Prozkoumat divizi</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="showcase-row row-reverse">
+                    <div class="showcase-media">
+                        <a href="firemni_akce.html" class="media-container">
+                            <img src="img/drone.png" alt="Firemní akce" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
+                            <div class="media-overlay"></div>
+                            <span class="media-badge">nazev 123</span>
+                        </a>
+                    </div>
+                    <div class="showcase-text">
+                        <div class="huge-bg-number">02</div>
+                        <h3 class="row-title"><a href="firemni_akce.html">Velké eventy</a></h3>
+                        <p class="row-description">Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete.
+                            Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě.
+                            Podle toho, co potřebujete, můžeme dodat jeden hlavní aftermovie, krátké klipy pro sociální sítě nebo celý balíček obsahu.  </p>
+                        <a href="firemni_akce.html" class="btn-drone-action">
+                            <span>Prozkoumat divizi</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="showcase-row">
+                    <div class="showcase-media">
+                        <a href="osobni_akce.html" class="media-container">
+                            <img src="img/drone.png" alt="Osobní akce" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
+                            <div class="media-overlay"></div>
+                            <span class="media-badge">nazev 123</span>
+                        </a>
+                    </div>
+                    <div class="showcase-text">
+                        <div class="huge-bg-number">03</div>
+                        <h3 class="row-title"><a href="osobni_akce.html">Osobní akce</a></h3>
+                        <p class="row-description">Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku?
+                            Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily, 
+                            které během samotné akce často ani nestihnete vnímat.
+                        </p>
+                        <a href="osobni_akce.html" class="btn-drone-action">
+                            <span>Prozkoumat divizi</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="trust-section global-container">
+            <div class="section-meta">
+                <h2>Klienti a Partneři</h2>
+            </div>
+            
+            <div class="trust-layout-premium">
+                <div class="trust-info">
+                    <p>Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?</p>
+                </div>
+                
+                <div class="trust-logos-grid">
+                    <div class="logo-wrapper"><img src="img/logos/audi.png" alt="Audi" loading="lazy" decoding="async" width="120" height="60"></div>
+                    <div class="logo-wrapper"><img src="img/logos/volvo.jpg" alt="Volvo" loading="lazy" decoding="async" width="120" height="60"></div>
+                    <div class="logo-wrapper"><img src="img/logos/porsche.png" alt="Porsche" loading="lazy" decoding="async" width="120" height="60"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section id="booking" class="booking-section global-container">
+            <div class="section-meta">
+                <h2>Sjednat akci</h2>        
+            </div>
+
+            <div class="booking-grid">
+                <div class="calendar-wrapper">
+                    <div class="calendar-header">
+                        <button class="cal-btn" id="prev-month-btn" type="button">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <div class="current-month">KVĚTEN 2026</div> 
+                        <button class="cal-btn" id="next-month-btn" type="button">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </div>
+
+                    <div class="calendar-days">
+                        <span>PO</span><span>ÚT</span><span>ST</span><span>ČT</span><span>PÁ</span><span>SO</span><span>NE</span>
+                    </div>
+
+                    <div class="calendar-grid"></div>
+                </div>
+
+                <div class="booking-details">
+                    <h3>Vyberte čas akce</h3>
+                    <div id="selected-date-presenter" class="date-unselected">Žádné datum nebylo vybráno</div>
+                    
+                    <form class="booking-form" id="rezervacni-formular">                        
+                        <select name="booking-time-from" id="real-time-select-from" style="display:none;">
+                            <option value="" disabled selected>Čas od...</option>
+                            <option value="8:00">8:00</option>
+                            <option value="8:30">8:30</option>
+                            <option value="9:00">9:00</option>
+                            <option value="9:30">9:30</option>
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:30">13:30</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="15:30">15:30</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                        </select>                        
+                        
+                        <select name="booking-time-to" id="real-time-select-to" style="display:none;">
+                            <option value="" disabled selected>Čas do...</option>
+                            <option value="9:00">9:00</option>
+                            <option value="9:30">9:30</option>
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:30">13:30</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="15:30">15:30</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                            <option value="21:00">21:00</option>
+                            <option value="21:30">21:30</option>
+                            <option value="22:00">22:00</option>
+                            <option value="22:30">22:30</option>
+                            <option value="23:00">23:00</option>
+                        </select>
+
+                        <div class="time-range-row">
+                            <div class="custom-select-wrapper" id="custom-time-select-from">
+                                <div class="custom-select-trigger">Čas od...</div>
+                                <ul class="custom-options-list">
+                                    <li data-value="8:00">8:00</li>
+                                    <li data-value="8:30">8:30</li>
+                                    <li data-value="9:00">9:00</li>
+                                    <li data-value="9:30">9:30</li>
+                                    <li data-value="10:00">10:00</li>
+                                    <li data-value="10:30">10:30</li>
+                                    <li data-value="11:00">11:00</li>
+                                    <li data-value="11:30">11:30</li>
+                                    <li data-value="12:00">12:00</li>
+                                    <li data-value="12:30">12:30</li>
+                                    <li data-value="13:00">13:00</li>
+                                    <li data-value="13:30">13:30</li>
+                                    <li data-value="14:00">14:00</li>
+                                    <li data-value="14:30">14:30</li>
+                                    <li data-value="15:00">15:00</li>
+                                    <li data-value="15:30">15:30</li>
+                                    <li data-value="16:00">16:00</li>
+                                    <li data-value="16:30">16:30</li>
+                                    <li data-value="17:00">17:00</li>
+                                    <li data-value="17:30">17:30</li>
+                                    <li data-value="18:00">18:00</li>
+                                    <li data-value="18:30">18:30</li>
+                                    <li data-value="19:00">19:00</li>
+                                    <li data-value="19:30">19:30</li>
+                                    <li data-value="20:00">20:00</li>
+                                </ul>
+                            </div>
+
+                            <div class="custom-select-wrapper" id="custom-time-select-to">
+                                <div class="custom-select-trigger">Čas do...</div>
+                                <ul class="custom-options-list">
+                                    <li data-value="8:30">8:30</li>
+                                    <li data-value="9:00">9:00</li>
+                                    <li data-value="9:30">9:30</li>
+                                    <li data-value="10:00">10:00</li>
+                                    <li data-value="10:30">10:30</li>
+                                    <li data-value="11:00">11:00</li>
+                                    <li data-value="11:30">11:30</li>
+                                    <li data-value="12:00">12:00</li>
+                                    <li data-value="12:30">12:30</li>
+                                    <li data-value="13:00">13:00</li>
+                                    <li data-value="13:30">13:30</li>
+                                    <li data-value="14:00">14:00</li>
+                                    <li data-value="14:30">14:30</li>
+                                    <li data-value="15:00">15:00</li>
+                                    <li data-value="15:30">15:30</li>
+                                    <li data-value="16:00">16:00</li>
+                                    <li data-value="16:30">16:30</li>
+                                    <li data-value="17:00">17:00</li>
+                                    <li data-value="17:30">17:30</li>
+                                    <li data-value="18:00">18:00</li>
+                                    <li data-value="18:30">18:30</li>
+                                    <li data-value="19:00">19:00</li>
+                                    <li data-value="19:30">19:30</li>
+                                    <li data-value="20:00">20:00</li>
+                                    <li data-value="20:30">20:30</li>
+                                    <li data-value="21:00">21:00</li>
+                                    <li data-value="21:30">21:30</li>
+                                    <li data-value="22:00">22:00</li>
+                                    <li data-value="22:30">22:30</li>
+                                    <li data-value="23:00">23:00</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <input type="text" id="form-jmeno" placeholder="Jméno / název společnosti" required>
+                        <input type="email" id="form-email" placeholder="Email" required>
+                        <input type="tel" id="form-telefon" placeholder="Telefonní číslo">
+                        <textarea id="form-projekt" placeholder="Popis vašeho projektu"></textarea>
+                        <button type="submit" class="btn-confirm">Potvrdit termín</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="global-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>sik-group.cz</h3>
+                    <p>Filming without limits</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Zaměření</h4>
+                    <ul>
+                        <li><a href="firemni_akce.html">Velké Eventy</a></li>
+                        <li><a href="propagace.html">Propagační videa</a></li>
+                        <li><a href="osobni_akce.html">Osobní akce</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>O Nás</h4>
+                    <ul>
+                        <li><a href="/pages/kontakt.html#kontakt">Kontakt</a></li>
+                        <li><a href="/pages/kontakt.html#tym">Náš tým</a></li>
+                        <li><a href="pages/gdpr.html">GDPR</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Sociální sítě</h4>
+                    <ul>
+                        <li><a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a></li>
+                        <li><a href="#" target="_blank">Facebook</a></li>
+                        <li><a href="https://www.youtube.com/@Group_SIK_Czech" target="_blank">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SIK-GROUP. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./js/script.js" defer></script>
+</body>
+</html>

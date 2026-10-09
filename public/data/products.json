@@ -1,0 +1,90 @@
+[
+  {
+    "id": "1",
+    "title": "SpeedIK",
+    "category": "cinematic",
+    "categoryLabel": "FPV Cinematic",
+    "tag": "Cinematic FPV",
+    "price": 25000,
+    "eurPrice": 1000,
+    "stock": "skladem",
+    "image": "../img/drone.png",
+    "description": "Špičkový 3.5\" cinewhoop určený pro natáčení v blízkosti lidí a v interiérech. Maximální stabilita obrazu, odhlučněný systém vrtulí a plná kompatibilita s GoPro 12.",
+    "specs": {
+      "Rám": "Carbon 3.5 inch",
+      "Video vysílač": "DJI O3 Air Unit",
+      "Motor": "2004 3000KV",
+      "Baterie": "6S LiPo 1100mAh"
+    }
+  },
+  {
+    "id": "2",
+    "title": "Paladin",
+    "category": "longrange",
+    "categoryLabel": "Longrange",
+    "tag": "Longrange Spec",
+    "price": 25000,
+    "eurPrice": 1000,
+    "stock": "skladem",
+    "image": "../img/drone.png",
+    "description": "Sedmipalcový longrange speciál navržený pro extrémní dolet a čas ve vzduchu až 25 minut. Vybaven GPS záchranným systémem.",
+    "specs": {
+      "Rám": "7 inch Longrange Carbon",
+      "GPS": "Matek M10",
+      "Video vysílač": "DJI O3 Air Unit",
+      "Doba letu": "až 25 minut"
+    }
+  },
+  {
+    "id": "3",
+    "title": "CinematIK",
+    "category": "freestyle",
+    "categoryLabel": "Freestyle",
+    "tag": "Freestyle 5\"",
+    "price": 20000,
+    "eurPrice": 850,
+    "stock": "skladem",
+    "image": "../img/drone.png",
+    "description": "Agresivní 5\" freestyle stroj schopný odolat tvrdým nárazům. Ideální pro akrobatické kousky a rychlé průlety.",
+    "specs": {
+      "Rám": "5 inch Heavy Duty",
+      "ESC": "60A 4in1",
+      "Baterie": "6S 1300mAh",
+      "Hmotnost": "420g"
+    }
+  },
+  {
+    "id": "4",
+    "title": "RejSIK",
+    "category": "freestyle",
+    "categoryLabel": "Freestyle",
+    "tag": "Ultra Light",
+    "price": 15000,
+    "eurPrice": 650,
+    "stock": "skladem",
+    "image": "../img/drone.png",
+    "description": "Lehký a obratný závodní dron laděný pro maximální akceleraci a ostré zatáčky.",
+    "specs": {
+      "Rám": "Lightweight Race Carbon",
+      "Motory": "2207 1950KV",
+      "Baterie": "6S 1000mAh"
+    }
+  },
+  {
+    "id": "5",
+    "title": "BIG-SIK",
+    "category": "freestyle",
+    "categoryLabel": "Freestyle",
+    "tag": "Heavy Lifter",
+    "price": 30000,
+    "eurPrice": 1300,
+    "stock": "skladem",
+    "image": "../img/drone.png",
+    "description": "Masivní dron určený k nošení plnohodnotných filmových kamer jako RED Komodo nebo Blackmagic.",
+    "specs": {
+      "Rám": "X8 Heavy Lift 10\"",
+      "Payload": "až 3 kg",
+      "Baterie": "2x 6S 5000mAh"
+    }
+  }
+]

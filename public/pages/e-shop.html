@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SIK-GROUP | E-shop</title>
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+        
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../css/e-shop.css">
+    </head>
+    <body>
+        <header>
+            <div id="nav-wrapper">
+                <nav id="main-nav" class="global-container">
+                    <div class="logo">
+                        <a href="../index.html">
+                            <img src="../img/logo.svg" alt="SIK-GROUP">
+                        </a>
+                    </div>
+                    
+                    <div class="menu-toggle" id="mobile-menu">
+                        <span class="bar b1"></span>
+                        <span class="bar b2"></span>
+                    </div>
+                </nav>
+
+                <div class="nav-drop-panel" id="nav-panel">
+                    <div class="panel-grid">
+                        <div class="panel-main">
+                            <ul class="nav-list">
+                                <li><a href="../index.html">Domů</a></li>
+                                <li><a href="propagace.html">Propagační videa</a></li>
+                                <li><a href="osobni_akce.html">Osobní akce</a></li>
+                                <li><a href="firemni_akce.html">Firemní akce</a></li>
+                                <li class="active"><a href="e-shop.html">E-shop</a></li>
+                                <li><a href="kontakt.html#tym">Náš tým</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="panel-side">
+                            <div class="side-block">
+                                <span>Email</span>
+                                <a href="mailto:info@sik-group.cz" class="side-email">info@sik-group.cz</a>
+                                <span>Telefon</span>
+                                <a href="tel:732520715" class="side-phone">732 520 715</a>
+                            </div>
+                            <div class="side-block">
+                                <span>Sociální sítě</span>
+                                <div class="side-socials">
+                                    <a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a>
+                                    <a href="#" target="_blank">Facebook</a>
+                                    <a href="#" target="_blank">YouTube</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-dim-overlay" id="nav-overlay"></div>
+        </header>
+
+<main class="tech-shop-wrapper">
+    <div class="shop-container">
+        
+        <div class="tech-top-bar">
+            <div class="tech-title-block">
+                <h1 class="tech-main-title">Chcete létat jako my?</h1>
+                <p class="tech-subtitle" id="product-count">Co postavíme to i prodáme. Ready to fly.</p>
+            </div>
+            
+            <div class="tech-controls">
+                <button class="tech-btn-filter" id="toggle-filter-btn">
+                    <span class="btn-text">Skrýt filtry</span>
+                    <span class="filter-indicator"></span>
+                </button>
+                <div class="tech-sort-box" id="tech-custom-dropdown">
+                    <div class="tech-dropdown-toggle">
+                        <span class="current-sort">Doporučené</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </div>
+                    <ul class="tech-dropdown-menu">
+                        <li data-value="recommended" class="active">Doporučené</li>
+                        <li data-value="price-asc">NEJNIŽŠÍ > NEJVYŠŠÍ</li>
+                        <li data-value="price-desc">NEJVYŠŠÍ > NEJNIŽŠÍ</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-layout" id="shop-layout-container">
+            
+            <aside class="tech-sidebar">
+                
+                <div class="tech-sidebar-top">
+                    <button type="button" class="tech-btn-reset-all" id="reset-all-filters-btn">✕ Resetovat všechny filtry</button>
+                </div>
+
+                <div class="tech-filter-group">
+                    <h4 class="tech-filter-caption">Kategorie //</h4>
+                    <ul class="tech-filter-list">
+                        <li>
+                            <label class="tech-checkbox-label">
+                                <input type="checkbox" class="category-filter" value="cinematic">
+                                <span class="custom-box"></span> FPV Cinematic
+                            </label>
+                        </li>
+                        <li>
+                            <label class="tech-checkbox-label">
+                                <input type="checkbox" class="category-filter" value="longrange">
+                                <span class="custom-box"></span> Longrange
+                            </label>
+                        </li>
+                        <li>
+                            <label class="tech-checkbox-label">
+                                <input type="checkbox" class="category-filter" value="freestyle">
+                                <span class="custom-box"></span> Freestyle
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tech-filter-group">
+                    <h4 class="tech-filter-caption">Cenové rozpětí</h4>
+                    <div class="tech-price-box">
+                        <div class="price-display">
+                            Od <span id="price-min-value">0</span> do <span id="price-max-value">0</span> Kč
+                        </div>
+                        <div class="range-slider-container">
+                            <div class="slider-track" id="slider-track"></div>
+                            <input type="range" id="price-min-range" class="tech-range-input" step="500">
+                            <input type="range" id="price-max-range" class="tech-range-input" step="500">
+                        </div>
+                        <div class="price-limits">
+                            <span id="price-min-label">0 Kč</span>
+                            <span id="price-max-label">0 Kč</span>
+                        </div>
+                        <button type="button" class="tech-btn-reset-price" id="reset-price-btn">✕ Resetovat cenu</button>
+                    </div>
+                </div>
+
+                <div class="tech-filter-group">
+                    <h4 class="tech-filter-caption">Dostupnost //</h4>
+                    <ul class="tech-filter-list">
+                        <li>
+                            <label class="tech-checkbox-label">
+                                <input type="checkbox" class="stock-filter" value="skladem">
+                                <span class="custom-box"></span> Komponenty skladem
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="tech-grid" id="product-grid"></div>
+
+        </div>
+    </div>
+</main>
+
+<!-- HIGH-TECH MODÁLNÍ OKNO DETAILU PRODUKTU -->
+<div class="tech-modal-overlay" id="product-modal">
+    <div class="tech-modal-card">
+        <button type="button" class="tech-modal-close" id="modal-close-btn" aria-label="Zavřít detail">✕</button>
+        <div class="tech-modal-grid">
+            <div class="tech-modal-media">
+                <img id="modal-img" src="../img/drone.png" alt="Detail dronu">
+                <div class="tech-modal-img-badge" id="modal-category-badge">FPV Cinematic</div>
+            </div>
+            <div class="tech-modal-content">
+                <div class="tech-modal-header">
+                    <span class="tech-modal-tag" id="modal-category">FPV CINEMATIC //</span>
+                    <h2 class="tech-modal-title" id="modal-title">SpeedIK</h2>
+                    <div class="tech-modal-price" id="modal-price">25 000 Kč <span class="price-eur">/ 1000 EUR</span></div>
+                </div>
+                
+                <p class="tech-modal-desc" id="modal-description">
+                    Popis dronu...
+                </p>
+
+                <div class="tech-modal-specs-block">
+                    <h4 class="tech-specs-heading">Technické specifikace //</h4>
+                    <ul class="tech-specs-list" id="modal-specs"></ul>
+                </div>
+
+                <div class="tech-modal-actions">
+                    <a href="kontakt.html" class="tech-modal-btn">
+                        <span>Nezávazně poptat stavbu</span>
+                        <span class="btn-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="main-footer">
+    <div class="global-container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>sik-group.cz</h3>
+                <p>Filming without limits</p>
+            </div>
+            <div class="footer-column">
+                <h4>Zaměření</h4>
+                <ul>
+                    <li><a href="firemni_akce.html">Velké Eventy</a></li>
+                    <li><a href="propagace.html">Propagační videa</a></li>
+                    <li><a href="osobni_akce.html">Osobní akce</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>O Nás</h4>
+                <ul>
+                    <li><a href="kontakt.html#kontakt">Kontakt</a></li>
+                    <li><a href="kontakt.html#tym">Náš tým</a></li>
+                    <li><a href="gdpr.html">GDPR</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Sociální sítě</h4>
+                <ul>
+                    <li><a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a></li>
+                    <li><a href="#" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.youtube.com/@Group_SIK_Czech" target="_blank">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SIK-GROUP. Všechna práva vyhrazena.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/script.js"></script>
+<script src="../js/e-shop.js"></script>
+
+</body>
+</html>

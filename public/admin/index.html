@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIK-GROUP | High-Tech CMS Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --card-bg: #070707;
+            --card-border: #181818;
+            --accent-cyan: #00D1C7;
+            --text-main: #ffffff;
+            --text-muted: #777777;
+            --input-bg: #0f0f0f;
+            --input-border: #222222;
+            --danger-red: #ff4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .admin-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 30px;
+        }
+
+        .brand-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .brand-title span { color: var(--accent-cyan); }
+
+        .settings-toggle-btn {
+            background: transparent;
+            border: 1px solid var(--input-border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .settings-toggle-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        /* CONFIG PANEL */
+        .config-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .config-panel.open { display: block; }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        input[type="text"], input[type="number"], input[type="password"], select, textarea {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        /* TABY */
+        .nav-tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-cyan);
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+
+        .tab-section { display: none; }
+        .tab-section.active { display: block; }
+
+        /* BUTTONS */
+        .btn-primary {
+            background: var(--accent-cyan);
+            color: #000000;
+            border: none;
+            padding: 14px 28px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .btn-delete {
+            background: rgba(255, 68, 68, 0.08);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            color: var(--danger-red);
+            padding: 8px 14px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger-red);
+            color: #ffffff;
+        }
+
+        /* SEZNAM PRODUKTŮ KAŽDÝ ŘÁDEK */
+        .products-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .product-item-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 16px 20px;
+            border-radius: 6px;
+            gap: 20px;
+        }
+
+        .product-item-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .product-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: #000;
+            border: 1px solid var(--card-border);
+        }
+
+        .product-details h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .product-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .spec-item-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .img-preview-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .img-preview-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--card-border);
+        }
+
+        /* TERMINÁL LOGS */
+        .terminal-log {
+            background: #040404;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 18px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 40px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .log-entry { margin-bottom: 6px; }
+        .log-entry.success { color: var(--accent-cyan); }
+        .log-entry.error { color: var(--danger-red); }
+    </style>
+</head>
+<body>
+
+<div class="admin-wrapper">
+    
+    <div class="header-bar">
+        <div class="brand-title">SIK-GROUP <span>// CMS ADMIN</span></div>
+        <button class="settings-toggle-btn" id="toggle-settings-btn">⚙ GitHub API Nastavení</button>
+    </div>
+
+    <!-- PANEL NASTAVENÍ GITHUBU -->
+    <div class="config-panel" id="config-panel">
+        <h3 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--accent-cyan);">Konfigurace GitHub Repozitáře</h3>
+        <div class="form-grid-3">
+            <div class="field-group">
+                <label>Vlastník (Owner)</label>
+                <input type="text" id="gh-owner" placeholder="např. sik-group">
+            </div>
+            <div class="field-group">
+                <label>Repozitář (Repo)</label>
+                <input type="text" id="gh-repo" placeholder="např. web">
+            </div>
+            <div class="field-group">
+                <label>Větev (Branch)</label>
+                <input type="text" id="gh-branch" value="main">
+            </div>
+        </div>
+        <div class="field-group">
+            <label>Personal Access Token (PAT)</label>
+            <input type="password" id="gh-token" placeholder="github_pat_...">
+        </div>
+        <button class="btn-secondary" id="save-config-btn">Uložit Konfiguraci</button>
+    </div>
+
+    <!-- TABY -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('tab-products')">🛒 E-shop Produkty</button>
+        <button class="tab-btn" onclick="openTab('tab-content')">📄 Texty & Obsah Webu</button>
+    </div>
+
+    <!-- ZÁLOŽKA 1: PRODUKTY -->
+    <div class="tab-section active" id="tab-products">
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase;">Aktivní drony v e-shopu</h3>
+        <div class="products-list-container" id="products-list"></div>
+
+        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
+
+        <!-- FORMULÁŘ DROMŮ -->
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
+            <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="product-form-title">Přidat nový dron</h3>
+            <form id="product-form">
+                <input type="hidden" id="edit-prod-id">
+                
+                <div class="form-grid-2">
+                    <div class="field-group">
+                        <label>Název dronu</label>
+                        <input type="text" id="prod-title" required placeholder="SpeedIK v2">
+                    </div>
+                    <div class="field-group">
+                        <label>Cena (Kč)</label>
+                        <input type="number" id="prod-price" required placeholder="25000">
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="field-group">
+                        <label>Kategorie</label>
+                        <select id="prod-category">
+                            <option value="cinematic">FPV Cinematic</option>
+                            <option value="longrange">Longrange</option>
+                            <option value="freestyle">Freestyle</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Tag / Specifikace</label>
+                        <input type="text" id="prod-tag" placeholder="Cinematic 3.5&quot;">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>Popis dronu</label>
+                    <textarea id="prod-desc" rows="4" placeholder="Detailní popis vlastností, určení a letových schopností dronu..."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>Fotka dronu</label>
+                    <input type="file" id="prod-img-file" accept="image/*">
+                    <div class="img-preview-box" id="current-img-preview-box" style="display: none;">
+                        <img id="current-img-preview" src="" alt="Aktuální fotka">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);" id="current-img-path-text"></span>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>Technické parametry (Klíč / Hodnota)</label>
+                    <div id="specs-builder"></div>
+                    <button type="button" class="btn-secondary" id="add-spec-btn" style="width: max-content; margin-top: 8px;">+ Přidat parametr</button>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit & Commitnout na GitHub</button>
+                    <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display: none;">Zrušit úpravy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ZÁLOŽKA 2: TEXTY WEBU -->
+    <div class="tab-section" id="tab-content">
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
+            <h3 style="margin-bottom: 24px; font-size: 1.1rem; text-transform: uppercase;">Úprava globálních textů na webu</h3>
+            <form id="content-form">
+                
+                <h4 style="color: var(--accent-cyan); font-size: 0.85rem; margin-bottom: 15px; text-transform: uppercase;">Globální kontakty //</h4>
+                <div class="form-grid-2">
+                    <div class="field-group">
+                        <label>Telefon</label>
+                        <input type="text" id="site-phone">
+                    </div>
+                    <div class="field-group">
+                        <label>Email</label>
+                        <input type="text" id="site-email">
+                    </div>
+                </div>
+
+                <h4 style="color: var(--accent-cyan); font-size: 0.85rem; margin-top: 25px; margin-bottom: 15px; text-transform: uppercase;">E-Shop Záhlaví //</h4>
+                <div class="field-group">
+                    <label>Hlavní nadpis</label>
+                    <input type="text" id="site-eshop-title">
+                </div>
+                <div class="field-group">
+                    <label>Podtitulek</label>
+                    <input type="text" id="site-eshop-subtitle">
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 20px;">Uložit texty celého webu</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TERMINÁL PROCESU -->
+    <div class="terminal-log" id="terminal-log">
+        <div class="log-entry">[System] CMS Připraveno. Vložte GitHub Token pro živou synchronizaci.</div>
+    </div>
+
+</div>
+
+<script>
+    // STAV
+    let productsData = [];
+    let siteContentData = {};
+
+    const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
+    const configPanel = document.getElementById('config-panel');
+    const saveConfigBtn = document.getElementById('save-config-btn');
+
+    toggleSettingsBtn.addEventListener('click', () => configPanel.classList.toggle('open'));
+
+    function loadConfig() {
+        document.getElementById('gh-owner').value = localStorage.getItem('sik_gh_owner') || '';
+        document.getElementById('gh-repo').value = localStorage.getItem('sik_gh_repo') || '';
+        document.getElementById('gh-branch').value = localStorage.getItem('sik_gh_branch') || 'main';
+        document.getElementById('gh-token').value = localStorage.getItem('sik_gh_token') || '';
+    }
+
+    saveConfigBtn.addEventListener('click', () => {
+        localStorage.setItem('sik_gh_owner', document.getElementById('gh-owner').value.trim());
+        localStorage.setItem('sik_gh_repo', document.getElementById('gh-repo').value.trim());
+        localStorage.setItem('sik_gh_branch', document.getElementById('gh-branch').value.trim());
+        localStorage.setItem('sik_gh_token', document.getElementById('gh-token').value.trim());
+        log('Konfigurace GitHubu uložena v prohlížeči.', 'success');
+        configPanel.classList.remove('open');
+    });
+
+    function log(msg, type = '') {
+        const terminal = document.getElementById('terminal-log');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        terminal.appendChild(entry);
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function openTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+        
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    async function initData() {
+        try {
+            const prodRes = await fetch('../data/products.json');
+            productsData = await prodRes.json();
+            renderProductsList();
+
+            const contentRes = await fetch('../data/site-content.json');
+            siteContentData = await contentRes.json();
+            populateContentForm();
+        } catch (e) {
+            log('Chyba při načítání lokálních JSON dat: ' + e.message, 'error');
+        }
+    }
+
+    function renderProductsList() {
+        const container = document.getElementById('products-list');
+        container.innerHTML = '';
+
+        if (productsData.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Žádné drony v databázi.</p>';
+            return;
+        }
+
+        productsData.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'product-item-card';
+
+            const imgPath = p.image || '../img/drone.png';
+            const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
+
+            card.innerHTML = `
+                <div class="product-item-info">
+                    <img src="${imgPath}" alt="${p.title}" class="product-thumb">
+                    <div class="product-details">
+                        <h4>${p.title}</h4>
+                        <p>${p.categoryLabel || p.category} // ${formattedPrice} Kč (${p.eurPrice || Math.round(p.price/25)} EUR)</p>
+                    </div>
+                </div>
+                <div class="product-actions">
+                    <button class="btn-secondary" onclick="editProduct('${p.id}')">Upravit</button>
+                    <button class="btn-delete" onclick="deleteProduct('${p.id}')">Smazat</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function populateContentForm() {
+        if (siteContentData.global) {
+            document.getElementById('site-phone').value = siteContentData.global.phone || '';
+            document.getElementById('site-email').value = siteContentData.global.email || '';
+        }
+        if (siteContentData.eshop) {
+            document.getElementById('site-eshop-title').value = siteContentData.eshop.mainTitle || '';
+            document.getElementById('site-eshop-subtitle').value = siteContentData.eshop.mainSubtitle || '';
+        }
+    }
+
+    // PARAMETRY BUILDER
+    const specsContainer = document.getElementById('specs-builder');
+    document.getElementById('add-spec-btn').addEventListener('click', () => addSpecRow());
+
+    function addSpecRow(key = '', val = '') {
+        const row = document.createElement('div');
+        row.className = 'spec-item-row';
+        row.innerHTML = `
+            <input type="text" class="spec-key" placeholder="Parametr (např. Rám)" value="${key}" style="flex: 1;">
+            <input type="text" class="spec-val" placeholder="Hodnota (např. Carbon 3.5 inch)" value="${val}" style="flex: 1;">
+            <button type="button" class="btn-delete" onclick="this.parentElement.remove()">✕</button>
+        `;
+        specsContainer.appendChild(row);
+    }
+
+    function editProduct(id) {
+        const prod = productsData.find(p => p.id === id);
+        if (!prod) return;
+
+        document.getElementById('edit-prod-id').value = prod.id;
+        document.getElementById('prod-title').value = prod.title;
+        document.getElementById('prod-price').value = prod.price;
+        document.getElementById('prod-category').value = prod.category;
+        document.getElementById('prod-tag').value = prod.tag || '';
+        document.getElementById('prod-desc').value = prod.description || '';
+
+        // Zobrazení náhledu fotky
+        const previewBox = document.getElementById('current-img-preview-box');
+        const previewImg = document.getElementById('current-img-preview');
+        const previewPath = document.getElementById('current-img-path-text');
+
+        if (prod.image) {
+            previewImg.src = prod.image;
+            previewPath.textContent = `Aktuální fotka: ${prod.image}`;
+            previewBox.style.display = 'flex';
+        } else {
+            previewBox.style.display = 'none';
+        }
+
+        specsContainer.innerHTML = '';
+        if (prod.specs) {
+            Object.entries(prod.specs).forEach(([k, v]) => addSpecRow(k, v));
+        }
+
+        document.getElementById('product-form-title').textContent = `Upravit dron: ${prod.title}`;
+        document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+
+        window.scrollTo({ top: document.getElementById('product-form').offsetTop - 50, behavior: 'smooth' });
+    }
+
+    function resetProductForm() {
+        document.getElementById('product-form').reset();
+        document.getElementById('edit-prod-id').value = '';
+        document.getElementById('product-form-title').textContent = 'Přidat nový dron';
+        document.getElementById('cancel-edit-btn').style.display = 'none';
+        document.getElementById('current-img-preview-box').style.display = 'none';
+        specsContainer.innerHTML = '';
+    }
+
+    document.getElementById('cancel-edit-btn').addEventListener('click', resetProductForm);
+
+    async function deleteProduct(id) {
+        const prod = productsData.find(p => p.id === id);
+        if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
+
+        productsData = productsData.filter(p => p.id !== id);
+        renderProductsList();
+        await commitFileToGithub('data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
+    }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // GITHUB COMMIT API
+    async function commitFileToGithub(filePath, contentObject, commitMessage) {
+        const owner = localStorage.getItem('sik_gh_owner');
+        const repo = localStorage.getItem('sik_gh_repo');
+        const branch = localStorage.getItem('sik_gh_branch') || 'main';
+        const token = localStorage.getItem('sik_gh_token');
+
+        if (!token || !owner || !repo) {
+            log('Upozornění: Není vyplněn GitHub token. Změny se uložily pouze lokálně v prohlížeči.', 'error');
+            return;
+        }
+
+        try {
+            log(`1/2 Získávám SHA souboru ${filePath}...`);
+            const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            let sha = '';
+            if (getRes.ok) {
+                const fileData = await getRes.json();
+                sha = fileData.sha;
+            }
+
+            log(`2/2 Zapisuji commit na GitHub...`);
+            const jsonText = JSON.stringify(contentObject, null, 2);
+            const base64Content = btoa(unescape(encodeURIComponent(jsonText)));
+
+            const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: commitMessage,
+                    content: base64Content,
+                    sha: sha || undefined,
+                    branch: branch
+                })
+            });
+
+            if (!putRes.ok) throw new Error('Chyba GitHub API odpovědi.');
+            log(`✓ Úspěšně uloženo a zacommitováno na GitHub!`, 'success');
+
+        } catch (err) {
+            log(`Chyba: ${err.message}`, 'error');
+        }
+    }
+
+    // FORMULÁŘ PRODUKTŮ SUBMIT
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const editId = document.getElementById('edit-prod-id').value;
+        const title = document.getElementById('prod-title').value;
+        const price = parseFloat(document.getElementById('prod-price').value);
+        const category = document.getElementById('prod-category').value;
+        const tag = document.getElementById('prod-tag').value;
+        const desc = document.getElementById('prod-desc').value;
+        const imgFile = document.getElementById('prod-img-file').files[0];
+
+        const specs = {};
+        document.querySelectorAll('.spec-item-row').forEach(row => {
+            const k = row.querySelector('.spec-key').value.trim();
+            const v = row.querySelector('.spec-val').value.trim();
+            if (k && v) specs[k] = v;
+        });
+
+        let imagePath = '../img/drone.png';
+
+        if (editId) {
+            const existing = productsData.find(p => p.id === editId);
+            if (existing && existing.image) imagePath = existing.image;
+        }
+
+        // Nahrání nové fotky na GitHub
+        if (imgFile) {
+            const cleanFileName = imgFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+            const fileName = `drone_${Date.now()}_${cleanFileName}`;
+            const base64Img = await fileToBase64(imgFile);
+            
+            const owner = localStorage.getItem('sik_gh_owner');
+            const repo = localStorage.getItem('sik_gh_repo');
+            const token = localStorage.getItem('sik_gh_token');
+            const branch = localStorage.getItem('sik_gh_branch') || 'main';
+
+            if (token) {
+                log(`Nahrávám novou fotku img/${fileName}...`);
+                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/img/${fileName}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: `CMS: Nahrána nová fotka dronu ${fileName}`, content: base64Img, branch: branch })
+                });
+                imagePath = `../img/${fileName}`;
+            }
+        }
+
+        const catLabels = { cinematic: 'FPV Cinematic', longrange: 'Longrange', freestyle: 'Freestyle' };
+
+        if (editId) {
+            const idx = productsData.findIndex(p => p.id === editId);
+            if (idx !== -1) {
+                productsData[idx] = {
+                    ...productsData[idx],
+                    title, price, category, tag, description: desc, specs,
+                    categoryLabel: catLabels[category],
+                    eurPrice: Math.round(price / 25),
+                    image: imagePath
+                };
+            }
+        } else {
+            const newProd = {
+                id: String(Date.now()),
+                title, price, category, tag, description: desc, specs,
+                categoryLabel: catLabels[category],
+                eurPrice: Math.round(price / 25),
+                stock: 'skladem',
+                image: imagePath
+            };
+            productsData.push(newProd);
+        }
+
+        renderProductsList();
+        await commitFileToGithub('data/products.json', productsData, `CMS: Uložen dron ${title}`);
+        resetProductForm();
+    });
+
+    // FORMULÁŘ TEXTŮ SUBMIT
+    document.getElementById('content-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        siteContentData.global = {
+            ...siteContentData.global,
+            phone: document.getElementById('site-phone').value,
+            email: document.getElementById('site-email').value
+        };
+
+        siteContentData.eshop = {
+            ...siteContentData.eshop,
+            mainTitle: document.getElementById('site-eshop-title').value,
+            mainSubtitle: document.getElementById('site-eshop-subtitle').value
+        };
+
+        await commitFileToGithub('data/site-content.json', siteContentData, 'CMS: Aktualizovány texty webu');
+    });
+
+    loadConfig();
+    initData();
+</script>
+
+</body>
+</html>
