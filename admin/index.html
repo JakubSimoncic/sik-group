@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIK-GROUP | CMS</title>
+    <title>SIK-GROUP | CMS Rozcestník</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -213,15 +213,15 @@
             color: #ffffff;
         }
 
-        /* SEZNAM PRODUKTŮ KAŽDÝ ŘÁDEK */
-        .products-list-container {
+        /* KARTY ROZCESTNÍKU */
+        .list-container {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 40px;
         }
 
-        .product-item-card {
+        .item-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -232,35 +232,40 @@
             gap: 20px;
         }
 
-        .product-item-info {
+        .item-info {
             display: flex;
             align-items: center;
             gap: 16px;
         }
 
-        .product-thumb {
+        .item-thumb {
             width: 50px;
             height: 50px;
             border-radius: 4px;
             object-fit: cover;
             background: #000;
             border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+            font-size: 1.2rem;
         }
 
-        .product-details h4 {
+        .item-details h4 {
             font-size: 1rem;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 4px;
         }
 
-        .product-details p {
+        .item-details p {
             font-size: 0.8rem;
             color: var(--text-muted);
             font-family: monospace;
         }
 
-        .product-actions {
+        .item-actions {
             display: flex;
             gap: 10px;
         }
@@ -310,7 +315,7 @@
 <div class="admin-wrapper">
     
     <div class="header-bar">
-        <div class="brand-title">SIK-GROUP <span>// CMS ADMIN</span></div>
+        <div class="brand-title">SIK-GROUP <span>// CMS ROZCESTNÍK</span></div>
         <button class="settings-toggle-btn" id="toggle-settings-btn">⚙ GitHub API Nastavení</button>
     </div>
 
@@ -320,11 +325,11 @@
         <div class="form-grid-3">
             <div class="field-group">
                 <label>Vlastník (Owner)</label>
-                <input type="text" id="gh-owner" placeholder="JakubSimoncic">
+                <input type="text" id="gh-owner" value="JakubSimoncic">
             </div>
             <div class="field-group">
                 <label>Repozitář (Repo)</label>
-                <input type="text" id="gh-repo" placeholder="sik-group">
+                <input type="text" id="gh-repo" value="sik-group">
             </div>
             <div class="field-group">
                 <label>Větev (Branch)</label>
@@ -341,17 +346,16 @@
     <!-- TABY -->
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="openTab('tab-products')">🛒 E-shop Produkty</button>
-        <button class="tab-btn" onclick="openTab('tab-content')">📄 Texty & Obsah Webu</button>
+        <button class="tab-btn" onclick="openTab('tab-content')">📄 Rozcestník Stránek Webu</button>
     </div>
 
     <!-- ZÁLOŽKA 1: PRODUKTY -->
     <div class="tab-section active" id="tab-products">
         <h3 style="margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase;">Aktivní drony v e-shopu</h3>
-        <div class="products-list-container" id="products-list"></div>
+        <div class="list-container" id="products-list"></div>
 
         <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
-        <!-- FORMULÁŘ DRONŮ -->
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
             <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="product-form-title">Přidat nový dron</h3>
             <form id="product-form">
@@ -385,7 +389,7 @@
 
                 <div class="field-group">
                     <label>Popis dronu</label>
-                    <textarea id="prod-desc" rows="4" placeholder="Detailní popis vlastností, určení a letových schopností dronu..."></textarea>
+                    <textarea id="prod-desc" rows="4" placeholder="Detailní popis..."></textarea>
                 </div>
 
                 <div class="field-group">
@@ -411,50 +415,46 @@
         </div>
     </div>
 
-    <!-- ZÁLOŽKA 2: TEXTY WEBU -->
+    <!-- ZÁLOŽKA 2: ROZCESTNÍK STRÁNEK -->
     <div class="tab-section" id="tab-content">
-        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
-            <h3 style="margin-bottom: 24px; font-size: 1.1rem; text-transform: uppercase;">Úprava globálních textů na webu</h3>
-            <form id="content-form">
+        <h3 style="margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase;">Rozcestník stránek webu</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Vyberte stránku ze seznamu pro úpravu jejího obsahu:</p>
+        
+        <div class="list-container" id="pages-list"></div>
+
+        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
+
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;" id="page-form-container">
+            <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="page-form-title">Editor vybrané stránky</h3>
+            <form id="page-form">
+                <input type="hidden" id="edit-page-id">
                 
-                <h4 style="color: var(--accent-cyan); font-size: 0.85rem; margin-bottom: 15px; text-transform: uppercase;">Globální kontakty //</h4>
-                <div class="form-grid-2">
-                    <div class="field-group">
-                        <label>Telefon</label>
-                        <input type="text" id="site-phone">
-                    </div>
-                    <div class="field-group">
-                        <label>Email</label>
-                        <input type="text" id="site-email">
-                    </div>
+                <div class="field-group">
+                    <label>Upravovaná stránka</label>
+                    <input type="text" id="page-title" required readonly style="opacity: 0.7;">
                 </div>
 
-                <h4 style="color: var(--accent-cyan); font-size: 0.85rem; margin-top: 25px; margin-bottom: 15px; text-transform: uppercase;">E-Shop Záhlaví //</h4>
-                <div class="field-group">
-                    <label>Hlavní nadpis</label>
-                    <input type="text" id="site-eshop-title">
-                </div>
-                <div class="field-group">
-                    <label>Podtitulek</label>
-                    <input type="text" id="site-eshop-subtitle">
-                </div>
+                <!-- Dynamicky generovaná pole pro obsah konkrétní stránky -->
+                <div id="page-dynamic-fields"></div>
 
-                <button type="submit" class="btn-primary" style="margin-top: 20px;">Uložit texty celého webu</button>
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button type="submit" class="btn-primary" id="save-page-btn">Uložit & Commitnout na GitHub</button>
+                    <button type="button" class="btn-secondary" id="cancel-page-edit-btn" style="display: none;">Zrušit výběr</button>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- TERMINÁL PROCESU -->
     <div class="terminal-log" id="terminal-log">
-        <div class="log-entry">[System] CMS Připraveno. Vložte GitHub Token pro živou synchronizaci.</div>
+        <div class="log-entry">[System] Rozcestník CMS připraven.</div>
     </div>
 
 </div>
 
 <script>
-    // STAV
     let productsData = [];
-    let siteContentData = {};
+    let pagesData = [];
 
     const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
     const configPanel = document.getElementById('config-panel');
@@ -463,8 +463,8 @@
     toggleSettingsBtn.addEventListener('click', () => configPanel.classList.toggle('open'));
 
     function loadConfig() {
-        document.getElementById('gh-owner').value = localStorage.getItem('sik_gh_owner') || '';
-        document.getElementById('gh-repo').value = localStorage.getItem('sik_gh_repo') || '';
+        document.getElementById('gh-owner').value = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
+        document.getElementById('gh-repo').value = localStorage.getItem('sik_gh_repo') || 'sik-group';
         document.getElementById('gh-branch').value = localStorage.getItem('sik_gh_branch') || 'main';
         document.getElementById('gh-token').value = localStorage.getItem('sik_gh_token') || '';
     }
@@ -497,18 +497,21 @@
 
     async function initData() {
         try {
+            // Načtení produktů
             const prodRes = await fetch('../public/data/products.json');
             productsData = await prodRes.json();
             renderProductsList();
 
-            const contentRes = await fetch('../public/data/site-content.json');
-            siteContentData = await contentRes.json();
-            populateContentForm();
+            // Načtení rozcestníku stránek z pages.json
+            const pagesRes = await fetch('../public/data/pages.json');
+            pagesData = await pagesRes.json();
+            renderPagesList();
         } catch (e) {
-            log('Chyba při načítání lokálních JSON dat: ' + e.message, 'error');
+            log('Chyba při načítání dat: ' + e.message, 'error');
         }
     }
 
+    // --- PRODUKTY ---
     function renderProductsList() {
         const container = document.getElementById('products-list');
         container.innerHTML = '';
@@ -520,20 +523,20 @@
 
         productsData.forEach(p => {
             const card = document.createElement('div');
-            card.className = 'product-item-card';
+            card.className = 'item-card';
 
             const imgPath = p.image || '../public/img/drone.png';
             const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
 
             card.innerHTML = `
-                <div class="product-item-info">
-                    <img src="${imgPath}" alt="${p.title}" class="product-thumb">
-                    <div class="product-details">
+                <div class="item-info">
+                    <img src="${imgPath}" alt="${p.title}" class="item-thumb" style="object-fit: cover;">
+                    <div class="item-details">
                         <h4>${p.title}</h4>
-                        <p>${p.categoryLabel || p.category} // ${formattedPrice} Kč (${p.eurPrice || Math.round(p.price/25)} EUR)</p>
+                        <p>${p.categoryLabel || p.category} // ${formattedPrice} Kč</p>
                     </div>
                 </div>
-                <div class="product-actions">
+                <div class="item-actions">
                     <button class="btn-secondary" onclick="editProduct('${p.id}')">Upravit</button>
                     <button class="btn-delete" onclick="deleteProduct('${p.id}')">Smazat</button>
                 </div>
@@ -542,105 +545,95 @@
         });
     }
 
-    function populateContentForm() {
-        if (siteContentData.global) {
-            document.getElementById('site-phone').value = siteContentData.global.phone || '';
-            document.getElementById('site-email').value = siteContentData.global.email || '';
-        }
-        if (siteContentData.eshop) {
-            document.getElementById('site-eshop-title').value = siteContentData.eshop.mainTitle || '';
-            document.getElementById('site-eshop-subtitle').value = siteContentData.eshop.mainSubtitle || '';
-        }
-    }
+    // --- ROZCESTNÍK STRÁNEK ---
+    function renderPagesList() {
+        const container = document.getElementById('pages-list');
+        container.innerHTML = '';
 
-    // PARAMETRY BUILDER
-    const specsContainer = document.getElementById('specs-builder');
-    document.getElementById('add-spec-btn').addEventListener('click', () => addSpecRow());
-
-    function addSpecRow(key = '', val = '') {
-        const row = document.createElement('div');
-        row.className = 'spec-item-row';
-        row.innerHTML = `
-            <input type="text" class="spec-key" placeholder="Parametr (např. Rám)" value="${key}" style="flex: 1;">
-            <input type="text" class="spec-val" placeholder="Hodnota (např. Carbon 3.5 inch)" value="${val}" style="flex: 1;">
-            <button type="button" class="btn-delete" onclick="this.parentElement.remove()">✕</button>
-        `;
-        specsContainer.appendChild(row);
-    }
-
-    function editProduct(id) {
-        const prod = productsData.find(p => p.id === id);
-        if (!prod) return;
-
-        document.getElementById('edit-prod-id').value = prod.id;
-        document.getElementById('prod-title').value = prod.title;
-        document.getElementById('prod-price').value = prod.price;
-        document.getElementById('prod-category').value = prod.category;
-        document.getElementById('prod-tag').value = prod.tag || '';
-        document.getElementById('prod-desc').value = prod.description || '';
-
-        // Zobrazení náhledu fotky
-        const previewBox = document.getElementById('current-img-preview-box');
-        const previewImg = document.getElementById('current-img-preview');
-        const previewPath = document.getElementById('current-img-path-text');
-
-        if (prod.image) {
-            previewImg.src = prod.image;
-            previewPath.textContent = `Aktuální fotka: ${prod.image}`;
-            previewBox.style.display = 'flex';
-        } else {
-            previewBox.style.display = 'none';
+        if (pagesData.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Žádné stránky v rozcestníku.</p>';
+            return;
         }
 
-        specsContainer.innerHTML = '';
-        if (prod.specs) {
-            Object.entries(prod.specs).forEach(([k, v]) => addSpecRow(k, v));
-        }
+        pagesData.forEach(page => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
 
-        document.getElementById('product-form-title').textContent = `Upravit dron: ${prod.title}`;
-        document.getElementById('cancel-edit-btn').style.display = 'inline-block';
-
-        window.scrollTo({ top: document.getElementById('product-form').offsetTop - 50, behavior: 'smooth' });
-    }
-
-    function resetProductForm() {
-        document.getElementById('product-form').reset();
-        document.getElementById('edit-prod-id').value = '';
-        document.getElementById('product-form-title').textContent = 'Přidat nový dron';
-        document.getElementById('cancel-edit-btn').style.display = 'none';
-        document.getElementById('current-img-preview-box').style.display = 'none';
-        specsContainer.innerHTML = '';
-    }
-
-    document.getElementById('cancel-edit-btn').addEventListener('click', resetProductForm);
-
-    async function deleteProduct(id) {
-        const prod = productsData.find(p => p.id === id);
-        if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
-
-        productsData = productsData.filter(p => p.id !== id);
-        renderProductsList();
-        await commitFileToGithub('public/data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
-    }
-
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = error => reject(error);
+            card.innerHTML = `
+                <div class="item-info">
+                    <div class="item-thumb">🌐</div>
+                    <div class="item-details">
+                        <h4>${page.title}</h4>
+                        <p>Soubor: ${page.file}</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-secondary" onclick="editPage('${page.id}')">Upravit obsah stránky</button>
+                </div>
+            `;
+            container.appendChild(card);
         });
     }
 
-    // GITHUB COMMIT API
+    function editPage(id) {
+        const page = pagesData.find(p => p.id === id);
+        if (!page) return;
+
+        document.getElementById('edit-page-id').value = page.id;
+        document.getElementById('page-title').value = page.title;
+
+        const dynamicFields = document.getElementById('page-dynamic-fields');
+        dynamicFields.innerHTML = '';
+
+        // Vytvoří vstupní pole pro každou vlastnost dané stránky
+        Object.keys(page).forEach(key => {
+            if (['id', 'title', 'file'].includes(key)) return;
+
+            const val = page[key];
+            const fieldGroup = document.createElement('div');
+            fieldGroup.className = 'field-group';
+
+            const label = document.createElement('label');
+            label.textContent = key.toUpperCase();
+
+            let input;
+            if (typeof val === 'string' && val.length > 50) {
+                input = document.createElement('textarea');
+                input.rows = 3;
+            } else {
+                input = document.createElement('input');
+                input.type = 'text';
+            }
+
+            input.className = 'page-field-input';
+            input.dataset.key = key;
+            input.value = val;
+
+            fieldGroup.appendChild(label);
+            fieldGroup.appendChild(input);
+            dynamicFields.appendChild(fieldGroup);
+        });
+
+        document.getElementById('cancel-page-edit-btn').style.display = 'inline-block';
+        window.scrollTo({ top: document.getElementById('page-form-container').offsetTop - 50, behavior: 'smooth' });
+    }
+
+    document.getElementById('cancel-page-edit-btn').addEventListener('click', () => {
+        document.getElementById('page-form').reset();
+        document.getElementById('edit-page-id').value = '';
+        document.getElementById('page-dynamic-fields').innerHTML = '';
+        document.getElementById('cancel-page-edit-btn').style.display = 'none';
+    });
+
+    // --- GITHUB API COMMIT ---
     async function commitFileToGithub(filePath, contentObject, commitMessage) {
-        const owner = localStorage.getItem('sik_gh_owner');
-        const repo = localStorage.getItem('sik_gh_repo');
+        const owner = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
+        const repo = localStorage.getItem('sik_gh_repo') || 'sik-group';
         const branch = localStorage.getItem('sik_gh_branch') || 'main';
         const token = localStorage.getItem('sik_gh_token');
 
         if (!token || !owner || !repo) {
-            log('Upozornění: Není vyplněn GitHub token. Změny se uložily pouze lokálně v prohlížeči.', 'error');
+            log('Upozornění: Není vyplněn GitHub token.', 'error');
             return;
         }
 
@@ -676,108 +669,53 @@
 
             if (!putRes.ok) throw new Error('Chyba GitHub API odpovědi.');
             log(`✓ Úspěšně uloženo a zacommitováno na GitHub!`, 'success');
-
         } catch (err) {
             log(`Chyba: ${err.message}`, 'error');
         }
     }
 
-    // FORMULÁŘ PRODUKTŮ SUBMIT
-    document.getElementById('product-form').addEventListener('submit', async (e) => {
+    // --- SUBMIT STRÁNEK ---
+    document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const editId = document.getElementById('edit-prod-id').value;
-        const title = document.getElementById('prod-title').value;
-        const price = parseFloat(document.getElementById('prod-price').value);
-        const category = document.getElementById('prod-category').value;
-        const tag = document.getElementById('prod-tag').value;
-        const desc = document.getElementById('prod-desc').value;
-        const imgFile = document.getElementById('prod-img-file').files[0];
+        const editId = document.getElementById('edit-page-id').value;
+        if (!editId) {
+            log('Vyberte nejprve stránku k úpravě.', 'error');
+            return;
+        }
 
-        const specs = {};
-        document.querySelectorAll('.spec-item-row').forEach(row => {
-            const k = row.querySelector('.spec-key').value.trim();
-            const v = row.querySelector('.spec-val').value.trim();
-            if (k && v) specs[k] = v;
+        const pageIdx = pagesData.pages.findIndex(p => p.id === editId); // příp. podle struktury JSON
+        // Jelikož pagesData je pole:
+        const idx = pagesData.findIndex(p => p.id === editId);
+        if (idx === -1) return;
+
+        document.querySelectorAll('.page-field-input').forEach(input => {
+            const key = input.dataset.key;
+            pagesData[idx][key] = input.value;
         });
 
-        let imagePath = '../public/img/drone.png';
+        renderPagesList();
+        await commitFileToGithub('public/data/pages.json', pagesData, `CMS: Aktualizována stránka ${pagesData[idx].title}`);
+    });
 
-        if (editId) {
-            const existing = productsData.find(p => p.id === editId);
-            if (existing && existing.image) imagePath = existing.image;
-        }
+    // Další pomocné funkce pro produkty
+    async function deleteProduct(id) {
+        const prod = productsData.find(p => p.id === id);
+        if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
 
-        // Nahrání nové fotky na GitHub do public/img/
-        if (imgFile) {
-            const cleanFileName = imgFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-            const fileName = `drone_${Date.now()}_${cleanFileName}`;
-            const base64Img = await fileToBase64(imgFile);
-            
-            const owner = localStorage.getItem('sik_gh_owner');
-            const repo = localStorage.getItem('sik_gh_repo');
-            const token = localStorage.getItem('sik_gh_token');
-            const branch = localStorage.getItem('sik_gh_branch') || 'main';
-
-            if (token) {
-                log(`Nahrávám novou fotku public/img/${fileName}...`);
-                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/public/img/${fileName}`, {
-                    method: 'PUT',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: `CMS: Nahrána nová fotka dronu ${fileName}`, content: base64Img, branch: branch })
-                });
-                imagePath = `../public/img/${fileName}`;
-            }
-        }
-
-        const catLabels = { cinematic: 'FPV Cinematic', longrange: 'Longrange', freestyle: 'Freestyle' };
-
-        if (editId) {
-            const idx = productsData.findIndex(p => p.id === editId);
-            if (idx !== -1) {
-                productsData[idx] = {
-                    ...productsData[idx],
-                    title, price, category, tag, description: desc, specs,
-                    categoryLabel: catLabels[category],
-                    eurPrice: Math.round(price / 25),
-                    image: imagePath
-                };
-            }
-        } else {
-            const newProd = {
-                id: String(Date.now()),
-                title, price, category, tag, description: desc, specs,
-                categoryLabel: catLabels[category],
-                eurPrice: Math.round(price / 25),
-                stock: 'skladem',
-                image: imagePath
-            };
-            productsData.push(newProd);
-        }
-
+        productsData = productsData.filter(p => p.id !== id);
         renderProductsList();
-        await commitFileToGithub('public/data/products.json', productsData, `CMS: Uložen dron ${title}`);
-        resetProductForm();
-    });
+        await commitFileToGithub('public/data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
+    }
 
-    // FORMULÁŘ TEXTŮ SUBMIT
-    document.getElementById('content-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        siteContentData.global = {
-            ...siteContentData.global,
-            phone: document.getElementById('site-phone').value,
-            email: document.getElementById('site-email').value
-        };
-
-        siteContentData.eshop = {
-            ...siteContentData.eshop,
-            mainTitle: document.getElementById('site-eshop-title').value,
-            mainSubtitle: document.getElementById('site-eshop-subtitle').value
-        };
-
-        await commitFileToGithub('public/data/site-content.json', siteContentData, 'CMS: Aktualizovány texty webu');
-    });
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
+    }
 
     loadConfig();
     initData();
