@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIK-GROUP | CMS Rozcestník</title>
+    <title>SIK-GROUP | CMS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -291,24 +291,24 @@
 <div class="admin-wrapper">
     
     <div class="header-bar">
-        <div class="brand-title">SIK-GROUP <span>// CMS ROZCESTNÍK</span></div>
-        <button class="settings-toggle-btn" id="toggle-settings-btn">⚙ GitHub API Nastavení</button>
+        <div class="brand-title">SIK-GROUP <span></span></div>
+        <button class="settings-toggle-btn" id="toggle-settings-btn">Nastavení</button>
     </div>
 
     <!-- PANEL NASTAVENÍ GITHUBU -->
     <div class="config-panel" id="config-panel">
-        <h3 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--accent-cyan);">Konfigurace GitHub Repozitáře</h3>
+        <h3 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--accent-cyan);">Přihlášení</h3>
         <div class="form-grid-3">
             <div class="field-group">
-                <label>Vlastník (Owner)</label>
+                <label>Vlastník</label>
                 <input type="text" id="gh-owner" value="JakubSimoncic">
             </div>
             <div class="field-group">
-                <label>Repozitář (Repo)</label>
+                <label>Repozitář</label>
                 <input type="text" id="gh-repo" value="sik-group">
             </div>
             <div class="field-group">
-                <label>Větev (Branch)</label>
+                <label>Větev</label>
                 <input type="text" id="gh-branch" value="main">
             </div>
         </div>
@@ -316,15 +316,14 @@
             <label>Personal Access Token (PAT)</label>
             <input type="password" id="gh-token" placeholder="github_pat_...">
         </div>
-        <button class="btn-secondary" id="save-config-btn">Uložit Konfiguraci</button>
+        <button class="btn-secondary" id="save-config-btn">Uložit</button>
     </div>
 
     <!-- ================= VIEW 1: HLAVNÍ ROZCESTNÍK (DASHBOARD) ================= -->
     <div class="admin-view active" id="view-dashboard">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
-                <h3 style="margin-bottom: 5px; font-size: 1.1rem; text-transform: uppercase;">Hlavní rozcestník stránek a sekcí</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">Vyberte sekci nebo stránku, kterou chcete spravovat:</p>
+                <h3 style="margin-bottom: 5px; font-size: 1.1rem; text-transform: uppercase;">Rozcestník</h3>
             </div>
             <a href="../index.html" target="_blank" class="btn-secondary">🌐 Zobrazit web</a>
         </div>
