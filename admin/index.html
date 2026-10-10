@@ -161,6 +161,8 @@
             cursor: pointer;
             text-transform: uppercase;
             font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
             transition: all 0.2s ease;
         }
 
@@ -319,17 +321,22 @@
 
     <!-- ================= VIEW 1: HLAVNÍ ROZCESTNÍK (DASHBOARD) ================= -->
     <div class="admin-view active" id="view-dashboard">
-        <h3 style="margin-bottom: 10px; font-size: 1.1rem; text-transform: uppercase;">Hlavní rozcestník stránek a sekcí</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Vyberte sekci nebo stránku, kterou chcete spravovat:</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <div>
+                <h3 style="margin-bottom: 5px; font-size: 1.1rem; text-transform: uppercase;">Hlavní rozcestník stránek a sekcí</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Vyberte sekci nebo stránku, kterou chcete spravovat:</p>
+            </div>
+            <a href="../index.html" target="_blank" class="btn-secondary">🌐 Zobrazit web</a>
+        </div>
         
         <div class="list-container" id="dashboard-list"></div>
     </div>
 
     <!-- ================= VIEW 2: SPRÁVA PRODUKTŮ (E-SHOP) ================= -->
     <div class="admin-view" id="view-products">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <button class="btn-secondary" onclick="showDashboard()">← Zpět</button>
             <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 Správa e-shopu: Aktivní drony</h3>
-            <button class="btn-secondary" onclick="showDashboard()">← Zpět na rozcestník</button>
         </div>
 
         <div class="list-container" id="products-list"></div>
@@ -397,9 +404,9 @@
 
     <!-- ================= VIEW 3: EDITOR KONKRÉTNÍ STRÁNKY ================= -->
     <div class="admin-view" id="view-page-editor">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <button class="btn-secondary" onclick="showDashboard()">← Zpět</button>
             <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">📄 Úprava stránky</h3>
-            <button class="btn-secondary" onclick="showDashboard()">← Zpět na rozcestník</button>
         </div>
 
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
@@ -463,7 +470,6 @@
         terminal.scrollTop = terminal.scrollHeight;
     }
 
-    // PŘEPÍNÁNÍ POHLEDŮ (VIEWS)
     function switchView(viewId) {
         document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
@@ -488,7 +494,6 @@
         }
     }
 
-    // --- RENDER ROZCESTNÍKU (DASHBOARDU) ---
     function renderDashboard() {
         const container = document.getElementById('dashboard-list');
         container.innerHTML = '';
@@ -526,10 +531,8 @@
         if (!item) return;
 
         if (item.type === 'products') {
-            // Otevře správu produktů
             switchView('view-products');
         } else {
-            // Otevře dynamický editor stránky
             document.getElementById('edit-page-id').value = item.id;
             document.getElementById('page-title').value = item.title;
             document.getElementById('editor-page-heading').textContent = `📄 Úprava stránky: ${item.title}`;
@@ -569,7 +572,6 @@
         }
     }
 
-    // --- PRODUKTY ---
     function renderProductsList() {
         const container = document.getElementById('products-list');
         container.innerHTML = '';
@@ -603,7 +605,6 @@
         });
     }
 
-    // --- GITHUB API COMMIT ---
     async function commitFileToGithub(filePath, contentObject, commitMessage) {
         const owner = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
         const repo = localStorage.getItem('sik_gh_repo') || 'sik-group';
@@ -652,7 +653,6 @@
         }
     }
 
-    // --- SUBMIT STRÁNEK ---
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -670,7 +670,6 @@
         showDashboard();
     });
 
-    // Další pomocné funkce pro mazání produktů atd.
     async function deleteProduct(id) {
         const prod = productsData.find(p => p.id === id);
         if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
