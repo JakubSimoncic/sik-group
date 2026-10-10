@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIK-GROUP | drony neco neco</title>
+    <title>SIK-GROUP | Kontakt</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,9 +45,9 @@
                     <div class="panel-side">
                         <div class="side-block">
                             <span>Email</span>
-                            <a href="mailto:info@sik-group.cz" class="side-email">info@sik-group.cz</a>
+                            <a href="mailto:info@sik-group.cz" class="side-email contact-email-target">info@sik-group.cz</a>
                             <span>Telefon</span>
-                            <a href="tel:732520715" class="side-phone">732 520 715</a>
+                            <a href="tel:732520715" class="side-phone contact-phone-target">732 520 715</a>
                         </div>
                         <div class="side-block">
                             <span>Sociální sítě</span>
@@ -254,11 +254,11 @@
           <h3 class="block-title">OBCHODNÍ JEDNÁNÍ</h3>
           <div class="contact-row">
             <span class="label">E-mail</span>
-            <a href="mailto:info@sik-group.cz" class="contact-link">info@sik-group.cz</a>
+            <a href="mailto:info@sik-group.cz" class="contact-link" id="contact-email">info@sik-group.cz</a>
           </div>
           <div class="contact-row">
             <span class="label">Telefon</span>
-            <a href="tel:+420732520715" class="contact-link">732 520 715</a>
+            <a href="tel:+420732520715" class="contact-link" id="contact-phone">732 520 715</a>
           </div>
         </div>
 
@@ -266,21 +266,21 @@
           <h3 class="block-title">FAKTURAČNÍ ÚDAJE</h3>
           <div class="contact-row">
             <span class="label">Sídlo</span>
-            <p class="contact-text">Tvoje fakturační adresa 456, 150 00 Praha</p>
+            <p class="contact-text" id="contact-address">Tvoje fakturační adresa 456, 150 00 Praha</p>
           </div>
           <div class="contact-grid-sub">
             <div class="contact-row">
               <span class="label">IČO</span>
-              <p class="contact-text">12345678</p>
+              <p class="contact-text" id="contact-ico">12345678</p>
             </div>
             <div class="contact-row">
               <span class="label">DIČ</span>
-              <p class="contact-text">CZ12345678</p>
+              <p class="contact-text" id="contact-dic">CZ12345678</p>
             </div>
           </div>
           <div class="contact-row">
             <span class="label">Bankovní účet</span>
-            <p class="contact-text">2000123456/2010</p>
+            <p class="contact-text" id="contact-bank">2000123456/2010</p>
           </div>
         </div>
       </div>
@@ -328,5 +328,49 @@
     </footer>
 
     <script src="../js/script.js"></script>
+    
+    <!-- Dynamické načtení kontaktů z CMS (pages.json) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('../data/pages.json?t=' + Date.now());
+                if (!res.ok) return;
+                const pages = await res.json();
+                const contactData = pages.find(p => p.id === 'contact');
+                if (!contactData) return;
+
+                if (contactData.email) {
+                    document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
+                        el.textContent = contactData.email;
+                        el.href = `mailto:${contactData.email}`;
+                    });
+                }
+                if (contactData.phone) {
+                    document.querySelectorAll('#contact-phone, .contact-phone-target').forEach(el => {
+                        el.textContent = contactData.phone;
+                        el.href = `tel:${contactData.phone.replace(/\s+/g, '')}`;
+                    });
+                }
+                if (contactData.address) {
+                    const el = document.getElementById('contact-address');
+                    if (el) el.textContent = contactData.address;
+                }
+                if (contactData.ico) {
+                    const el = document.getElementById('contact-ico');
+                    if (el) el.textContent = contactData.ico;
+                }
+                if (contactData.dic) {
+                    const el = document.getElementById('contact-dic');
+                    if (el) el.textContent = contactData.dic;
+                }
+                if (contactData.bank) {
+                    const el = document.getElementById('contact-bank');
+                    if (el) el.textContent = contactData.bank;
+                }
+            } catch (err) {
+                console.error('Chyba při načítání kontaktních údajů z CMS:', err);
+            }
+        });
+    </script>
 </body>
 </html>
