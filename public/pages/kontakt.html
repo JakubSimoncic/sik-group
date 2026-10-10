@@ -152,16 +152,16 @@
           <img src="../img/team/lukas.jpg" alt="Lukas" class="team-member-img">
         </div>
         <div class="team-info-col">
-          <span class="team-role">// lukas</span>
+          <span class="team-role">// LUKAS</span>
           <h3 class="member-name">Lukas</h3>
           <p class="team-bio">
-            lukas
+            Lukas
           </p>
           <div class="specialization-tags">
-            <span>lukas</span>
-            <span>lukas</span>
-            <span>lukas</span>
-            <span>lukas</span>
+            <span>Lukas</span>
+            <span>Lukas</span>
+            <span>Lukas</span>
+            <span>Lukas</span>
           </div>
         </div>
       </div>
@@ -328,49 +328,6 @@
     </footer>
 
     <script src="../js/script.js"></script>
-    
-    <!-- Dynamické načtení kontaktů z CMS (pages.json) -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const res = await fetch('../data/pages.json?t=' + Date.now());
-                if (!res.ok) return;
-                const pages = await res.json();
-                const contactData = pages.find(p => p.id === 'contact');
-                if (!contactData) return;
-
-                if (contactData.email) {
-                    document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
-                        el.textContent = contactData.email;
-                        el.href = `mailto:${contactData.email}`;
-                    });
-                }
-                if (contactData.phone) {
-                    document.querySelectorAll('#contact-phone, .contact-phone-target').forEach(el => {
-                        el.textContent = contactData.phone;
-                        el.href = `tel:${contactData.phone.replace(/\s+/g, '')}`;
-                    });
-                }
-                if (contactData.address) {
-                    const el = document.getElementById('contact-address');
-                    if (el) el.textContent = contactData.address;
-                }
-                if (contactData.ico) {
-                    const el = document.getElementById('contact-ico');
-                    if (el) el.textContent = contactData.ico;
-                }
-                if (contactData.dic) {
-                    const el = document.getElementById('contact-dic');
-                    if (el) el.textContent = contactData.dic;
-                }
-                if (contactData.bank) {
-                    const el = document.getElementById('contact-bank');
-                    if (el) el.textContent = contactData.bank;
-                }
-            } catch (err) {
-                console.error('Chyba při načítání kontaktních údajů z CMS:', err);
-            }
-        });
-    </script>
+    <script src="../js/kontakt.js"></script>
 </body>
 </html>
