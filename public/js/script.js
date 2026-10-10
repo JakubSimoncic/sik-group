@@ -7,16 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     async function loadCMSContent() {
         try {
-            // Zjistíme, jestli jsme v kořenu (index.html) nebo ve složce /pages/ (kontakt.html apod.)
             const isInPagesFolder = window.location.pathname.includes('/pages/');
-            const dataPath = isInPagesFolder ? '../data/pages.json' : 'data/pages.json';
+            const dataPath = isInPagesFolder ? '../data/site-content.json' : 'data/site-content.json';
 
             const res = await fetch(`${dataPath}?t=` + Date.now());
             if (!res.ok) return;
-            const pages = await res.json();
+            const data = await res.json();
 
-            // A) Pokud jsme na kontaktní stránce
-            const contactData = pages.find(p => p.id === 'contact');
+            // A) Načtení kontaktů (podpora pro pole i objektový formát)
+            let contactData = null;
+            if (Array.isArray(data)) {
+                contactData = data.find(p => p.id === 'contact');
+            } else if (data.contact) {
+                contactData = data.contact;
+            }
+
             if (contactData && document.getElementById('contact-email')) {
                 if (contactData.email) {
                     document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
@@ -48,16 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // B) Pokud jsme na úvodní stránce (index.html)
-            const homeData = pages.find(p => p.id === 'home');
+            // B) Pokud jsme na úvodní stránce (index.html) nebo v objektu existují home data
+            const homeData = data.home || (Array.isArray(data) && data.find(p => p.id === 'home'));
             if (homeData) {
                 const titleEl = document.querySelector('.tech-main-title') || document.getElementById('main-title');
-                if (titleEl && homeData.mainTitle) {
-                    titleEl.textContent = homeData.mainTitle;
+                if (titleEl && (homeData.mainTitle || homeData.heroTitle)) {
+                    titleEl.textContent = homeData.mainTitle || homeData.heroTitle;
                 }
                 const subtitleEl = document.querySelector('.tech-subtitle') || document.getElementById('main-subtitle');
-                if (subtitleEl && homeData.mainSubtitle) {
-                    subtitleEl.textContent = homeData.mainSubtitle;
+                if (subtitleEl && (homeData.mainSubtitle || homeData.heroSubtitle)) {
+                    subtitleEl.textContent = homeData.mainSubtitle || homeData.heroSubtitle;
                 }
             }
 
@@ -66,13 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Spustíme načtení dat
     loadCMSContent();
     
     // ==========================================================================
     // 1. NAVIGACE & OVLÁDÁNÍ MOBILNÍHO MENU
     // ==========================================================================
-    
     const menuToggle = document.getElementById('mobile-menu');
     const navPanel = document.getElementById('nav-panel');
     const dimOverlay = document.getElementById('nav-overlay');
@@ -85,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollCloseLimit = 80; 
 
     if (menuToggle && navPanel && dimOverlay) {
-        
         function closeMenu() {
             menuToggle.classList.remove('active');
             navPanel.classList.remove('active');
@@ -94,11 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function toggleMenu() {
             const isOpening = !navPanel.classList.contains('active');
-            
             if (isOpening) {
                 scrollAtMenuOpen = window.scrollY || document.documentElement.scrollTop;
             }
-
             menuToggle.classList.toggle('active');
             navPanel.classList.toggle('active');
             dimOverlay.classList.toggle('active');
@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 2. SCROLL CHOVÁNÍ (OPTIMALIZOVÁNO)
     // ==========================================================================
-
     let isScrolling = false;
     let navHeight = mainNav ? mainNav.offsetHeight : 0;
     let isScrolledClass = false;
@@ -154,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!navWrapper || !mainNav) return;
 
-        // Zamezení zbytečného přepisování DOMu, pokud se stav nezměnil
         const shouldBeScrolled = scrollTop > 80;
         if (shouldBeScrolled !== isScrolledClass) {
             navWrapper.classList.toggle('scrolled', shouldBeScrolled);
@@ -185,9 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. BOOKING SEKCE - KALENDÁŘ (OPTIMALIZOVANÝ RENDERING)
+    // 3. BOOKING SEKCE - KALENDÁŘ (BEZPEČNÉ OŠETŘENÍ)
     // ==========================================================================
-    
     const calendarGrid = document.querySelector('.calendar-grid');
     const monthYearText = document.querySelector('.current-month');
     const prevBtn = document.getElementById('prev-month-btn');
@@ -287,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }
 
-            // Předchozí měsíc
             let prevM = currentMonth - 1, prevY = currentYear;
             if (prevM < 0) { prevM = 11; prevY--; }
 
@@ -301,7 +297,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Aktuální měsíc
             for (let i = 1; i <= daysInMonth; i++) {
                 const meta = getDayMeta(currentYear, currentMonth, i);
                 if (!meta.isSelectable) {
@@ -311,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Následující měsíc
             let nextM = currentMonth + 1, nextY = currentYear;
             if (nextM > 11) { nextM = 0; nextY++; }
 
@@ -328,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             calendarGrid.innerHTML = daysHtml;
 
-            // Bleskový hover efektivně přes timestampy bez přepočítávání Date objektů
             const selectableSpans = Array.from(calendarGrid.querySelectorAll('span[data-time]'));
             
             selectableSpans.forEach(day => {
@@ -437,7 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 4. CUSTOM SELECT TIME OVLÁDÁNÍ
     // ==========================================================================
-    
     const customSelects = document.querySelectorAll('.custom-select-wrapper');
     
     function validateTimeOptions() {
@@ -517,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 customSelect.classList.remove('selected');
             }
         });
-                    
+            
         if (fromValue && toValue && timeToMinutes(toValue) <= fromMinutes) {
             if (realToSelect) realToSelect.value = "";
             const customToWrapper = document.getElementById('custom-time-select-to');
@@ -589,7 +581,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 5. POTVRZENÍ FORMULÁŘE & ODESLÁNÍ NA WEBHOOK
     // ==========================================================================
-    
     const bookingForm = document.getElementById("rezervacni-formular") || document.querySelector('.booking-form');
     if (bookingForm) {
         bookingForm.addEventListener('submit', function(e) {
@@ -686,7 +677,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 6. FAQ AKORDEON
     // ==========================================================================
-
     document.querySelectorAll('.faq-question').forEach(question => {
         question.addEventListener('click', () => {
             const currentItem = question.parentElement;
@@ -711,7 +701,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 7. HERO VIDEO OBSERVER
     // ==========================================================================
-
     const heroVideo = document.getElementById('heroVideo');
 
     if (heroVideo) {
