@@ -111,14 +111,14 @@
 
 .team-row:hover .specialization-tags span {
   border-color: rgba(0, 240, 255, 0.25);  
-  background: rgba(0, 240, 255, 0.02);   
+  background: rgba(0, 240, 255, 0.02);    
 }
 
 .specialization-tags span:hover {
   border-color: #00f0ff !important;      
   color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); 
-  transform: translateY(-2px);           
+  transform: translateY(-2px);            
 }
 
 @media (min-width: 1025px) {
@@ -176,7 +176,6 @@
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  /* Vyladěná křivka pro hladký filmový rozjezd a dojezd */
   transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
