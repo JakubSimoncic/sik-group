@@ -15,5 +15,13 @@
   "eshop": {
     "mainTitle": "CHCETE LÉTAT JAKO MY?",
     "mainSubtitle": "Co postavíme to i prodáme. Ready to fly."
+  },
+  "contact": {
+    "email": "info@sik-group.cz",
+    "phone": "732 520 715",
+    "address": "Tvoje fakturační adresa 456, 150 00 Praha",
+    "ico": "12345678",
+    "dic": "CZ12345678",
+    "bank": "2000123456/2010"
   }
 }
