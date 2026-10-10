@@ -3,6 +3,7 @@
     "id": "eshop-products",
     "title": "E-shop Produkty (Drony)",
     "type": "products",
+    "dataFile": "data/products.json",
     "description": "Správa aktivních dronů, cen, fotek a specifikací",
     "icon": "🛒"
   },
@@ -11,17 +12,17 @@
     "title": "Úvodní stránka",
     "type": "page",
     "file": "index.html",
-    "icon": "📄",
-    "mainTitle": "AKTIVNÍ DRONY V E-SHOPU",
-    "mainSubtitle": "Profesionální FPV drony pro každou příležitost"
+    "dataFile": "data/home.json",
+    "description": "Správa hlavního nadpisu a podnadpisu webu",
+    "icon": "📄"
   },
   {
     "id": "contact",
     "title": "Kontakt & Podpora",
     "type": "page",
     "file": "contact.html",
-    "icon": "📞",
-    "phone": "+420 123 456 789",
-    "email": "info@sik-group.cz"
+    "dataFile": "data/contact.json",
+    "description": "Správa telefonů, e-mailů a fakturačních údajů",
+    "icon": "📞"
   }
 ]
