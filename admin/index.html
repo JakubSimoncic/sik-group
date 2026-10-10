@@ -335,7 +335,7 @@
     <div class="admin-view" id="view-products">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()">← Zpět</button>
-            <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 Správa e-shopu: Aktivní drony</h3>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 E-shop</h3>
         </div>
 
         <div class="list-container" id="products-list"></div>
@@ -350,11 +350,11 @@
                 <div class="form-grid-2">
                     <div class="field-group">
                         <label>Název dronu</label>
-                        <input type="text" id="prod-title" required placeholder="SpeedIK v2">
+                        <input type="text" id="prod-title">
                     </div>
                     <div class="field-group">
-                        <label>Cena (Kč)</label>
-                        <input type="number" id="prod-price" required placeholder="25000">
+                        <label>Cena    </label>
+                        <input type="number" id="prod-price" required placeholder="0">
                     </div>
                 </div>
 
@@ -368,18 +368,18 @@
                         </select>
                     </div>
                     <div class="field-group">
-                        <label>Tag / Specifikace</label>
-                        <input type="text" id="prod-tag" placeholder="Cinematic 3.5&quot;">
+                        <label>Specifikace</label>
+                        <input type="text" id="prod-tag" placeholder="">
                     </div>
                 </div>
 
                 <div class="field-group">
-                    <label>Popis dronu</label>
-                    <textarea id="prod-desc" rows="4" placeholder="Detailní popis..."></textarea>
+                    <label>Popis</label>
+                    <textarea id="prod-desc" rows="4"></textarea>
                 </div>
 
                 <div class="field-group">
-                    <label>Fotka dronu</label>
+                    <label>Fotka</label>
                     <input type="file" id="prod-img-file" accept="image/*">
                     <div class="img-preview-box" id="current-img-preview-box" style="display: none;">
                         <img id="current-img-preview" src="" alt="Aktuální fotka">
@@ -388,13 +388,13 @@
                 </div>
 
                 <div class="field-group">
-                    <label>Technické parametry (Klíč / Hodnota)</label>
+                    <label>Technické parametry</label>
                     <div id="specs-builder"></div>
                     <button type="button" class="btn-secondary" id="add-spec-btn" style="width: max-content; margin-top: 8px;">+ Přidat parametr</button>
                 </div>
 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit & Commitnout na GitHub</button>
+                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit</button>
                     <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display: none;">Zrušit úpravy</button>
                 </div>
             </form>
@@ -405,7 +405,7 @@
     <div class="admin-view" id="view-page-editor">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()">← Zpět</button>
-            <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">📄 Úprava stránky</h3>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">úvod</h3>
         </div>
 
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
@@ -413,7 +413,7 @@
                 <input type="hidden" id="edit-page-id">
                 
                 <div class="field-group">
-                    <label>Název sekce / souboru</label>
+                    <label>Název</label>
                     <input type="text" id="page-title" required readonly style="opacity: 0.7;">
                 </div>
 
@@ -429,7 +429,7 @@
 
     <!-- TERMINÁL PROCESU -->
     <div class="terminal-log" id="terminal-log">
-        <div class="log-entry">[System] Rozcestník CMS připraven.</div>
+        <div class="log-entry">[System] CMS připraveno.</div>
     </div>
 
 </div>
