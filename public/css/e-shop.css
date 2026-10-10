@@ -460,7 +460,7 @@
 }
 
 /* ==========================================================================
-   HIGH-TECH MODÁLNÍ OKNO (ČISTÝ & RYCHLÝ STYL BEZ ZBYTOČNÝCH EFEKTOV)
+   HIGH-TECH MODÁLNÍ OKNO
    ========================================================================== */
 .tech-modal-overlay {
   position: fixed;
@@ -500,7 +500,6 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
 }
 
-/* Zjednodušené tlačidlo na zatvorenie */
 .tech-modal-close {
   position: absolute;
   top: 20px;
@@ -541,7 +540,6 @@
   aspect-ratio: 1 / 1;
 }
 
-/* Obrázok v okne sa po najedení NIBLÍŽI (efekt vypnutý) */
 .tech-modal-media img {
   width: 100%;
   height: 100%;
