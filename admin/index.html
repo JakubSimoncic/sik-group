@@ -310,7 +310,7 @@
 
         <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
-        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;" id="product-form-container">
             <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="product-form-title">Přidat nový dron</h3>
             <form id="product-form">
                 <input type="hidden" id="edit-prod-id">
@@ -569,7 +569,7 @@
     }
 
     function editProduct(id) {
-        const prod = productsData.find(p => p.id === id);
+        const prod = productsData.find(p => String(p.id) === String(id));
         if (!prod) return;
 
         document.getElementById('edit-prod-id').value = prod.id;
@@ -587,7 +587,10 @@
         document.getElementById('product-form-title').textContent = `Upravit dron: ${prod.title}`;
         document.getElementById('cancel-edit-btn').style.display = 'inline-block';
 
-        window.scrollTo({ top: document.getElementById('product-form').offsetTop - 50, behavior: 'smooth' });
+        // Plynulý posun dolů k formuláři
+        const formContainer = document.getElementById('product-form-container');
+        formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        log(`Načten k úpravě dron: ${prod.title}`, 'success');
     }
 
     function resetProductForm() {
@@ -685,7 +688,7 @@
         const catLabels = { cinematic: 'FPV Cinematic', longrange: 'Longrange', freestyle: 'Freestyle' };
 
         if (editId) {
-            const idx = productsData.findIndex(p => p.id === editId);
+            const idx = productsData.findIndex(p => String(p.id) === String(editId));
             if (idx !== -1) {
                 productsData[idx] = {
                     ...productsData[idx],
@@ -711,10 +714,10 @@
     });
 
     async function deleteProduct(id) {
-        const prod = productsData.find(p => p.id === id);
+        const prod = productsData.find(p => String(p.id) === String(id));
         if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
 
-        productsData = productsData.filter(p => p.id !== id);
+        productsData = productsData.filter(p => String(p.id) !== String(id));
         renderProductsList();
         await commitFileToGithub('data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
