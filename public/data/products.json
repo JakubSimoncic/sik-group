@@ -1,23 +1,5 @@
 [
   {
-    "id": "1",
-    "title": "SpeedIK",
-    "category": "cinematic",
-    "categoryLabel": "FPV Cinematic",
-    "tag": "Cinematic FPV",
-    "price": 25000,
-    "eurPrice": 1000,
-    "stock": "skladem",
-    "image": "../img/drone.png",
-    "description": "Špičkový 3.5\" cinewhoop určený pro natáčení v blízkosti lidí a v interiérech. Maximální stabilita obrazu, odhlučněný systém vrtulí a plná kompatibilita s GoPro 12.",
-    "specs": {
-      "Rám": "Carbon 3.5 inch",
-      "Video vysílač": "DJI O3 Air Unit",
-      "Motor": "2004 3000KV",
-      "Baterie": "6S LiPo 1100mAh"
-    }
-  },
-  {
     "id": "2",
     "title": "Paladin",
     "category": "longrange",
