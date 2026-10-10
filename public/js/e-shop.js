@@ -23,17 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceGap = 500;
 
     // ==========================================================================
-    // 1. DYNAMICKÉ NAČTENÍ Z JSON SOUBORŮ
+    // 1. DYNAMICKÉ NAČTENÍ Z JSON SOUBORŮ (S OŠETŘENÍM CACHE)
     // ==========================================================================
     async function fetchAllShopData() {
         try {
-            const contentRes = await fetch('../data/site-content.json');
+            const contentRes = await fetch('../data/site-content.json?t=' + Date.now());
             if (contentRes.ok) {
                 siteContent = await contentRes.json();
                 applySiteContent();
             }
 
-            const productsRes = await fetch('../data/products.json');
+            const productsRes = await fetch('../data/products.json?t=' + Date.now());
             if (productsRes.ok) {
                 productsData = await productsRes.json();
                 initShop();
@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // 6. HIGH-TECH MODÁLNÍ OKNO (DETAIL PRODUKTU BEZ SEJIKU A SKOKŮ)
+    // 6. HIGH-TECH MODÁLNÍ OKNO
     // ==========================================================================
     const modal = document.getElementById('product-modal');
     const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -292,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Kompenzace šířky scrollbaru proti odskočení pozadí
         const scrollbarWidth = getScrollbarWidth();
         document.body.style.paddingRight = `${scrollbarWidth}px`;
         document.body.style.overflow = 'hidden';
