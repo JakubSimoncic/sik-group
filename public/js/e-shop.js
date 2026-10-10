@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     let productsData = [];
-    let siteContent = {};
+    let baseSubtitleText = "Co postavíme to i prodáme. Ready to fly.";
 
     const productGrid = document.getElementById('product-grid');
     const categoryCheckboxes = document.querySelectorAll('.category-filter');
@@ -16,59 +16,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceMaxLabel = document.getElementById('price-max-label');
 
     const productCountSpan = document.getElementById('product-count') || document.querySelector('.tech-subtitle');
-    let baseSubtitleText = "Co postavíme to i prodáme. Ready to fly.";
 
     let minPrice = 0;
     let maxPrice = 0;
     const priceGap = 500;
 
     // ==========================================================================
-    // 1. DYNAMICKÉ NAČTENÍ Z JSON SOUBORŮ (S OŠETŘENÍM CACHE)
+    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S OŠETŘENÍM CACHE)
     // ==========================================================================
     async function fetchAllShopData() {
         try {
-            const contentRes = await fetch('../data/site-content.json?t=' + Date.now());
-            if (contentRes.ok) {
-                siteContent = await contentRes.json();
-                applySiteContent();
-            }
+            const res = await fetch('../data/e-shop.json?t=' + Date.now());
+            if (res.ok) {
+                const shopData = await res.json();
 
-            const productsRes = await fetch('../data/products.json?t=' + Date.now());
-            if (productsRes.ok) {
-                productsData = await productsRes.json();
+                // Pokud je e-shop.json pole (starý formát), nebo objekt (nový CMS formát)
+                let items = [];
+                if (Array.isArray(shopData)) {
+                    items = shopData;
+                } else {
+                    if (shopData.mainTitle) {
+                        const titleEl = document.querySelector('.tech-main-title');
+                        if (titleEl) titleEl.textContent = shopData.mainTitle;
+                    }
+                    if (shopData.mainSubtitle) {
+                        baseSubtitleText = shopData.mainSubtitle;
+                    }
+                    items = shopData.products || [];
+                }
+
+                productsData = items;
                 initShop();
             }
         } catch (err) {
-            console.error('Chyba při načítání JSON dat:', err);
-        }
-    }
-
-    function applySiteContent() {
-        if (!siteContent) return;
-
-        if (siteContent.eshop) {
-            const titleEl = document.querySelector('.tech-main-title');
-            if (titleEl && siteContent.eshop.mainTitle) {
-                titleEl.textContent = siteContent.eshop.mainTitle;
-            }
-            if (siteContent.eshop.mainSubtitle) {
-                baseSubtitleText = siteContent.eshop.mainSubtitle;
-            }
-        }
-
-        if (siteContent.global) {
-            document.querySelectorAll('.side-phone').forEach(el => {
-                if (siteContent.global.phone) {
-                    el.textContent = siteContent.global.phone;
-                    el.href = `tel:${siteContent.global.phone.replace(/\s+/g, '')}`;
-                }
-            });
-            document.querySelectorAll('.side-email').forEach(el => {
-                if (siteContent.global.email) {
-                    el.textContent = siteContent.global.email;
-                    el.href = `mailto:${siteContent.global.email}`;
-                }
-            });
+            console.error('Chyba při načítání e-shop JSON dat:', err);
         }
     }
 
