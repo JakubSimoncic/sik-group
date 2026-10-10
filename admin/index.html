@@ -320,11 +320,11 @@
         <div class="form-grid-3">
             <div class="field-group">
                 <label>Vlastník (Owner)</label>
-                <input type="text" id="gh-owner" placeholder="např. sik-group">
+                <input type="text" id="gh-owner" placeholder="např. JakubSimoncic">
             </div>
             <div class="field-group">
                 <label>Repozitář (Repo)</label>
-                <input type="text" id="gh-repo" placeholder="např. web">
+                <input type="text" id="gh-repo" placeholder="např. sik-group">
             </div>
             <div class="field-group">
                 <label>Větev (Branch)</label>
@@ -351,7 +351,7 @@
 
         <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
-        <!-- FORMULÁŘ DROMŮ -->
+        <!-- FORMULÁŘ DRONŮ -->
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
             <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="product-form-title">Přidat nový dron</h3>
             <form id="product-form">
@@ -497,11 +497,11 @@
 
     async function initData() {
         try {
-            const prodRes = await fetch('../data/products.json');
+            const prodRes = await fetch('../public/data/products.json');
             productsData = await prodRes.json();
             renderProductsList();
 
-            const contentRes = await fetch('../data/site-content.json');
+            const contentRes = await fetch('../public/data/site-content.json');
             siteContentData = await contentRes.json();
             populateContentForm();
         } catch (e) {
@@ -522,7 +522,7 @@
             const card = document.createElement('div');
             card.className = 'product-item-card';
 
-            const imgPath = p.image || '../img/drone.png';
+            const imgPath = p.image || '../public/img/drone.png';
             const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
 
             card.innerHTML = `
@@ -620,7 +620,7 @@
 
         productsData = productsData.filter(p => p.id !== id);
         renderProductsList();
-        await commitFileToGithub('data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
+        await commitFileToGithub('public/data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
 
     function fileToBase64(file) {
@@ -701,14 +701,14 @@
             if (k && v) specs[k] = v;
         });
 
-        let imagePath = '../img/drone.png';
+        let imagePath = '../public/img/drone.png';
 
         if (editId) {
             const existing = productsData.find(p => p.id === editId);
             if (existing && existing.image) imagePath = existing.image;
         }
 
-        // Nahrání nové fotky na GitHub
+        // Nahrání nové fotky na GitHub do public/img/
         if (imgFile) {
             const cleanFileName = imgFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
             const fileName = `drone_${Date.now()}_${cleanFileName}`;
@@ -720,13 +720,13 @@
             const branch = localStorage.getItem('sik_gh_branch') || 'main';
 
             if (token) {
-                log(`Nahrávám novou fotku img/${fileName}...`);
-                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/img/${fileName}`, {
+                log(`Nahrávám novou fotku public/img/${fileName}...`);
+                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/public/img/${fileName}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: `CMS: Nahrána nová fotka dronu ${fileName}`, content: base64Img, branch: branch })
                 });
-                imagePath = `../img/${fileName}`;
+                imagePath = `../public/img/${fileName}`;
             }
         }
 
@@ -756,7 +756,7 @@
         }
 
         renderProductsList();
-        await commitFileToGithub('data/products.json', productsData, `CMS: Uložen dron ${title}`);
+        await commitFileToGithub('public/data/products.json', productsData, `CMS: Uložen dron ${title}`);
         resetProductForm();
     });
 
@@ -776,7 +776,7 @@
             mainSubtitle: document.getElementById('site-eshop-subtitle').value
         };
 
-        await commitFileToGithub('data/site-content.json', siteContentData, 'CMS: Aktualizovány texty webu');
+        await commitFileToGithub('public/data/site-content.json', siteContentData, 'CMS: Aktualizovány texty webu');
     });
 
     loadConfig();
