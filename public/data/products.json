@@ -68,17 +68,5 @@
       "Payload": "až 3 kg",
       "Baterie": "2x 6S 5000mAh"
     }
-  },
-  {
-    "id": "1791651831494",
-    "title": "aaa",
-    "price": 1000,
-    "category": "cinematic",
-    "tag": "mh",
-    "description": "jbjb",
-    "specs": {},
-    "categoryLabel": "FPV Cinematic",
-    "eurPrice": 40,
-    "image": "../public/img/drone.png"
   }
 ]
