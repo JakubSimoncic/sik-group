@@ -441,16 +441,11 @@
 
     async function initData() {
         try {
-            // Přidáno ?t=... proti kachování (cache) prohlížeče
-            const prodRes = await fetch('../public/data/products.json?t=' + Date.now());
-            productsData = await prodRes.json();
-            renderProductsList();
-
             const pagesRes = await fetch('../public/data/pages.json?t=' + Date.now());
             pagesData = await pagesRes.json();
             renderDashboard();
         } catch (e) {
-            log('Chyba při načítání dat: ' + e.message, 'error');
+            log('Chyba při načítání rozcestníku: ' + e.message, 'error');
         }
     }
 
@@ -481,11 +476,18 @@
         });
     }
 
-    function openSection(id) {
+    async function openSection(id) {
         const item = pagesData.find(p => p.id === id);
         if (!item) return;
 
         if (item.type === 'products') {
+            try {
+                const prodRes = await fetch(`../public/${item.dataFile}?t=` + Date.now());
+                productsData = await prodRes.json();
+                renderProductsList();
+            } catch (e) {
+                log('Chyba při načítání produktů: ' + e.message, 'error');
+            }
             switchView('view-products');
         } else {
             document.getElementById('edit-page-id').value = item.id;
@@ -493,37 +495,46 @@
             document.getElementById('editor-page-heading').textContent = `Úprava stránky: ${item.title}`;
 
             const dynamicFields = document.getElementById('page-dynamic-fields');
-            dynamicFields.innerHTML = '';
+            dynamicFields.innerHTML = '<p style="color: var(--text-muted);">Načítám data...</p>';
 
-            Object.keys(item).forEach(key => {
-                if (['id', 'title', 'type', 'file', 'icon', 'description'].includes(key)) return;
+            const targetFile = item.dataFile || `data/${item.id}.json`;
+            try {
+                const res = await fetch(`../public/${targetFile}?t=` + Date.now());
+                const pageContent = await res.json();
 
-                const val = item[key];
-                const fieldGroup = document.createElement('div');
-                fieldGroup.className = 'field-group';
+                dynamicFields.innerHTML = '';
+                dynamicFields.dataset.dataFile = targetFile;
 
-                const label = document.createElement('label');
-                label.textContent = key.toUpperCase();
+                Object.keys(pageContent).forEach(key => {
+                    const val = pageContent[key];
+                    const fieldGroup = document.createElement('div');
+                    fieldGroup.className = 'field-group';
 
-                let input;
-                if (typeof val === 'string' && val.length > 50) {
-                    input = document.createElement('textarea');
-                    input.rows = 3;
-                } else {
-                    input = document.createElement('input');
-                    input.type = 'text';
-                }
+                    const label = document.createElement('label');
+                    label.textContent = key.toUpperCase();
 
-                input.className = 'page-field-input';
-                input.dataset.key = key;
-                input.value = val;
+                    let input;
+                    if (typeof val === 'string' && val.length > 50) {
+                        input = document.createElement('textarea');
+                        input.rows = 3;
+                    } else {
+                        input = document.createElement('input');
+                        input.type = 'text';
+                    }
 
-                fieldGroup.appendChild(label);
-                fieldGroup.appendChild(input);
-                dynamicFields.appendChild(fieldGroup);
-            });
+                    input.className = 'page-field-input';
+                    input.dataset.key = key;
+                    input.value = val;
 
-            switchView('view-page-editor');
+                    fieldGroup.appendChild(label);
+                    fieldGroup.appendChild(input);
+                    dynamicFields.appendChild(fieldGroup);
+                });
+
+                switchView('view-page-editor');
+            } catch (err) {
+                log('Chyba při načítání souboru stránky: ' + err.message, 'error');
+            }
         }
     }
 
@@ -651,20 +662,22 @@
         }
     }
 
+    // Uložení editu stránky (home.json, contact.json apod.)
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const editId = document.getElementById('edit-page-id').value;
-        const idx = pagesData.findIndex(p => p.id === editId);
-        if (idx === -1) return;
+        const dynamicFields = document.getElementById('page-dynamic-fields');
+        const dataFile = dynamicFields.dataset.dataFile;
+        if (!dataFile) return;
 
+        const updatedData = {};
         document.querySelectorAll('.page-field-input').forEach(input => {
             const key = input.dataset.key;
-            pagesData[idx][key] = input.value;
+            updatedData[key] = input.value;
         });
 
-        renderDashboard();
-        await commitFileToGithub('data/pages.json', pagesData, `CMS: Aktualizována stránka ${pagesData[idx].title}`);
+        const pageTitle = document.getElementById('page-title').value;
+        await commitFileToGithub(dataFile, updatedData, `CMS: Aktualizován soubor ${dataFile} (${pageTitle})`);
         showDashboard();
     });
 
@@ -679,7 +692,7 @@
         const desc = document.getElementById('prod-desc').value;
 
         const specs = {};
-        document.querySelectorAll('.spec-item-row').fetchall = document.querySelectorAll('.spec-item-row').forEach(row => {
+        document.querySelectorAll('.spec-item-row').forEach(row => {
             const k = row.querySelector('.spec-key').value.trim();
             const v = row.querySelector('.spec-val').value.trim();
             if (k && v) specs[k] = v;
