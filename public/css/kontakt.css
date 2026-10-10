@@ -97,8 +97,8 @@
 
 .specialization-tags span {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.03); 
-  color: #e0e0e0;                        
+  background: rgba(255, 255, 255,.03); 
+  color: #e0e0e0;                     
   border: 1px solid rgba(255, 255, 255, 0.1); 
   padding: 6px 14px; 
   border-radius: 4px;                    
@@ -118,7 +118,7 @@
   border-color: #00f0ff !important;      
   color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); 
-  transform: translateY(-2px);            
+  transform: translateY(-2px);           
 }
 
 @media (min-width: 1025px) {
