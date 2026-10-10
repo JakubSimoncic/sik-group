@@ -127,35 +127,9 @@
             border-color: var(--accent-cyan);
         }
 
-        /* TABY */
-        .nav-tabs {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 12px;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            letter-spacing: 1px;
-        }
-
-        .tab-btn.active {
-            color: var(--accent-cyan);
-            border-bottom: 2px solid var(--accent-cyan);
-        }
-
-        .tab-section { display: none; }
-        .tab-section.active { display: block; }
+        /* VIEWS (PŘEPÍNÁNÍ OBRAZOVEK) */
+        .admin-view { display: none; }
+        .admin-view.active { display: block; }
 
         /* BUTTONS */
         .btn-primary {
@@ -213,7 +187,7 @@
             color: #ffffff;
         }
 
-        /* KARTY ROZCESTNÍKU */
+        /* KARTY ROZCESTNÍKU A SEZNAMŮ */
         .list-container {
             display: flex;
             flex-direction: column;
@@ -343,15 +317,21 @@
         <button class="btn-secondary" id="save-config-btn">Uložit Konfiguraci</button>
     </div>
 
-    <!-- TABY -->
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="openTab('tab-products')">🛒 E-shop Produkty</button>
-        <button class="tab-btn" onclick="openTab('tab-content')">📄 Rozcestník Stránek Webu</button>
+    <!-- ================= VIEW 1: HLAVNÍ ROZCESTNÍK (DASHBOARD) ================= -->
+    <div class="admin-view active" id="view-dashboard">
+        <h3 style="margin-bottom: 10px; font-size: 1.1rem; text-transform: uppercase;">Hlavní rozcestník stránek a sekcí</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 25px;">Vyberte sekci nebo stránku, kterou chcete spravovat:</p>
+        
+        <div class="list-container" id="dashboard-list"></div>
     </div>
 
-    <!-- ZÁLOŽKA 1: PRODUKTY -->
-    <div class="tab-section active" id="tab-products">
-        <h3 style="margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase;">Aktivní drony v e-shopu</h3>
+    <!-- ================= VIEW 2: SPRÁVA PRODUKTŮ (E-SHOP) ================= -->
+    <div class="admin-view" id="view-products">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 Správa e-shopu: Aktivní drony</h3>
+            <button class="btn-secondary" onclick="showDashboard()">← Zpět na rozcestník</button>
+        </div>
+
         <div class="list-container" id="products-list"></div>
 
         <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
@@ -415,31 +395,27 @@
         </div>
     </div>
 
-    <!-- ZÁLOŽKA 2: ROZCESTNÍK STRÁNEK -->
-    <div class="tab-section" id="tab-content">
-        <h3 style="margin-bottom: 20px; font-size: 1.1rem; text-transform: uppercase;">Rozcestník stránek webu</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Vyberte stránku ze seznamu pro úpravu jejího obsahu:</p>
-        
-        <div class="list-container" id="pages-list"></div>
+    <!-- ================= VIEW 3: EDITOR KONKRÉTNÍ STRÁNKY ================= -->
+    <div class="admin-view" id="view-page-editor">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">📄 Úprava stránky</h3>
+            <button class="btn-secondary" onclick="showDashboard()">← Zpět na rozcestník</button>
+        </div>
 
-        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
-
-        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;" id="page-form-container">
-            <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="page-form-title">Editor vybrané stránky</h3>
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
             <form id="page-form">
                 <input type="hidden" id="edit-page-id">
                 
                 <div class="field-group">
-                    <label>Upravovaná stránka</label>
+                    <label>Název sekce / souboru</label>
                     <input type="text" id="page-title" required readonly style="opacity: 0.7;">
                 </div>
 
-                <!-- Dynamicky generovaná pole pro obsah konkrétní stránky -->
                 <div id="page-dynamic-fields"></div>
 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button type="submit" class="btn-primary" id="save-page-btn">Uložit & Commitnout na GitHub</button>
-                    <button type="button" class="btn-secondary" id="cancel-page-edit-btn" style="display: none;">Zrušit výběr</button>
+                    <button type="submit" class="btn-primary">Uložit změny na GitHub</button>
+                    <button type="button" class="btn-secondary" onclick="showDashboard()">Zrušit</button>
                 </div>
             </form>
         </div>
@@ -487,27 +463,109 @@
         terminal.scrollTop = terminal.scrollHeight;
     }
 
-    function openTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
-        
-        event.target.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
+    // PŘEPÍNÁNÍ POHLEDŮ (VIEWS)
+    function switchView(viewId) {
+        document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showDashboard() {
+        switchView('view-dashboard');
     }
 
     async function initData() {
         try {
-            // Načtení produktů
             const prodRes = await fetch('../public/data/products.json');
             productsData = await prodRes.json();
             renderProductsList();
 
-            // Načtení rozcestníku stránek z pages.json
             const pagesRes = await fetch('../public/data/pages.json');
             pagesData = await pagesRes.json();
-            renderPagesList();
+            renderDashboard();
         } catch (e) {
             log('Chyba při načítání dat: ' + e.message, 'error');
+        }
+    }
+
+    // --- RENDER ROZCESTNÍKU (DASHBOARDU) ---
+    function renderDashboard() {
+        const container = document.getElementById('dashboard-list');
+        container.innerHTML = '';
+
+        if (pagesData.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted);">Žádné položky v rozcestníku.</p>';
+            return;
+        }
+
+        pagesData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+
+            const icon = item.icon || '📄';
+            const subtitle = item.description || (item.file ? `Soubor: ${item.file}` : 'Sekce webu');
+
+            card.innerHTML = `
+                <div class="item-info">
+                    <div class="item-thumb">${icon}</div>
+                    <div class="item-details">
+                        <h4>${item.title}</h4>
+                        <p>${subtitle}</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-primary" onclick="openSection('${item.id}')">Spravovat</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function openSection(id) {
+        const item = pagesData.find(p => p.id === id);
+        if (!item) return;
+
+        if (item.type === 'products') {
+            // Otevře správu produktů
+            switchView('view-products');
+        } else {
+            // Otevře dynamický editor stránky
+            document.getElementById('edit-page-id').value = item.id;
+            document.getElementById('page-title').value = item.title;
+            document.getElementById('editor-page-heading').textContent = `📄 Úprava stránky: ${item.title}`;
+
+            const dynamicFields = document.getElementById('page-dynamic-fields');
+            dynamicFields.innerHTML = '';
+
+            Object.keys(item).forEach(key => {
+                if (['id', 'title', 'type', 'file', 'icon', 'description'].includes(key)) return;
+
+                const val = item[key];
+                const fieldGroup = document.createElement('div');
+                fieldGroup.className = 'field-group';
+
+                const label = document.createElement('label');
+                label.textContent = key.toUpperCase();
+
+                let input;
+                if (typeof val === 'string' && val.length > 50) {
+                    input = document.createElement('textarea');
+                    input.rows = 3;
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'text';
+                }
+
+                input.className = 'page-field-input';
+                input.dataset.key = key;
+                input.value = val;
+
+                fieldGroup.appendChild(label);
+                fieldGroup.appendChild(input);
+                dynamicFields.appendChild(fieldGroup);
+            });
+
+            switchView('view-page-editor');
         }
     }
 
@@ -544,86 +602,6 @@
             container.appendChild(card);
         });
     }
-
-    // --- ROZCESTNÍK STRÁNEK ---
-    function renderPagesList() {
-        const container = document.getElementById('pages-list');
-        container.innerHTML = '';
-
-        if (pagesData.length === 0) {
-            container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Žádné stránky v rozcestníku.</p>';
-            return;
-        }
-
-        pagesData.forEach(page => {
-            const card = document.createElement('div');
-            card.className = 'item-card';
-
-            card.innerHTML = `
-                <div class="item-info">
-                    <div class="item-thumb">🌐</div>
-                    <div class="item-details">
-                        <h4>${page.title}</h4>
-                        <p>Soubor: ${page.file}</p>
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-secondary" onclick="editPage('${page.id}')">Upravit obsah stránky</button>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    function editPage(id) {
-        const page = pagesData.find(p => p.id === id);
-        if (!page) return;
-
-        document.getElementById('edit-page-id').value = page.id;
-        document.getElementById('page-title').value = page.title;
-
-        const dynamicFields = document.getElementById('page-dynamic-fields');
-        dynamicFields.innerHTML = '';
-
-        // Vytvoří vstupní pole pro každou vlastnost dané stránky
-        Object.keys(page).forEach(key => {
-            if (['id', 'title', 'file'].includes(key)) return;
-
-            const val = page[key];
-            const fieldGroup = document.createElement('div');
-            fieldGroup.className = 'field-group';
-
-            const label = document.createElement('label');
-            label.textContent = key.toUpperCase();
-
-            let input;
-            if (typeof val === 'string' && val.length > 50) {
-                input = document.createElement('textarea');
-                input.rows = 3;
-            } else {
-                input = document.createElement('input');
-                input.type = 'text';
-            }
-
-            input.className = 'page-field-input';
-            input.dataset.key = key;
-            input.value = val;
-
-            fieldGroup.appendChild(label);
-            fieldGroup.appendChild(input);
-            dynamicFields.appendChild(fieldGroup);
-        });
-
-        document.getElementById('cancel-page-edit-btn').style.display = 'inline-block';
-        window.scrollTo({ top: document.getElementById('page-form-container').offsetTop - 50, behavior: 'smooth' });
-    }
-
-    document.getElementById('cancel-page-edit-btn').addEventListener('click', () => {
-        document.getElementById('page-form').reset();
-        document.getElementById('edit-page-id').value = '';
-        document.getElementById('page-dynamic-fields').innerHTML = '';
-        document.getElementById('cancel-page-edit-btn').style.display = 'none';
-    });
 
     // --- GITHUB API COMMIT ---
     async function commitFileToGithub(filePath, contentObject, commitMessage) {
@@ -679,13 +657,6 @@
         e.preventDefault();
 
         const editId = document.getElementById('edit-page-id').value;
-        if (!editId) {
-            log('Vyberte nejprve stránku k úpravě.', 'error');
-            return;
-        }
-
-        const pageIdx = pagesData.pages.findIndex(p => p.id === editId); // příp. podle struktury JSON
-        // Jelikož pagesData je pole:
         const idx = pagesData.findIndex(p => p.id === editId);
         if (idx === -1) return;
 
@@ -694,11 +665,12 @@
             pagesData[idx][key] = input.value;
         });
 
-        renderPagesList();
+        renderDashboard();
         await commitFileToGithub('public/data/pages.json', pagesData, `CMS: Aktualizována stránka ${pagesData[idx].title}`);
+        showDashboard();
     });
 
-    // Další pomocné funkce pro produkty
+    // Další pomocné funkce pro mazání produktů atd.
     async function deleteProduct(id) {
         const prod = productsData.find(p => p.id === id);
         if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
@@ -706,15 +678,6 @@
         productsData = productsData.filter(p => p.id !== id);
         renderProductsList();
         await commitFileToGithub('public/data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
-    }
-
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = error => reject(error);
-        });
     }
 
     loadConfig();
