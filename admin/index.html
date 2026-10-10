@@ -441,11 +441,12 @@
 
     async function initData() {
         try {
-            const prodRes = await fetch('../public/data/products.json');
+            // Přidáno ?t=... proti kachování (cache) prohlížeče
+            const prodRes = await fetch('../public/data/products.json?t=' + Date.now());
             productsData = await prodRes.json();
             renderProductsList();
 
-            const pagesRes = await fetch('../public/data/pages.json');
+            const pagesRes = await fetch('../public/data/pages.json?t=' + Date.now());
             pagesData = await pagesRes.json();
             renderDashboard();
         } catch (e) {
@@ -587,7 +588,6 @@
         document.getElementById('product-form-title').textContent = `Upravit dron: ${prod.title}`;
         document.getElementById('cancel-edit-btn').style.display = 'inline-block';
 
-        // Plynulý posun dolů k formuláři
         const formContainer = document.getElementById('product-form-container');
         formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         log(`Načten k úpravě dron: ${prod.title}`, 'success');
@@ -679,7 +679,7 @@
         const desc = document.getElementById('prod-desc').value;
 
         const specs = {};
-        document.querySelectorAll('.spec-item-row').forEach(row => {
+        document.querySelectorAll('.spec-item-row').fetchall = document.querySelectorAll('.spec-item-row').forEach(row => {
             const k = row.querySelector('.spec-key').value.trim();
             const v = row.querySelector('.spec-val').value.trim();
             if (k && v) specs[k] = v;
