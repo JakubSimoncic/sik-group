@@ -3,6 +3,73 @@ const makeWebhookUrl = "https://hook.eu1.make.com/kk5lv67txlhlqo1w2wsmftvuxyk62i
 document.addEventListener('DOMContentLoaded', () => {
     
     // ==========================================================================
+    // 0. DYNAMICKÉ NAČTENÍ Z CMS (PODLE AKTUÁLNÍ STRÁNKY)
+    // ==========================================================================
+    async function loadCMSContent() {
+        try {
+            // Zjistíme, jestli jsme v kořenu (index.html) nebo ve složce /pages/ (kontakt.html apod.)
+            const isInPagesFolder = window.location.pathname.includes('/pages/');
+            const dataPath = isInPagesFolder ? '../data/pages.json' : 'data/pages.json';
+
+            const res = await fetch(`${dataPath}?t=` + Date.now());
+            if (!res.ok) return;
+            const pages = await res.json();
+
+            // A) Pokud jsme na kontaktní stránce
+            const contactData = pages.find(p => p.id === 'contact');
+            if (contactData && document.getElementById('contact-email')) {
+                if (contactData.email) {
+                    document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
+                        el.textContent = contactData.email;
+                        el.href = `mailto:${contactData.email}`;
+                    });
+                }
+                if (contactData.phone) {
+                    document.querySelectorAll('#contact-phone, .contact-phone-target').forEach(el => {
+                        el.textContent = contactData.phone;
+                        el.href = `tel:${contactData.phone.replace(/\s+/g, '')}`;
+                    });
+                }
+                if (contactData.address) {
+                    const el = document.getElementById('contact-address');
+                    if (el) el.textContent = contactData.address;
+                }
+                if (contactData.ico) {
+                    const el = document.getElementById('contact-ico');
+                    if (el) el.textContent = contactData.ico;
+                }
+                if (contactData.dic) {
+                    const el = document.getElementById('contact-dic');
+                    if (el) el.textContent = contactData.dic;
+                }
+                if (contactData.bank) {
+                    const el = document.getElementById('contact-bank');
+                    if (el) el.textContent = contactData.bank;
+                }
+            }
+
+            // B) Pokud jsme na úvodní stránce (index.html)
+            const homeData = pages.find(p => p.id === 'home');
+            if (homeData) {
+                const titleEl = document.querySelector('.tech-main-title') || document.getElementById('main-title');
+                if (titleEl && homeData.mainTitle) {
+                    titleEl.textContent = homeData.mainTitle;
+                }
+                const subtitleEl = document.querySelector('.tech-subtitle') || document.getElementById('main-subtitle');
+                if (subtitleEl && homeData.mainSubtitle) {
+                    subtitleEl.textContent = homeData.mainSubtitle;
+                }
+            }
+
+        } catch (err) {
+            console.error('Chyba při načítání dat z CMS:', err);
+        }
+    }
+
+    // Spustíme načtení dat
+    loadCMSContent();
+    
+    // ==========================================================================
     // 1. NAVIGACE & OVLÁDÁNÍ MOBILNÍHO MENU
     // ==========================================================================
     
@@ -450,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 customSelect.classList.remove('selected');
             }
         });
-                        
+                    
         if (fromValue && toValue && timeToMinutes(toValue) <= fromMinutes) {
             if (realToSelect) realToSelect.value = "";
             const customToWrapper = document.getElementById('custom-time-select-to');
