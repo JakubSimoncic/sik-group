@@ -76,13 +76,13 @@
     "category": "freestyle",
     "categoryLabel": "Freestyle",
     "tag": "Heavy Lifter",
-    "price": 30000,
-    "eurPrice": 1300,
+    "price": 20000,
+    "eurPrice": 800,
     "stock": "skladem",
     "image": "../img/drone.png",
     "description": "Masivní dron určený k nošení plnohodnotných filmových kamer jako RED Komodo nebo Blackmagic.",
     "specs": {
-      "Rám": "X8 Heavy Lift 10\"",
+      "Rám": "X8 Heavy Lift 10",
       "Payload": "až 3 kg",
       "Baterie": "2x 6S 5000mAh"
     }
