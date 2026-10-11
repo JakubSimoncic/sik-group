@@ -398,7 +398,7 @@
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     
-    // Výchozí rozcestník podle reálné struktury public/data/
+    // Záložní výchozí rozcestník (pokud by pages.json chyběl)
     let pagesData = [
         {
             "id": "e-shop",
@@ -410,7 +410,7 @@
         },
         {
             "id": "home",
-            "title": "Úvodní stránka (index.json)",
+            "title": "Úvodní stránka",
             "description": "Správa hlavního obsahu úvodní stránky",
             "icon": "📄",
             "type": "page",
@@ -468,6 +468,21 @@
         switchView('view-dashboard');
     }
 
+    // Pomocná funkce pro správné normalizování cesty k souboru
+    function resolvePath(dataFile) {
+        if (!dataFile) return 'public/data/index.json';
+        let cleanPath = dataFile.trim();
+        // Pokud cesta začíná rovnou složkou data/, opravíme ji na public/data/
+        if (cleanPath.startsWith('data/')) {
+            cleanPath = 'public/' + cleanPath;
+        }
+        // Pokud v cestě vůbec není public/, doplníme ho
+        if (!cleanPath.startsWith('public/')) {
+            cleanPath = 'public/' + cleanPath;
+        }
+        return cleanPath;
+    }
+
     async function initData() {
         try {
             const pagesUrl = '../public/data/pages.json';
@@ -518,8 +533,12 @@
         const item = pagesData.find(p => p.id === id);
         if (!item) return;
 
-        let dataFile = item.dataFile; // např. "public/data/e-shop.json"
-        const targetUrl = `../${dataFile}`; // vedle admin/ je public/, takže "../public/data/..."
+        let correctedDataFile = resolvePath(item.dataFile);
+        if (item.type === 'products') {
+            correctedDataFile = 'public/data/e-shop.json';
+        }
+
+        const targetUrl = `../${correctedDataFile}`;
 
         if (item.type === 'products') {
             try {
@@ -555,7 +574,7 @@
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = dataFile; // Ukládá správnou cestu pro commit ("public/data/index.json")
+                dynamicFields.dataset.dataFile = correctedDataFile; // Správná cesta pro GitHub commit
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
@@ -716,7 +735,7 @@
         }
     }
 
-    // Uložení editu stránky (zapisuje do public/data/index.json, kontakt.json atd.)
+    // Uložení editu stránky
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -735,7 +754,7 @@
         showDashboard();
     });
 
-    // Uložení / vytvoření produktu (zapisuje do public/data/e-shop.json)
+    // Uložení / vytvoření produktu (e-shop.json)
     document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
