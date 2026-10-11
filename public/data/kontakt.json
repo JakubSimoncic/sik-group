@@ -1,5 +1,6 @@
 {
   "teamSectionTitle": "LIDÉ ZA KAMEROU",
+  "teamTitle": "LIDÉ ZA KAMEROU",
   "team": [
     {
       "name": "Honza",
@@ -82,7 +83,7 @@
     },
     {
       "question": "Kde všude natáčíte?",
-      "answer": "Prakticky všude, kde to dává smysł a kde to podmínky dovolují. Natáčíme venku i uvnitř, z výšky i těsně nad zemí."
+      "answer": "Prakticky všude, kde to dává smysl a kde to podmínky dovolují. Natáčíme venku i uvnitř, z výšky i těsně nad zemí."
     }
   ],
   "contactSectionTitle": "KONTAKTNÍ ÚDAJE",
