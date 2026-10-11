@@ -398,7 +398,7 @@
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     
-    // Záchranná výchozí struktura rozcestníku
+    // Záchranná struktura s garantovaně správnými názvy souborů
     let pagesData = [
         {
             "id": "e-shop",
@@ -468,11 +468,11 @@
         switchView('view-dashboard');
     }
 
-    // Automatická oprava cest při načítání pages.json
+    // Bezpečné mapování souborů podle reálného názvu v repozitáři
     function sanitizePath(dataFile, type, id) {
         if (type === 'products' || id === 'e-shop') return 'public/data/e-shop.json';
         if (id === 'home' || id === 'index' || (dataFile && dataFile.includes('index.json'))) return 'public/data/index.json';
-        if (id === 'kontakt' || (dataFile && dataFile.includes('kontakt.json'))) return 'public/data/kontakt.json';
+        if (id === 'kontakt' || id === 'contact' || (dataFile && (dataFile.includes('kontakt.json') || dataFile.includes('contact.json')))) return 'public/data/kontakt.json';
         
         let path = dataFile || '';
         if (path.startsWith('data/')) path = 'public/' + path;
@@ -491,6 +491,7 @@
                     pagesData = loadedPages.map(p => {
                         p.dataFile = sanitizePath(p.dataFile, p.type, p.id);
                         if (p.id === 'home') p.id = 'index';
+                        if (p.id === 'contact') p.id = 'kontakt';
                         return p;
                     });
                 }
@@ -571,7 +572,7 @@
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = dataFile;
+                dynamicFields.dataset.dataFile = dataFile; // Přesná cesta k JSONu (např. public/data/kontakt.json)
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
@@ -732,12 +733,12 @@
         }
     }
 
-    // Uložení editu stránky
+    // Uložení editu stránky (přepisuje přímo odpovídající JSON soubor v repozitáři)
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const dynamicFields = document.getElementById('page-dynamic-fields');
-        const dataFile = dynamicFields.dataset.dataFile; 
+        const dataFile = dynamicFields.dataset.dataFile; // např. public/data/kontakt.json
         if (!dataFile) return;
 
         const updatedData = {};
@@ -746,7 +747,7 @@
             updatedData[key] = input.value;
         });
 
-        const pageTitle = document.getElementById('page-title').value;
+        const pageTitle = document.getElementById('page-title'].value;
         await commitFileToGithub(dataFile, updatedData, `CMS: Aktualizován soubor ${dataFile} (${pageTitle})`);
         showDashboard();
     });
