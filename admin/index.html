@@ -398,7 +398,7 @@
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     
-    // Správné názvy souborů odpovídající reálné struktuře v public/data/
+    // Záchranná výchozí struktura rozcestníku
     let pagesData = [
         {
             "id": "e-shop",
@@ -468,6 +468,18 @@
         switchView('view-dashboard');
     }
 
+    // Automatická oprava cest při načítání pages.json
+    function sanitizePath(dataFile, type, id) {
+        if (type === 'products' || id === 'e-shop') return 'public/data/e-shop.json';
+        if (id === 'home' || id === 'index' || (dataFile && dataFile.includes('index.json'))) return 'public/data/index.json';
+        if (id === 'kontakt' || (dataFile && dataFile.includes('kontakt.json'))) return 'public/data/kontakt.json';
+        
+        let path = dataFile || '';
+        if (path.startsWith('data/')) path = 'public/' + path;
+        if (!path.startsWith('public/')) path = 'public/data/' + path;
+        return path;
+    }
+
     async function initData() {
         try {
             const pagesUrl = '../public/data/pages.json';
@@ -476,10 +488,9 @@
             if (pagesRes.ok) {
                 const loadedPages = await pagesRes.json();
                 if (Array.isArray(loadedPages) && loadedPages.length > 0) {
-                    // Zajistíme, že ID odpovídají správným souborům
                     pagesData = loadedPages.map(p => {
+                        p.dataFile = sanitizePath(p.dataFile, p.type, p.id);
                         if (p.id === 'home') p.id = 'index';
-                        if (p.dataFile === 'public/data/home.json') p.dataFile = 'public/data/index.json';
                         return p;
                     });
                 }
@@ -523,14 +534,10 @@
         const item = pagesData.find(p => p.id === id);
         if (!item) return;
 
-        let dataFile = item.dataFile;
-        if (dataFile.startsWith('data/')) {
-            dataFile = 'public/' + dataFile;
-        }
-
+        const dataFile = sanitizePath(item.dataFile, item.type, item.id);
         const targetUrl = `../${dataFile}`;
 
-        if (item.type === 'products') {
+        if (item.type === 'products' || id === 'e-shop') {
             try {
                 log(`Načítám produkty z: ${targetUrl}`);
                 const prodRes = await fetch(targetUrl + '?t=' + Date.now());
@@ -564,7 +571,7 @@
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = dataFile; // např. "public/data/index.json" nebo "public/data/kontakt.json"
+                dynamicFields.dataset.dataFile = dataFile;
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
@@ -725,7 +732,7 @@
         }
     }
 
-    // Uložení editu stránky (zapisuje do public/data/index.json, public/data/kontakt.json apod.)
+    // Uložení editu stránky
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
