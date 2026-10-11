@@ -18,7 +18,7 @@
                 <nav id="main-nav" class="global-container">
                     <div class="logo">
                         <a href="../../index.html">
-                            <img src="../img/logo.svg" alt="SIK-GROUP">
+                            <img src="../img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
                         </a>
                     </div>
                     
@@ -44,16 +44,16 @@
                         <div class="panel-side">
                             <div class="side-block">
                                 <span>Email</span>
-                                <a href="mailto:info@sik-group.cz" class="side-email">info@sik-group.cz</a>
+                                <a href="mailto:info@sik-group.cz" class="side-email contact-email-target">info@sik-group.cz</a>
                                 <span>Telefon</span>
-                                <a href="tel:732520715" class="side-phone">732 520 715</a>
+                                <a href="tel:732520715" class="side-phone contact-phone-target">732 520 715</a>
                             </div>
                             <div class="side-block">
                                 <span>Sociální sítě</span>
                                 <div class="side-socials">
                                     <a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a>
                                     <a href="#" target="_blank">Facebook</a>
-                                    <a href="#" target="_blank">YouTube</a>
+                                    <a href="https://www.youtube.com/@Group_SIK_Czech" target="_blank">YouTube</a>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
             </div>
             
             <div class="tech-controls">
-                <button class="tech-btn-filter" id="toggle-filter-btn">
+                <button class="tech-btn-filter" id="toggle-filter-btn" type="button">
                     <span class="btn-text">Skrýt filtry</span>
                     <span class="filter-indicator"></span>
                 </button>
@@ -131,8 +131,8 @@
                         </div>
                         <div class="range-slider-container">
                             <div class="slider-track" id="slider-track"></div>
-                            <input type="range" id="price-min-range" class="tech-range-input" step="500">
-                            <input type="range" id="price-max-range" class="tech-range-input" step="500">
+                            <input type="range" id="price-min-range" class="tech-range-input" step="500" aria-label="Minimální cena">
+                            <input type="range" id="price-max-range" class="tech-range-input" step="500" aria-label="Maximální cena">
                         </div>
                         <div class="price-limits">
                             <span id="price-min-label">0 Kč</span>
@@ -167,7 +167,7 @@
         <button type="button" class="tech-modal-close" id="modal-close-btn" aria-label="Zavřít detail">✕</button>
         <div class="tech-modal-grid">
             <div class="tech-modal-media">
-                <img id="modal-img" src="../img/drone.png" alt="Detail dronu">
+                <img id="modal-img" src="../img/drone.png" alt="Detail dronu" loading="lazy">
                 <div class="tech-modal-img-badge" id="modal-category-badge">FPV Cinematic</div>
             </div>
             <div class="tech-modal-content">
@@ -235,8 +235,8 @@
     </div>
 </footer>
 
-<script src="../js/script.js"></script>
-<script src="../js/e-shop.js"></script>
+<script src="../js/script.js" defer></script>
+<script src="../js/e-shop.js" defer></script>
 
 </body>
 </html>
