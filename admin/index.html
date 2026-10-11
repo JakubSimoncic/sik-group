@@ -397,7 +397,34 @@
     let productsData = [];
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
-    let pagesData = [];
+    
+    // Výchozí rozcestník podle reálné struktury public/data/
+    let pagesData = [
+        {
+            "id": "e-shop",
+            "title": "E-shop Produkty (Drony)",
+            "description": "Správa aktivních dronů, cen, fotek a specifikací",
+            "icon": "🛒",
+            "type": "products",
+            "dataFile": "public/data/e-shop.json"
+        },
+        {
+            "id": "home",
+            "title": "Úvodní stránka (index.json)",
+            "description": "Správa hlavního obsahu úvodní stránky",
+            "icon": "📄",
+            "type": "page",
+            "dataFile": "public/data/index.json"
+        },
+        {
+            "id": "kontakt",
+            "title": "Kontakt & Podpora",
+            "description": "Správa telefonů, e-mailů a fakturačních údajů",
+            "icon": "📞",
+            "type": "page",
+            "dataFile": "public/data/kontakt.json"
+        }
+    ];
 
     const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
     const configPanel = document.getElementById('config-panel');
@@ -443,15 +470,20 @@
 
     async function initData() {
         try {
-            // Správná cesta k pages.json z /admin/ adresáře
             const pagesUrl = '../public/data/pages.json';
             log(`Načítám rozcestník z: ${pagesUrl}`);
             const pagesRes = await fetch(pagesUrl + '?t=' + Date.now());
-            if (!pagesRes.ok) throw new Error(`HTTP chyba ${pagesRes.status}`);
-            pagesData = await pagesRes.json();
+            if (pagesRes.ok) {
+                const loadedPages = await pagesRes.json();
+                if (Array.isArray(loadedPages) && loadedPages.length > 0) {
+                    pagesData = loadedPages;
+                }
+            }
             renderDashboard();
+            log('Rozcestník úspěšně načten.', 'success');
         } catch (e) {
-            log('Chyba při načítání rozcestníku: ' + e.message, 'error');
+            renderDashboard();
+            log('Použita výchozí struktura rozcestníku.', 'success');
         }
     }
 
@@ -464,7 +496,7 @@
             card.className = 'item-card';
 
             const icon = item.icon || '📄';
-            const subtitle = item.description || (item.file ? `Soubor: ${item.file}` : '');
+            const subtitle = item.description || (item.dataFile ? `Soubor: ${item.dataFile}` : '');
 
             card.innerHTML = `
                 <div class="item-info">
@@ -486,12 +518,8 @@
         const item = pagesData.find(p => p.id === id);
         if (!item) return;
 
-        // Ošetření správné cesty k datovému souboru
-        let dataFile = item.dataFile;
-        if (dataFile.startsWith('public/')) {
-            dataFile = dataFile.replace('public/', '');
-        }
-        const targetUrl = `../public/${dataFile}`;
+        let dataFile = item.dataFile; // např. "public/data/e-shop.json"
+        const targetUrl = `../${dataFile}`; // vedle admin/ je public/, takže "../public/data/..."
 
         if (item.type === 'products') {
             try {
@@ -508,10 +536,10 @@
                     productsData = shopData.products || [];
                 }
                 renderProductsList();
+                switchView('view-products');
             } catch (e) {
                 log('Chyba při načítání produktů: ' + e.message, 'error');
             }
-            switchView('view-products');
         } else {
             document.getElementById('edit-page-id').value = item.id;
             document.getElementById('page-title').value = item.title;
@@ -527,7 +555,7 @@
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = dataFile;
+                dynamicFields.dataset.dataFile = dataFile; // Ukládá správnou cestu pro commit ("public/data/index.json")
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
@@ -572,7 +600,7 @@
             const card = document.createElement('div');
             card.className = 'item-card';
 
-            const imgPath = p.image || '../img/drone.png';
+            const imgPath = p.image ? '../public/' + p.image.replace(/^\.\//, '') : '../public/img/drone.png';
             const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
 
             card.innerHTML = `
@@ -652,8 +680,8 @@
         }
 
         try {
-            log(`Získávám SHA pro public/${filePath}...`);
-            const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/public/${filePath}?ref=${branch}`, {
+            log(`Získávám SHA pro ${filePath}...`);
+            const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -667,7 +695,7 @@
             const jsonText = JSON.stringify(contentObject, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonText)));
 
-            const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/public/${filePath}`, {
+            const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -688,12 +716,12 @@
         }
     }
 
-    // Uložení editu stránky
+    // Uložení editu stránky (zapisuje do public/data/index.json, kontakt.json atd.)
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const dynamicFields = document.getElementById('page-dynamic-fields');
-        const dataFile = dynamicFields.dataset.dataFile;
+        const dataFile = dynamicFields.dataset.dataFile; // např. "public/data/index.json"
         if (!dataFile) return;
 
         const updatedData = {};
@@ -707,7 +735,7 @@
         showDashboard();
     });
 
-    // Uložení / vytvoření produktu (e-shop.json)
+    // Uložení / vytvoření produktu (zapisuje do public/data/e-shop.json)
     document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -757,7 +785,7 @@
             products: productsData
         };
 
-        await commitFileToGithub('data/e-shop.json', shopPayload, `CMS: Uložen dron ${title}`);
+        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Uložen dron ${title}`);
         resetProductForm();
     });
 
@@ -774,7 +802,7 @@
             products: productsData
         };
 
-        await commitFileToGithub('data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
+        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
 
     loadConfig();
