@@ -287,7 +287,7 @@
         <button class="btn-secondary" id="save-config-btn" type="button">Uložit Konfiguraci</button>
     </div>
 
-    <!-- VIEW 1: ROZCESTNÍK -->
+    <!-- VIEW 1: ROZCESTNÍK (generuje se automaticky z pages.json) -->
     <div class="admin-view active" id="view-dashboard">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
@@ -360,11 +360,11 @@
         </div>
     </div>
 
-    <!-- VIEW 3: EDITOR STRÁNEK -->
+    <!-- VIEW 3: EDITOR BĚŽNÝCH STRÁNEK (PRO <main> OBSAH) -->
     <div class="admin-view" id="view-page-editor">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
-            <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">Úprava stránky</h3>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">Úprava obsahu stránky</h3>
         </div>
 
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;">
@@ -372,7 +372,7 @@
                 <input type="hidden" id="edit-page-id">
                 
                 <div class="field-group">
-                    <label>Název</label>
+                    <label>Název sekce</label>
                     <input type="text" id="page-title" required readonly style="opacity: 0.7;">
                 </div>
 
@@ -397,34 +397,7 @@
     let productsData = [];
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
-    
-    // Záchranná struktura s garantovaně správnými názvy souborů
-    let pagesData = [
-        {
-            "id": "e-shop",
-            "title": "E-shop Produkty (Drony)",
-            "description": "Správa aktivních dronů, cen, fotek a specifikací",
-            "icon": "🛒",
-            "type": "products",
-            "dataFile": "public/data/e-shop.json"
-        },
-        {
-            "id": "index",
-            "title": "Úvodní stránka",
-            "description": "Správa hlavního obsahu úvodní stránky",
-            "icon": "📄",
-            "type": "page",
-            "dataFile": "public/data/index.json"
-        },
-        {
-            "id": "kontakt",
-            "title": "Kontakt & Podpora",
-            "description": "Správa telefonů, e-mailů a fakturačních údajů",
-            "icon": "📞",
-            "type": "page",
-            "dataFile": "public/data/kontakt.json"
-        }
-    ];
+    let pagesData = [];
 
     const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
     const configPanel = document.getElementById('config-panel');
@@ -468,7 +441,7 @@
         switchView('view-dashboard');
     }
 
-    // Bezpečné mapování souborů podle reálného názvu v repozitáři
+    // Bezpečné čištění cesty k JSON souborům
     function sanitizePath(dataFile, type, id) {
         if (type === 'products' || id === 'e-shop') return 'public/data/e-shop.json';
         if (id === 'home' || id === 'index' || (dataFile && dataFile.includes('index.json'))) return 'public/data/index.json';
@@ -480,27 +453,37 @@
         return path;
     }
 
+    // Načtení rozcestníku ze souboru public/data/pages.json
     async function initData() {
         try {
             const pagesUrl = '../public/data/pages.json';
             log(`Načítám rozcestník z: ${pagesUrl}`);
             const pagesRes = await fetch(pagesUrl + '?t=' + Date.now());
-            if (pagesRes.ok) {
-                const loadedPages = await pagesRes.json();
-                if (Array.isArray(loadedPages) && loadedPages.length > 0) {
-                    pagesData = loadedPages.map(p => {
-                        p.dataFile = sanitizePath(p.dataFile, p.type, p.id);
-                        if (p.id === 'home') p.id = 'index';
-                        if (p.id === 'contact') p.id = 'kontakt';
-                        return p;
-                    });
-                }
+            if (!pagesRes.ok) throw new Error(`HTTP chyba ${pagesRes.status}`);
+            
+            const loadedPages = await pagesRes.json();
+            if (Array.isArray(loadedPages) && loadedPages.length > 0) {
+                pagesData = loadedPages.map(p => {
+                    p.dataFile = sanitizePath(p.dataFile, p.type, p.id);
+                    if (p.id === 'home') p.id = 'index';
+                    if (p.id === 'contact') p.id = 'kontakt';
+                    return p;
+                });
+                renderDashboard();
+                log('Rozcestník úspěšně načten z pages.json.', 'success');
+            } else {
+                throw new Error('pages.json je prázdný.');
             }
-            renderDashboard();
-            log('Rozcestník úspěšně načten.', 'success');
         } catch (e) {
+            log('Chyba při načítání pages.json: ' + e.message, 'error');
+            // Záložní záchranná struktura, pokud by pages.json chyběl
+            pagesData = [
+                { "id": "e-shop", "title": "E-shop Produkty (Drony)", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json" },
+                { "id": "index", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json" },
+                { "id": "kontakt", "title": "Kontakt & Podpora", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json" }
+            ];
             renderDashboard();
-            log('Použita výchozí struktura rozcestníku.', 'success');
+            log('Použita záložní struktura rozcestníku.', 'success');
         }
     }
 
@@ -560,19 +543,19 @@
         } else {
             document.getElementById('edit-page-id').value = item.id;
             document.getElementById('page-title').value = item.title;
-            document.getElementById('editor-page-heading').textContent = `Úprava stránky: ${item.title}`;
+            document.getElementById('editor-page-heading').textContent = `Úprava obsahu: ${item.title}`;
 
             const dynamicFields = document.getElementById('page-dynamic-fields');
             dynamicFields.innerHTML = '<p style="color: var(--text-muted);">Načítám data...</p>';
 
             try {
-                log(`Načítám stránku z: ${targetUrl}`);
+                log(`Načítám data stránky z: ${targetUrl}`);
                 const res = await fetch(targetUrl + '?t=' + Date.now());
                 if (!res.ok) throw new Error(`HTTP chyba ${res.status}`);
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = dataFile; // Přesná cesta k JSONu (např. public/data/kontakt.json)
+                dynamicFields.dataset.dataFile = dataFile;
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
@@ -587,7 +570,7 @@
                     let input;
                     if (typeof val === 'string' && val.length > 50) {
                         input = document.createElement('textarea');
-                        input.rows = 3;
+                        input.rows = 4;
                     } else {
                         input = document.createElement('input');
                         input.type = 'text';
@@ -604,7 +587,7 @@
 
                 switchView('view-page-editor');
             } catch (err) {
-                log('Chyba při načítání souboru stránky: ' + err.message, 'error');
+                log('Chyba při načítání obsahu stránky: ' + err.message, 'error');
             }
         }
     }
@@ -733,12 +716,12 @@
         }
     }
 
-    // Uložení editu stránky (přepisuje přímo odpovídající JSON soubor v repozitáři)
+    // Uložení editu běžné stránky (přepisuje odpovídající JSON soubor v repozitáři)
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const dynamicFields = document.getElementById('page-dynamic-fields');
-        const dataFile = dynamicFields.dataset.dataFile; // např. public/data/kontakt.json
+        const dataFile = dynamicFields.dataset.dataFile; 
         if (!dataFile) return;
 
         const updatedData = {};
@@ -747,8 +730,8 @@
             updatedData[key] = input.value;
         });
 
-        const pageTitle = document.getElementById('page-title'].value;
-        await commitFileToGithub(dataFile, updatedData, `CMS: Aktualizován soubor ${dataFile} (${pageTitle})`);
+        const pageTitle = document.getElementById('page-title').value;
+        await commitFileToGithub(dataFile, updatedData, `CMS: Aktualizován obsah ${dataFile} (${pageTitle})`);
         showDashboard();
     });
 
