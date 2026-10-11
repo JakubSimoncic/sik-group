@@ -3,25 +3,29 @@ const makeWebhookUrl = "https://hook.eu1.make.com/kk5lv67txlhlqo1w2wsmftvuxyk62i
 document.addEventListener('DOMContentLoaded', () => {
     
     // ==========================================================================
-    // 0. DYNAMICKÉ NAČTENÍ Z CMS (PODLE AKTUÁLNÍ STRÁNKY)
+    // 0. DYNAMICKÉ NAČTENÍ Z CMS (PODLE AKTUÁLNÍ STRÁNKY A JEJÍHO SAMOSTATNÉHO JSONu)
     // ==========================================================================
     async function loadCMSContent() {
         try {
-            const isInPagesFolder = window.location.pathname.includes('/pages/');
-            const dataPath = isInPagesFolder ? '../data/site-content.json' : 'data/site-content.json';
+            const path = window.location.pathname;
+            const isInPagesFolder = path.includes('/pages/');
+            
+            // Určení správného JSON souboru podle toho, kde se nacházíme
+            let jsonFileName = 'index.json';
+            if (path.includes('kontakt')) jsonFileName = 'kontakt.json';
+            else if (path.includes('e-shop')) jsonFileName = 'e-shop.json';
+            else if (path.includes('propagace')) jsonFileName = 'propagace.json';
+            else if (path.includes('osobni_akce')) jsonFileName = 'osobni_akce.json';
+            else if (path.includes('firemni_akce')) jsonFileName = 'firemni_akce.json';
+
+            const dataPath = isInPagesFolder ? `../data/${jsonFileName}` : `public/data/${jsonFileName}`;
 
             const res = await fetch(`${dataPath}?t=` + Date.now());
             if (!res.ok) return;
             const data = await res.json();
 
-            // A) Načtení kontaktů (podpora pro pole i objektový formát)
-            let contactData = null;
-            if (Array.isArray(data)) {
-                contactData = data.find(p => p.id === 'contact');
-            } else if (data.contact) {
-                contactData = data.contact;
-            }
-
+            // A) Načtení kontaktů (pokud jsou v JSONu přítomny)
+            const contactData = data.contact || (Array.isArray(data) && data.find(p => p.id === 'contact'));
             if (contactData && document.getElementById('contact-email')) {
                 if (contactData.email) {
                     document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
@@ -53,16 +57,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // B) Pokud jsme na úvodní stránce (index.html) nebo v objektu existují home data
-            const homeData = data.home || (Array.isArray(data) && data.find(p => p.id === 'home'));
+            // B) Načtení dat pro úvodní stránku (index) nebo obecná hero data
+            const homeData = data.home || data;
             if (homeData) {
-                const titleEl = document.querySelector('.tech-main-title') || document.getElementById('main-title');
-                if (titleEl && (homeData.mainTitle || homeData.heroTitle)) {
-                    titleEl.textContent = homeData.mainTitle || homeData.heroTitle;
+                const titleEl = document.getElementById('hero-title') || document.querySelector('.hero-title');
+                if (titleEl && (homeData.heroTitle || homeData.mainTitle)) {
+                    titleEl.textContent = homeData.heroTitle || homeData.mainTitle;
                 }
-                const subtitleEl = document.querySelector('.tech-subtitle') || document.getElementById('main-subtitle');
-                if (subtitleEl && (homeData.mainSubtitle || homeData.heroSubtitle)) {
-                    subtitleEl.textContent = homeData.mainSubtitle || homeData.heroSubtitle;
+                
+                // Načtení specializací pro index.html, pokud existují
+                if (homeData.divisions && Array.isArray(homeData.divisions)) {
+                    homeData.divisions.forEach((div, index) => {
+                        const i = index + 1;
+                        const badgeEl = document.getElementById(`badge-${i}`);
+                        const titleEl = document.getElementById(`div-title-${i}`);
+                        const descEl = document.getElementById(`div-desc-${i}`);
+
+                        if (badgeEl && div.badge) badgeEl.textContent = div.badge;
+                        if (titleEl && div.title) titleEl.textContent = div.title;
+                        if (descEl && div.description) descEl.textContent = div.description;
+                    });
+                }
+
+                if (homeData.trustText) {
+                    const trustEl = document.getElementById('trust-text');
+                    if (trustEl) trustEl.textContent = homeData.trustText;
                 }
             }
 
