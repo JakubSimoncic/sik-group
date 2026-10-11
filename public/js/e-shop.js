@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 const shopData = await res.json();
 
-                // Pokud je e-shop.json pole (starý formát), nebo objekt (nový CMS formát)
                 let items = [];
                 if (Array.isArray(shopData)) {
                     items = shopData;
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.innerHTML = `
                 <div class="tech-img-wrapper">
-                    <img src="${imagePath}" alt="${product.title}">
+                    <img src="${imagePath}" alt="${product.title}" loading="lazy">
                     <div class="tech-card-overlay"><span>Zobrazit specifikaci</span></div>
                 </div>
                 <div class="tech-card-meta">
