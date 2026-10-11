@@ -1,10 +1,9 @@
 [
   {
     "id": "eshop-products",
-    "title": "E-shop Produkty (Drony)",
+    "title": "E-shop Produkty",
     "type": "products",
-    "dataFile": "data/products.json",
-    "description": "Správa aktivních dronů, cen, fotek a specifikací",
+    "dataFile": "data/e-shop.json",
     "icon": "🛒"
   },
   {
@@ -12,17 +11,15 @@
     "title": "Úvodní stránka",
     "type": "page",
     "file": "index.html",
-    "dataFile": "data/home.json",
-    "description": "Správa hlavního nadpisu a podnadpisu webu",
+    "dataFile": "data/index.json",
     "icon": "📄"
   },
   {
     "id": "contact",
-    "title": "Kontakt & Podpora",
+    "title": "Kontakt",
     "type": "page",
     "file": "contact.html",
-    "dataFile": "data/contact.json",
-    "description": "Správa telefonů, e-mailů a fakturačních údajů",
+    "dataFile": "data/kontakt.json",
     "icon": "📞"
   }
 ]
