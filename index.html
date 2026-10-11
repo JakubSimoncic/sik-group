@@ -102,9 +102,7 @@
                         <div class="huge-bg-number">01</div>
                         <h3 class="row-title"><a href="propagace.html" id="div-title-1">Propagační videa</a></h3>
                         <p class="row-description" id="div-desc-1">
-                            Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální 
-                            sítě, video na web nebo rovnou kompletní obsah pro prezentaci vašeho projektu?
-                            Postaráme se o natáčení, střih i finální podobu videa.
+                            Načítá se...
                         </p>
                         <a href="propagace.html" class="btn-drone-action">
                             <span>Prozkoumat divizi</span>
@@ -125,8 +123,7 @@
                         <div class="huge-bg-number">02</div>
                         <h3 class="row-title"><a href="firemni_akce.html" id="div-title-2">Velké eventy</a></h3>
                         <p class="row-description" id="div-desc-2">
-                            Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete.
-                            Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě.
+                            Načítá se...
                         </p>
                         <a href="firemni_akce.html" class="btn-drone-action">
                             <span>Prozkoumat divizi</span>
@@ -147,8 +144,7 @@
                         <div class="huge-bg-number">03</div>
                         <h3 class="row-title"><a href="osobni_akce.html" id="div-title-3">Osobní akce</a></h3>
                         <p class="row-description" id="div-desc-3">
-                            Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku?
-                            Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily.
+                            Načítá se...
                         </p>
                         <a href="osobni_akce.html" class="btn-drone-action">
                             <span>Prozkoumat divizi</span>
@@ -168,7 +164,7 @@
             
             <div class="trust-layout-premium">
                 <div class="trust-info">
-                    <p id="trust-text">Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?</p>
+                    <p id="trust-text">Načítá se...</p>
                 </div>
                 
                 <div class="trust-logos-grid">
@@ -390,40 +386,9 @@
         </div>
     </footer>
 
+    <!-- Globální script -->
     <script src="public/js/script.js" defer></script>
-    
-    <!-- Dynamické načtení obsahu z index.json -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const res = await fetch('public/data/index.json?t=' + Date.now());
-                if (!res.ok) return;
-                const data = await res.json();
-
-                if (data.heroTitle) {
-                    const heroEl = document.getElementById('hero-title');
-                    if (heroEl) heroEl.textContent = data.heroTitle;
-                }
-                if (data.divisions) {
-                    data.divisions.forEach((div, index) => {
-                        const i = index + 1;
-                        const badgeEl = document.getElementById(`badge-${i}`);
-                        const titleEl = document.getElementById(`div-title-${i}`);
-                        const descEl = document.getElementById(`div-desc-${i}`);
-
-                        if (badgeEl && div.badge) badgeEl.textContent = div.badge;
-                        if (titleEl && div.title) titleEl.textContent = div.title;
-                        if (descEl && div.description) descEl.textContent = div.description;
-                    });
-                }
-                if (data.trustText) {
-                    const trustEl = document.getElementById('trust-text');
-                    if (trustEl) trustEl.textContent = data.trustText;
-                }
-            } catch (err) {
-                console.error('Chyba při načítání index.json:', err);
-            }
-        });
-    </script>
+    <!-- Stránkový script pro hlavní stránku -->
+    <script src="public/js/index.js" defer></script>
 </body>
 </html>
