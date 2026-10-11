@@ -236,24 +236,6 @@
             margin-bottom: 10px;
         }
 
-        .nested-section {
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid var(--card-border);
-            border-left: 3px solid var(--accent-cyan);
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .nested-section-title {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
         .terminal-log {
             background: #040404;
             border: 1px solid var(--card-border);
@@ -321,7 +303,23 @@
     <div class="admin-view" id="view-products">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
-            <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 E-Shop</h3>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 E-Shop & Hlavní texty</h3>
+        </div>
+
+        <!-- Úprava hlavních textů e-shopu -->
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 8px; margin-bottom: 30px;">
+            <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Hlavní nadpisy e-shopu</h4>
+            <div class="form-grid-2">
+                <div class="field-group">
+                    <label>Hlavní nadpis (Main Title)</label>
+                    <input type="text" id="shop-main-title-input">
+                </div>
+                <div class="field-group">
+                    <label>Podnadpis (Main Subtitle)</label>
+                    <input type="text" id="shop-main-subtitle-input">
+                </div>
+            </div>
+            <button type="button" class="btn-secondary" id="save-shop-texts-btn" style="margin-top: 10px;">Uložit nadpisy</button>
         </div>
 
         <div class="list-container" id="products-list"></div>
@@ -371,14 +369,14 @@
                 </div>
 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit</button>
+                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit dron</button>
                     <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display: none;">Zrušit úpravy</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- VIEW 3: EDITOR OBSAHU STRÁNEK -->
+    <!-- VIEW 3: EDITOR OBSAHU STRÁNEK (PLOCHÝ SEZNAM POLÍ BEZ NADPISŮ) -->
     <div class="admin-view" id="view-page-editor">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
@@ -389,11 +387,12 @@
             <form id="page-form">
                 <input type="hidden" id="edit-page-id">
                 
-                <div class="field-group">
+                <div class="field-group" style="display:none;">
                     <label>Název sekce</label>
-                    <input type="text" id="page-title" required readonly style="opacity: 0.7;">
+                    <input type="text" id="page-title" required readonly>
                 </div>
 
+                <!-- Zde budou všechna textová pole postupně pod sebou bez boxů a nadpisů -->
                 <div id="page-dynamic-fields"></div>
 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
@@ -416,7 +415,7 @@
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     let pagesData = [];
-    let currentLoadedPageData = {}; // Uchovává kompletní načtenou strukturu pro správné uložení
+    let currentLoadedPageData = {};
 
     const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
     const configPanel = document.getElementById('config-panel');
@@ -461,7 +460,7 @@
     }
 
     function sanitizePath(dataFile, type, id) {
-        if (type === 'products' || id === 'e-shop') return 'public/data/e-shop.json';
+        if (type === 'products' || id === 'e-shop' || id === 'eshop-products') return 'public/data/e-shop.json';
         if (id === 'home' || id === 'index' || (dataFile && dataFile.includes('index.json'))) return 'public/data/index.json';
         if (id === 'kontakt' || id === 'contact' || (dataFile && (dataFile.includes('kontakt.json') || dataFile.includes('contact.json')))) return 'public/data/kontakt.json';
         
@@ -494,7 +493,7 @@
         } catch (e) {
             log('Chyba při načítání pages.json: ' + e.message, 'error');
             pagesData = [
-                { "id": "e-shop", "title": "E-shop Produkty (Drony)", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json" },
+                { "id": "eshop-products", "title": "E-shop Produkty (Drony)", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json" },
                 { "id": "index", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json" },
                 { "id": "kontakt", "title": "Kontakt & Podpora", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json" }
             ];
@@ -530,37 +529,23 @@
         });
     }
 
-    // Rekurzivní generování formulářových polí pro vnořené objekty v JSONu
-    function renderNestedFields(obj, prefix = '', container) {
+    // Rekurzivní vykreslení všech textů postupně pod sebou BEZ nadpisů a boxů
+    function renderFlatFields(obj, prefix = '', container) {
+        if (obj === null || obj === undefined) return;
+
         Object.keys(obj).forEach(key => {
             const fullKey = prefix ? `${prefix}.${key}` : key;
             const val = obj[key];
 
-            if (val !== null && typeof val === 'object' && !Array.isArray(val)) {
-                // Je to vnořený objekt (např. contact, global, contactPage)
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'nested-section';
-
-                const titleEl = document.createElement('div');
-                titleEl.className = 'nested-section-title';
-                titleEl.textContent = key;
-                sectionDiv.appendChild(titleEl);
-
-                renderNestedFields(val, fullKey, sectionDiv);
-                container.appendChild(sectionDiv);
-            } else if (Array.isArray(val)) {
-                // Pole (např. team, faq) necháme nedotčené, nebo informujeme
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'field-group';
-                infoDiv.innerHTML = `<label>${key.toUpperCase()} (Pole / Array)</label><input type="text" disabled value="[Pole obsahuje ${val.length} položek - spravuje se primárně v JSONu]" style="opacity: 0.5;">`;
-                container.appendChild(infoDiv);
+            if (val !== null && typeof val === 'object') {
+                // Rekurzivně projde objekty i pole bez vytváření jakýchkoliv rámců či nadpisů
+                renderFlatFields(val, fullKey, container);
             } else {
-                // Běžná hodnota (řetězec, číslo)
                 const fieldGroup = document.createElement('div');
                 fieldGroup.className = 'field-group';
 
                 const label = document.createElement('label');
-                label.textContent = key;
+                label.textContent = fullKey; // Zobrazí jasný klíč/cestu k textu
 
                 let input;
                 if (typeof val === 'string' && val.length > 60) {
@@ -573,7 +558,7 @@
 
                 input.className = 'page-field-input';
                 input.dataset.keyPath = fullKey;
-                input.value = val !== undefined ? val : '';
+                input.value = val !== undefined && val !== null ? val : '';
 
                 fieldGroup.appendChild(label);
                 fieldGroup.appendChild(input);
@@ -589,7 +574,7 @@
         const dataFile = sanitizePath(item.dataFile, item.type, item.id);
         const targetUrl = `../${dataFile}`;
 
-        if (item.type === 'products' || id === 'e-shop') {
+        if (item.type === 'products' || id === 'e-shop' || id === 'eshop-products') {
             try {
                 log(`Načítám produkty z: ${targetUrl}`);
                 const prodRes = await fetch(targetUrl + '?t=' + Date.now());
@@ -603,6 +588,10 @@
                     shopMainSubtitle = shopData.mainSubtitle || shopMainSubtitle;
                     productsData = shopData.products || [];
                 }
+                
+                document.getElementById('shop-main-title-input').value = shopMainTitle;
+                document.getElementById('shop-main-subtitle-input').value = shopMainSubtitle;
+
                 renderProductsList();
                 switchView('view-products');
             } catch (e) {
@@ -621,12 +610,13 @@
                 const res = await fetch(targetUrl + '?t=' + Date.now());
                 if (!res.ok) throw new Error(`HTTP chyba ${res.status}`);
                 
-                currentLoadedPageData = await res.json(); // Uložíme si kompletní objekt
+                currentLoadedPageData = await res.json();
 
                 dynamicFields.innerHTML = '';
                 dynamicFields.dataset.dataFile = dataFile;
 
-                renderNestedFields(currentLoadedPageData, '', dynamicFields);
+                // Vykreslí veškerý text postupně pod sebou
+                renderFlatFields(currentLoadedPageData, '', dynamicFields);
 
                 switchView('view-page-editor');
             } catch (err) {
@@ -759,18 +749,35 @@
         }
     }
 
-    // Pomocná funkce pro vložení hodnoty zpět do vnořeného objektu podle tečkové notace (např. contact.email)
     function setNestedValue(obj, path, value) {
         const parts = path.split('.');
         let curr = obj;
         for (let i = 0; i < parts.length - 1; i++) {
-            if (!curr[parts[i]]) curr[parts[i]] = {};
-            curr = curr[parts[i]];
+            const part = parts[i];
+            const nextPart = parts[i + 1];
+            if (curr[part] === undefined) {
+                curr[part] = !isNaN(nextPart) ? [] : {};
+            }
+            curr = curr[part];
         }
         curr[parts[parts.length - 1]] = value;
     }
 
-    // Uložení editu stránky - rekonstruuje celou vnořenou JSON strukturu a odešle na GitHub
+    // Uložení nadpisů e-shopu
+    document.getElementById('save-shop-texts-btn').addEventListener('click', async () => {
+        shopMainTitle = document.getElementById('shop-main-title-input').value;
+        shopMainSubtitle = document.getElementById('shop-main-subtitle-input').value;
+
+        const shopPayload = {
+            mainTitle: shopMainTitle,
+            mainSubtitle: shopMainSubtitle,
+            products: productsData
+        };
+
+        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Aktualizovány nadpisy e-shopu`);
+    });
+
+    // Uložení editu stránky (index.json, kontakt.json atd.)
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -778,10 +785,8 @@
         const dataFile = dynamicFields.dataset.dataFile; 
         if (!dataFile) return;
 
-        // Vytvoříme kopii původních dat (aby se zachovala pole jako team, faq atd.)
         let updatedData = JSON.parse(JSON.stringify(currentLoadedPageData));
 
-        // Projdeme všechna input pole a aktualizujeme hodnoty ve vnořené struktuře
         document.querySelectorAll('.page-field-input').forEach(input => {
             const keyPath = input.dataset.keyPath;
             setNestedValue(updatedData, keyPath, input.value);
@@ -792,7 +797,7 @@
         showDashboard();
     });
 
-    // Uložení / vytvoření produktu (e-shop.json)
+    // Uložení / vytvoření produktu
     document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -859,7 +864,7 @@
             products: productsData
         };
 
-        await commitFileToGitHub('public/data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
+        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
 
     loadConfig();
