@@ -1,40 +1,8 @@
 {
-  "heroTitle": "Jeden tým pro celý záběr",
+  "heroTitle": "a",
   "heroBtnDrony": "Drony",
   "heroBtnFpv": "FPV",
   "divisionsTitle": "Naše specializace",
-  "divisions": [
-    {
-      "id": "1",
-      "badge": "nazev 123",
-      "title": "Propagační videa",
-      "description": "Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální sítě, video na web nebo rovnou kompletní obsah pro prezentaci vašeho projektu? Postaráme se o natáčení, střih i finální podobu videa.",
-      "link": "propagace.html",
-      "image": "public/img/drone.png",
-      "number": "01",
-      "btnText": "Prozkoumat divizi"
-    },
-    {
-      "id": "2",
-      "badge": "nazev 123",
-      "title": "Velké eventy",
-      "description": "Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete. Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě.",
-      "link": "firemni_akce.html",
-      "image": "public/img/drone.png",
-      "number": "02",
-      "btnText": "Prozkoumat divizi"
-    },
-    {
-      "id": "3",
-      "badge": "nazev 123",
-      "title": "Osobní akce",
-      "description": "Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku? Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily.",
-      "link": "osobni_akce.html",
-      "image": "public/img/drone.png",
-      "number": "03",
-      "btnText": "Prozkoumat divizi"
-    }
-  ],
   "trustTitle": "Klienti a Partneři",
   "trustText": "Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?",
   "bookingTitle": "Sjednat akci",
