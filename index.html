@@ -74,10 +74,10 @@
 
             <div class="hero-content-centered global-container">
                 <div class="hero-main-text">
-                    <h1 class="hero-title" id="hero-title">Jeden tým pro celý záběr</h1>
+                    <h1 class="hero-title" id="hero-title">Načítá se...</h1>
                     <div class="hero-cta-group">
-                        <a href="#ukazka" class="btn-drone-minimal">Drony</a>
-                        <a href="public/pages/kontakt.html#kontakt" class="btn-drone-minimal outline">FPV</a>
+                        <a href="#ukazka" class="btn-drone-minimal" id="hero-btn-drony">Drony</a>
+                        <a href="public/pages/kontakt.html#kontakt" class="btn-drone-minimal outline" id="hero-btn-fpv">FPV</a>
                     </div>
                 </div>
             </div>
@@ -86,72 +86,11 @@
 
         <section id="ukazka" class="divisions-section global-container">
             <div class="section-meta">
-                <h2>Naše specializace</h2>
+                <h2 id="divisions-section-title">Načítá se...</h2>
             </div>
 
-            <div class="cinematic-showcase-list">
-                <div class="showcase-row">
-                    <div class="showcase-media">
-                        <a href="propagace.html" class="media-container">
-                            <img src="public/img/drone.png" alt="Propagační videa" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
-                            <div class="media-overlay"></div>
-                            <span class="media-badge" id="badge-1">nazev 123</span>
-                        </a>
-                    </div>
-                    <div class="showcase-text">
-                        <div class="huge-bg-number">01</div>
-                        <h3 class="row-title"><a href="propagace.html" id="div-title-1">Propagační videa</a></h3>
-                        <p class="row-description" id="div-desc-1">
-                            Načítá se...
-                        </p>
-                        <a href="propagace.html" class="btn-drone-action">
-                            <span>Prozkoumat divizi</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="showcase-row row-reverse">
-                    <div class="showcase-media">
-                        <a href="firemni_akce.html" class="media-container">
-                            <img src="public/img/drone.png" alt="Firemní akce" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
-                            <div class="media-overlay"></div>
-                            <span class="media-badge" id="badge-2">nazev 123</span>
-                        </a>
-                    </div>
-                    <div class="showcase-text">
-                        <div class="huge-bg-number">02</div>
-                        <h3 class="row-title"><a href="firemni_akce.html" id="div-title-2">Velké eventy</a></h3>
-                        <p class="row-description" id="div-desc-2">
-                            Načítá se...
-                        </p>
-                        <a href="firemni_akce.html" class="btn-drone-action">
-                            <span>Prozkoumat divizi</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="showcase-row">
-                    <div class="showcase-media">
-                        <a href="osobni_akce.html" class="media-container">
-                            <img src="public/img/drone.png" alt="Osobní akce" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
-                            <div class="media-overlay"></div>
-                            <span class="media-badge" id="badge-3">nazev 123</span>
-                        </a>
-                    </div>
-                    <div class="showcase-text">
-                        <div class="huge-bg-number">03</div>
-                        <h3 class="row-title"><a href="osobni_akce.html" id="div-title-3">Osobní akce</a></h3>
-                        <p class="row-description" id="div-desc-3">
-                            Načítá se...
-                        </p>
-                        <a href="osobni_akce.html" class="btn-drone-action">
-                            <span>Prozkoumat divizi</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                        </a>
-                    </div>
-                </div>
+            <div class="cinematic-showcase-list" id="divisions-container">
+                <!-- Dynamicky generováno přes index.js -->
             </div>
         </section>
 
@@ -159,7 +98,7 @@
 
         <section class="trust-section global-container">
             <div class="section-meta">
-                <h2>Klienti a Partneři</h2>
+                <h2 id="trust-section-title">Načítá se...</h2>
             </div>
             
             <div class="trust-layout-premium">
@@ -179,7 +118,7 @@
 
         <section id="booking" class="booking-section global-container">
             <div class="section-meta">
-                <h2>Sjednat akci</h2>        
+                <h2 id="booking-section-title">Načítá se...</h2>        
             </div>
 
             <div class="booking-grid">
@@ -202,7 +141,7 @@
                 </div>
 
                 <div class="booking-details">
-                    <h3>Vyberte čas akce</h3>
+                    <h3 id="booking-heading">Načítá se...</h3>
                     <div id="selected-date-presenter" class="date-unselected">Žádné datum nebylo vybráno</div>
                     
                     <form class="booking-form" id="rezervacni-formular">                        
@@ -337,11 +276,11 @@
                             </div>
                         </div>
 
-                        <input type="text" id="form-jmeno" placeholder="Jméno / název společnosti" required>
-                        <input type="email" id="form-email" placeholder="Email" required>
-                        <input type="tel" id="form-telefon" placeholder="Telefonní číslo">
-                        <textarea id="form-projekt" placeholder="Popis vašeho projektu"></textarea>
-                        <button type="submit" class="btn-confirm">Potvrdit termín</button>
+                        <input type="text" id="form-jmeno" placeholder="Načítá se..." required>
+                        <input type="email" id="form-email" placeholder="Načítá se..." required>
+                        <input type="tel" id="form-telefon" placeholder="Načítá se...">
+                        <textarea id="form-projekt" placeholder="Načítá se..."></textarea>
+                        <button type="submit" class="btn-confirm" id="form-submit-btn">Načítá se...</button>
                     </form>
                 </div>
             </div>
