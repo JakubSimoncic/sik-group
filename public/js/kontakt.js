@@ -9,6 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) return;
             const data = await res.json();
 
+            // 0. Hlavní nadpisy a popisky stránek z CMS (contactPage)
+            const cPage = data.contactPage;
+            if (cPage) {
+                const teamTitleEl = document.getElementById('team-section-title');
+                if (teamTitleEl && cPage.teamSectionTitle) teamTitleEl.textContent = cPage.teamSectionTitle;
+
+                const faqTitleEl = document.getElementById('faq-section-title');
+                if (faqTitleEl && cPage.faqSectionTitle) faqTitleEl.textContent = cPage.faqSectionTitle;
+
+                const contactTitleEl = document.getElementById('contact-section-title');
+                if (contactTitleEl && cPage.contactSectionTitle) contactTitleEl.textContent = cPage.contactSectionTitle;
+
+                const businessTitleEl = document.getElementById('business-block-title');
+                if (businessTitleEl && cPage.businessTitle) businessTitleEl.textContent = cPage.businessTitle;
+
+                const billingTitleEl = document.getElementById('billing-block-title');
+                if (billingTitleEl && cPage.billingTitle) billingTitleEl.textContent = cPage.billingTitle;
+
+                if (cPage.labels) {
+                    const l = cPage.labels;
+                    if (l.email) { const el = document.getElementById('label-email'); if (el) el.textContent = l.email; }
+                    if (l.phone) { const el = document.getElementById('label-phone'); if (el) el.textContent = l.phone; }
+                    if (l.address) { const el = document.getElementById('label-address'); if (el) el.textContent = l.address; }
+                    if (l.ico) { const el = document.getElementById('label-ico'); if (el) el.textContent = l.ico; }
+                    if (l.dic) { const el = document.getElementById('label-dic'); if (el) el.textContent = l.dic; }
+                    if (l.bank) { const el = document.getElementById('label-bank'); if (el) el.textContent = l.bank; }
+                }
+            }
+
             // 1. Kontakty a fakturační údaje
             const contactData = data.contact;
             if (contactData) {
