@@ -443,7 +443,11 @@
 
     async function initData() {
         try {
-            const pagesRes = await fetch('../public/data/pages.json?t=' + Date.now());
+            // Správná cesta k pages.json z /admin/ adresáře
+            const pagesUrl = '../public/data/pages.json';
+            log(`Načítám rozcestník z: ${pagesUrl}`);
+            const pagesRes = await fetch(pagesUrl + '?t=' + Date.now());
+            if (!pagesRes.ok) throw new Error(`HTTP chyba ${pagesRes.status}`);
             pagesData = await pagesRes.json();
             renderDashboard();
         } catch (e) {
@@ -482,9 +486,18 @@
         const item = pagesData.find(p => p.id === id);
         if (!item) return;
 
+        // Ošetření správné cesty k datovému souboru
+        let dataFile = item.dataFile;
+        if (dataFile.startsWith('public/')) {
+            dataFile = dataFile.replace('public/', '');
+        }
+        const targetUrl = `../public/${dataFile}`;
+
         if (item.type === 'products') {
             try {
-                const prodRes = await fetch(`../public/${item.dataFile}?t=` + Date.now());
+                log(`Načítám produkty z: ${targetUrl}`);
+                const prodRes = await fetch(targetUrl + '?t=' + Date.now());
+                if (!prodRes.ok) throw new Error(`HTTP chyba ${prodRes.status}`);
                 const shopData = await prodRes.json();
                 
                 if (Array.isArray(shopData)) {
@@ -507,17 +520,18 @@
             const dynamicFields = document.getElementById('page-dynamic-fields');
             dynamicFields.innerHTML = '<p style="color: var(--text-muted);">Načítám data...</p>';
 
-            const targetFile = item.dataFile || `data/${item.id}.json`;
             try {
-                const res = await fetch(`../public/${targetFile}?t=` + Date.now());
+                log(`Načítám stránku z: ${targetUrl}`);
+                const res = await fetch(targetUrl + '?t=' + Date.now());
+                if (!res.ok) throw new Error(`HTTP chyba ${res.status}`);
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = targetFile;
+                dynamicFields.dataset.dataFile = dataFile;
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
-                    if (typeof val === 'object' && val !== null) return; // Jednoduché mapování plochých klíčů
+                    if (typeof val === 'object' && val !== null) return;
 
                     const fieldGroup = document.createElement('div');
                     fieldGroup.className = 'field-group';
