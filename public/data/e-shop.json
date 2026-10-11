@@ -1,34 +1,10 @@
 {
   "mainTitle": "Chcete létat jako my?",
   "mainSubtitle": "Co postavíme to i prodáme. Ready to fly.",
-  "filterBtnText": "Skrýt filtry",
-  "sortDefault": "Doporučené",
-  "resetFiltersBtn": "✕ Resetovat všechny filtry",
-  "categoryCaption": "Kategorie //",
-  "categories": [
-    "FPV Cinematic",
-    "Longrange",
-    "Freestyle"
-  ],
-  "priceCaption": "Cenové rozpětí",
-  "resetPriceBtn": "✕ Resetovat cenu",
-  "stockCaption": "Dostupnost //",
-  "stockLabel": "Komponenty skladem",
-  "modalCloseLabel": "Zavřít detail",
-  "modalSpecsHeading": "Technické specifikace //",
-  "modalBtnText": "Nezávazně poptat stavbu",
-  "footer": {
-    "brand": "sik-group.cz",
-    "slogan": "Filming without limits",
-    "col1Title": "Zaměření",
-    "col2Title": "O Nás",
-    "col3Title": "Sociální sítě",
-    "copyright": "© 2026 SIK-GROUP. Všechna práva vyhrazena."
-  },
   "products": [
     {
       "id": "1",
-      "title": "SpeedIK",
+      "title": "SpeedIKaaaaaa",
       "category": "cinematic",
       "categoryLabel": "FPV Cinematic",
       "tag": "Cinematic Spec",
