@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIK-GROUP | drony neco neco</title>
+    <title>SIK-GROUP | Svatby, eventy a FPV drony</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,7 +74,7 @@
 
             <div class="hero-content-centered global-container">
                 <div class="hero-main-text">
-                    <h1 class="hero-title">Jeden tým pro celý záběr</h1>
+                    <h1 class="hero-title" id="hero-title">Jeden tým pro celý záběr</h1>
                     <div class="hero-cta-group">
                         <a href="#ukazka" class="btn-drone-minimal">Drony</a>
                         <a href="public/pages/kontakt.html#kontakt" class="btn-drone-minimal outline">FPV</a>
@@ -95,13 +95,14 @@
                         <a href="propagace.html" class="media-container">
                             <img src="public/img/drone.png" alt="Propagační videa" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
                             <div class="media-overlay"></div>
-                            <span class="media-badge">nazev 123</span>
+                            <span class="media-badge" id="badge-1">nazev 123</span>
                         </a>
                     </div>
                     <div class="showcase-text">
                         <div class="huge-bg-number">01</div>
-                        <h3 class="row-title"><a href="propagace.html">Propagační videa</a></h3>
-                        <p class="row-description">Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální 
+                        <h3 class="row-title"><a href="propagace.html" id="div-title-1">Propagační videa</a></h3>
+                        <p class="row-description" id="div-desc-1">
+                            Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální 
                             sítě, video na web nebo rovnou kompletní obsah pro prezentaci vašeho projektu?
                             Postaráme se o natáčení, střih i finální podobu videa.
                         </p>
@@ -117,15 +118,16 @@
                         <a href="firemni_akce.html" class="media-container">
                             <img src="public/img/drone.png" alt="Firemní akce" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
                             <div class="media-overlay"></div>
-                            <span class="media-badge">nazev 123</span>
+                            <span class="media-badge" id="badge-2">nazev 123</span>
                         </a>
                     </div>
                     <div class="showcase-text">
                         <div class="huge-bg-number">02</div>
-                        <h3 class="row-title"><a href="firemni_akce.html">Velké eventy</a></h3>
-                        <p class="row-description">Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete.
+                        <h3 class="row-title"><a href="firemni_akce.html" id="div-title-2">Velké eventy</a></h3>
+                        <p class="row-description" id="div-desc-2">
+                            Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete.
                             Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě.
-                            Podle toho, co potřebujete, můžeme dodat jeden hlavní aftermovie, krátké klipy pro sociální sítě nebo celý balíček obsahu.  </p>
+                        </p>
                         <a href="firemni_akce.html" class="btn-drone-action">
                             <span>Prozkoumat divizi</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -138,15 +140,15 @@
                         <a href="osobni_akce.html" class="media-container">
                             <img src="public/img/drone.png" alt="Osobní akce" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
                             <div class="media-overlay"></div>
-                            <span class="media-badge">nazev 123</span>
+                            <span class="media-badge" id="badge-3">nazev 123</span>
                         </a>
                     </div>
                     <div class="showcase-text">
                         <div class="huge-bg-number">03</div>
-                        <h3 class="row-title"><a href="osobni_akce.html">Osobní akce</a></h3>
-                        <p class="row-description">Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku?
-                            Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily, 
-                            které během samotné akce často ani nestihnete vnímat.
+                        <h3 class="row-title"><a href="osobni_akce.html" id="div-title-3">Osobní akce</a></h3>
+                        <p class="row-description" id="div-desc-3">
+                            Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku?
+                            Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily.
                         </p>
                         <a href="osobni_akce.html" class="btn-drone-action">
                             <span>Prozkoumat divizi</span>
@@ -166,7 +168,7 @@
             
             <div class="trust-layout-premium">
                 <div class="trust-info">
-                    <p>Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?</p>
+                    <p id="trust-text">Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?</p>
                 </div>
                 
                 <div class="trust-logos-grid">
@@ -389,5 +391,39 @@
     </footer>
 
     <script src="public/js/script.js" defer></script>
+    
+    <!-- Dynamické načtení obsahu z index.json -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('public/data/index.json?t=' + Date.now());
+                if (!res.ok) return;
+                const data = await res.json();
+
+                if (data.heroTitle) {
+                    const heroEl = document.getElementById('hero-title');
+                    if (heroEl) heroEl.textContent = data.heroTitle;
+                }
+                if (data.divisions) {
+                    data.divisions.forEach((div, index) => {
+                        const i = index + 1;
+                        const badgeEl = document.getElementById(`badge-${i}`);
+                        const titleEl = document.getElementById(`div-title-${i}`);
+                        const descEl = document.getElementById(`div-desc-${i}`);
+
+                        if (badgeEl && div.badge) badgeEl.textContent = div.badge;
+                        if (titleEl && div.title) titleEl.textContent = div.title;
+                        if (descEl && div.description) descEl.textContent = div.description;
+                    });
+                }
+                if (data.trustText) {
+                    const trustEl = document.getElementById('trust-text');
+                    if (trustEl) trustEl.textContent = data.trustText;
+                }
+            } catch (err) {
+                console.error('Chyba při načítání index.json:', err);
+            }
+        });
+    </script>
 </body>
 </html>
