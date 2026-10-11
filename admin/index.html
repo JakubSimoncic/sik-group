@@ -236,6 +236,24 @@
             margin-bottom: 10px;
         }
 
+        .nested-section {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .nested-section-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .terminal-log {
             background: #040404;
             border: 1px solid var(--card-border);
@@ -287,7 +305,7 @@
         <button class="btn-secondary" id="save-config-btn" type="button">Uložit Konfiguraci</button>
     </div>
 
-    <!-- VIEW 1: ROZCESTNÍK (generuje se automaticky z pages.json) -->
+    <!-- VIEW 1: ROZCESTNÍK -->
     <div class="admin-view active" id="view-dashboard">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <div>
@@ -360,7 +378,7 @@
         </div>
     </div>
 
-    <!-- VIEW 3: EDITOR BĚŽNÝCH STRÁNEK (PRO <main> OBSAH) -->
+    <!-- VIEW 3: EDITOR OBSAHU STRÁNEK -->
     <div class="admin-view" id="view-page-editor">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
@@ -398,6 +416,7 @@
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     let pagesData = [];
+    let currentLoadedPageData = {}; // Uchovává kompletní načtenou strukturu pro správné uložení
 
     const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
     const configPanel = document.getElementById('config-panel');
@@ -441,7 +460,6 @@
         switchView('view-dashboard');
     }
 
-    // Bezpečné čištění cesty k JSON souborům
     function sanitizePath(dataFile, type, id) {
         if (type === 'products' || id === 'e-shop') return 'public/data/e-shop.json';
         if (id === 'home' || id === 'index' || (dataFile && dataFile.includes('index.json'))) return 'public/data/index.json';
@@ -453,7 +471,6 @@
         return path;
     }
 
-    // Načtení rozcestníku ze souboru public/data/pages.json
     async function initData() {
         try {
             const pagesUrl = '../public/data/pages.json';
@@ -476,7 +493,6 @@
             }
         } catch (e) {
             log('Chyba při načítání pages.json: ' + e.message, 'error');
-            // Záložní záchranná struktura, pokud by pages.json chyběl
             pagesData = [
                 { "id": "e-shop", "title": "E-shop Produkty (Drony)", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json" },
                 { "id": "index", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json" },
@@ -511,6 +527,58 @@
                 </div>
             `;
             container.appendChild(card);
+        });
+    }
+
+    // Rekurzivní generování formulářových polí pro vnořené objekty v JSONu
+    function renderNestedFields(obj, prefix = '', container) {
+        Object.keys(obj).forEach(key => {
+            const fullKey = prefix ? `${prefix}.${key}` : key;
+            const val = obj[key];
+
+            if (val !== null && typeof val === 'object' && !Array.isArray(val)) {
+                // Je to vnořený objekt (např. contact, global, contactPage)
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'nested-section';
+
+                const titleEl = document.createElement('div');
+                titleEl.className = 'nested-section-title';
+                titleEl.textContent = key;
+                sectionDiv.appendChild(titleEl);
+
+                renderNestedFields(val, fullKey, sectionDiv);
+                container.appendChild(sectionDiv);
+            } else if (Array.isArray(val)) {
+                // Pole (např. team, faq) necháme nedotčené, nebo informujeme
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'field-group';
+                infoDiv.innerHTML = `<label>${key.toUpperCase()} (Pole / Array)</label><input type="text" disabled value="[Pole obsahuje ${val.length} položek - spravuje se primárně v JSONu]" style="opacity: 0.5;">`;
+                container.appendChild(infoDiv);
+            } else {
+                // Běžná hodnota (řetězec, číslo)
+                const fieldGroup = document.createElement('div');
+                fieldGroup.className = 'field-group';
+
+                const label = document.createElement('label');
+                label.textContent = key;
+
+                let input;
+                if (typeof val === 'string' && val.length > 60) {
+                    input = document.createElement('textarea');
+                    input.rows = 4;
+                } else {
+                    input = document.createElement('input');
+                    input.type = 'text';
+                }
+
+                input.className = 'page-field-input';
+                input.dataset.keyPath = fullKey;
+                input.value = val !== undefined ? val : '';
+
+                fieldGroup.appendChild(label);
+                fieldGroup.appendChild(input);
+                container.appendChild(fieldGroup);
+            }
         });
     }
 
@@ -552,38 +620,13 @@
                 log(`Načítám data stránky z: ${targetUrl}`);
                 const res = await fetch(targetUrl + '?t=' + Date.now());
                 if (!res.ok) throw new Error(`HTTP chyba ${res.status}`);
-                const pageContent = await res.json();
+                
+                currentLoadedPageData = await res.json(); // Uložíme si kompletní objekt
 
                 dynamicFields.innerHTML = '';
                 dynamicFields.dataset.dataFile = dataFile;
 
-                Object.keys(pageContent).forEach(key => {
-                    const val = pageContent[key];
-                    if (typeof val === 'object' && val !== null) return;
-
-                    const fieldGroup = document.createElement('div');
-                    fieldGroup.className = 'field-group';
-
-                    const label = document.createElement('label');
-                    label.textContent = key.toUpperCase();
-
-                    let input;
-                    if (typeof val === 'string' && val.length > 50) {
-                        input = document.createElement('textarea');
-                        input.rows = 4;
-                    } else {
-                        input = document.createElement('input');
-                        input.type = 'text';
-                    }
-
-                    input.className = 'page-field-input';
-                    input.dataset.key = key;
-                    input.value = val;
-
-                    fieldGroup.appendChild(label);
-                    fieldGroup.appendChild(input);
-                    dynamicFields.appendChild(fieldGroup);
-                });
+                renderNestedFields(currentLoadedPageData, '', dynamicFields);
 
                 switchView('view-page-editor');
             } catch (err) {
@@ -716,7 +759,18 @@
         }
     }
 
-    // Uložení editu běžné stránky (přepisuje odpovídající JSON soubor v repozitáři)
+    // Pomocná funkce pro vložení hodnoty zpět do vnořeného objektu podle tečkové notace (např. contact.email)
+    function setNestedValue(obj, path, value) {
+        const parts = path.split('.');
+        let curr = obj;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (!curr[parts[i]]) curr[parts[i]] = {};
+            curr = curr[parts[i]];
+        }
+        curr[parts[parts.length - 1]] = value;
+    }
+
+    // Uložení editu stránky - rekonstruuje celou vnořenou JSON strukturu a odešle na GitHub
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -724,10 +778,13 @@
         const dataFile = dynamicFields.dataset.dataFile; 
         if (!dataFile) return;
 
-        const updatedData = {};
+        // Vytvoříme kopii původních dat (aby se zachovala pole jako team, faq atd.)
+        let updatedData = JSON.parse(JSON.stringify(currentLoadedPageData));
+
+        // Projdeme všechna input pole a aktualizujeme hodnoty ve vnořené struktuře
         document.querySelectorAll('.page-field-input').forEach(input => {
-            const key = input.dataset.key;
-            updatedData[key] = input.value;
+            const keyPath = input.dataset.keyPath;
+            setNestedValue(updatedData, keyPath, input.value);
         });
 
         const pageTitle = document.getElementById('page-title').value;
@@ -802,7 +859,7 @@
             products: productsData
         };
 
-        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
+        await commitFileToGitHub('public/data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
 
     loadConfig();
