@@ -9,21 +9,27 @@
       "badge": "nazev 123",
       "title": "Propagační videa",
       "description": "Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální sítě, video na web nebo rovnou kompletní obsah pro prezentaci vašeho projektu? Postaráme se o natáčení, střih i finální podobu videa.",
-      "btnText": "Prozkoumat divizi"
+      "btnText": "Prozkoumat divizi",
+      "image": "public/img/divisions/propagace.jpg",
+      "link": "public/pages/propagace.html"
     },
     {
       "number": "02",
       "badge": "nazev 123",
       "title": "Velké eventy",
       "description": "Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete. Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě. Podle toho, co potřebujete, můžeme dodat jeden hlavní aftermovie, krátké klipy pro sociální sítě nebo celý balíček obsahu.",
-      "btnText": "Prozkoumat divizi"
+      "btnText": "Prozkoumat divizi",
+      "image": "public/img/divisions/eventy.jpg",
+      "link": "public/pages/firemni_akce.html"
     },
     {
       "number": "03",
       "badge": "nazev 123",
       "title": "Osobní akce",
       "description": "Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku? Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily, které během samotné akce často ani nestihnete vnímat.",
-      "btnText": "Prozkoumat divizi"
+      "btnText": "Prozkoumat divizi",
+      "image": "public/img/divisions/osobni.jpg",
+      "link": "public/pages/osobni_akce.html"
     }
   ],
   "trustTitle": "Klienti a Partneři",
