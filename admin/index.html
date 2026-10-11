@@ -398,7 +398,7 @@
     let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
     let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     
-    // Záložní výchozí rozcestník (pokud by pages.json chyběl)
+    // Správné názvy souborů odpovídající reálné struktuře v public/data/
     let pagesData = [
         {
             "id": "e-shop",
@@ -409,7 +409,7 @@
             "dataFile": "public/data/e-shop.json"
         },
         {
-            "id": "home",
+            "id": "index",
             "title": "Úvodní stránka",
             "description": "Správa hlavního obsahu úvodní stránky",
             "icon": "📄",
@@ -468,21 +468,6 @@
         switchView('view-dashboard');
     }
 
-    // Pomocná funkce pro správné normalizování cesty k souboru
-    function resolvePath(dataFile) {
-        if (!dataFile) return 'public/data/index.json';
-        let cleanPath = dataFile.trim();
-        // Pokud cesta začíná rovnou složkou data/, opravíme ji na public/data/
-        if (cleanPath.startsWith('data/')) {
-            cleanPath = 'public/' + cleanPath;
-        }
-        // Pokud v cestě vůbec není public/, doplníme ho
-        if (!cleanPath.startsWith('public/')) {
-            cleanPath = 'public/' + cleanPath;
-        }
-        return cleanPath;
-    }
-
     async function initData() {
         try {
             const pagesUrl = '../public/data/pages.json';
@@ -491,7 +476,12 @@
             if (pagesRes.ok) {
                 const loadedPages = await pagesRes.json();
                 if (Array.isArray(loadedPages) && loadedPages.length > 0) {
-                    pagesData = loadedPages;
+                    // Zajistíme, že ID odpovídají správným souborům
+                    pagesData = loadedPages.map(p => {
+                        if (p.id === 'home') p.id = 'index';
+                        if (p.dataFile === 'public/data/home.json') p.dataFile = 'public/data/index.json';
+                        return p;
+                    });
                 }
             }
             renderDashboard();
@@ -533,12 +523,12 @@
         const item = pagesData.find(p => p.id === id);
         if (!item) return;
 
-        let correctedDataFile = resolvePath(item.dataFile);
-        if (item.type === 'products') {
-            correctedDataFile = 'public/data/e-shop.json';
+        let dataFile = item.dataFile;
+        if (dataFile.startsWith('data/')) {
+            dataFile = 'public/' + dataFile;
         }
 
-        const targetUrl = `../${correctedDataFile}`;
+        const targetUrl = `../${dataFile}`;
 
         if (item.type === 'products') {
             try {
@@ -574,7 +564,7 @@
                 const pageContent = await res.json();
 
                 dynamicFields.innerHTML = '';
-                dynamicFields.dataset.dataFile = correctedDataFile; // Správná cesta pro GitHub commit
+                dynamicFields.dataset.dataFile = dataFile; // např. "public/data/index.json" nebo "public/data/kontakt.json"
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
@@ -735,12 +725,12 @@
         }
     }
 
-    // Uložení editu stránky
+    // Uložení editu stránky (zapisuje do public/data/index.json, public/data/kontakt.json apod.)
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const dynamicFields = document.getElementById('page-dynamic-fields');
-        const dataFile = dynamicFields.dataset.dataFile; // např. "public/data/index.json"
+        const dataFile = dynamicFields.dataset.dataFile; 
         if (!dataFile) return;
 
         const updatedData = {};
