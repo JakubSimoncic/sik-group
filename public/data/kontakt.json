@@ -1,6 +1,27 @@
 {
-  "teamSectionTitle": "LIDÉ ZA KAMEROU",
-  "teamTitle": "LIDÉ ZA KAMEROU",
+  "contactPage": {
+    "teamSectionTitle": "LIDÉ ZA KAMEROU",
+    "faqSectionTitle": "ČASTO KLADENÉ OTÁZKY",
+    "contactSectionTitle": "KONTAKTNÍ ÚDAJE",
+    "businessTitle": "OBCHODNÍ JEDNÁNÍ",
+    "billingTitle": "FAKTURAČNÍ ÚDAJE",
+    "labels": {
+      "email": "E-mail",
+      "phone": "Telefon",
+      "address": "Sídlo",
+      "ico": "IČO",
+      "dic": "DIČ",
+      "bank": "Bankovní účet"
+    }
+  },
+  "contact": {
+    "email": "info@sik-group.cz",
+    "phone": "732 520 715",
+    "address": "Tvoje fakturační adresa 456, 150 00 Praha",
+    "ico": "12345678",
+    "dic": "CZ12345678",
+    "bank": "2000123456/2010"
+  },
   "team": [
     {
       "name": "Honza",
@@ -63,7 +84,6 @@
       ]
     }
   ],
-  "faqSectionTitle": "ČASTO KLADENÉ OTÁZKY",
   "faq": [
     {
       "question": "Jak dlouho trvá výroba videa?",
@@ -85,20 +105,5 @@
       "question": "Kde všude natáčíte?",
       "answer": "Prakticky všude, kde to dává smysl a kde to podmínky dovolují. Natáčíme venku i uvnitř, z výšky i těsně nad zemí."
     }
-  ],
-  "contactSectionTitle": "KONTAKTNÍ ÚDAJE",
-  "businessTitle": "OBCHODNÍ JEDNÁNÍ",
-  "labelEmail": "E-mail",
-  "contactEmail": "info@sik-group.cz",
-  "labelPhone": "Telefon",
-  "contactPhone": "732 520 715",
-  "billingTitle": "FAKTURAČNÍ ÚDAJE",
-  "labelAddress": "Sídlo",
-  "contactAddress": "Tvoje fakturační adresa 456, 150 00 Praha",
-  "labelIco": "IČO",
-  "contactIco": "12345678",
-  "labelDic": "DIČ",
-  "contactDic": "CZ12345678",
-  "labelBank": "Bankovní účet",
-  "contactBank": "2000123456/2010"
+  ]
 }
