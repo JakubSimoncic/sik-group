@@ -260,7 +260,7 @@
     
     <div class="header-bar">
         <div class="brand-title">SIK-GROUP <span>// CMS ROZCESTNÍK</span></div>
-        <button class="settings-toggle-btn" id="toggle-settings-btn">⚙ NASTAVENÍ</button>
+        <button class="settings-toggle-btn" id="toggle-settings-btn" type="button">⚙ NASTAVENÍ</button>
     </div>
 
     <!-- PANEL NASTAVENÍ GITHUBU -->
@@ -284,7 +284,7 @@
             <label>Personal Access Token (PAT)</label>
             <input type="password" id="gh-token" placeholder="github_pat_...">
         </div>
-        <button class="btn-secondary" id="save-config-btn">Uložit Konfiguraci</button>
+        <button class="btn-secondary" id="save-config-btn" type="button">Uložit Konfiguraci</button>
     </div>
 
     <!-- VIEW 1: ROZCESTNÍK -->
@@ -302,7 +302,7 @@
     <!-- VIEW 2: PRODUKTY (E-SHOP) -->
     <div class="admin-view" id="view-products">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-            <button class="btn-secondary" onclick="showDashboard()">← Zpět</button>
+            <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
             <h3 style="font-size: 1.1rem; text-transform: uppercase;">🛒 E-Shop</h3>
         </div>
 
@@ -336,7 +336,7 @@
                         </select>
                     </div>
                     <div class="field-group">
-                        <label>Specifikace</label>
+                        <label>Specifikace / Tag</label>
                         <input type="text" id="prod-tag" placeholder="Cinematic 3.5&quot;">
                     </div>
                 </div>
@@ -363,7 +363,7 @@
     <!-- VIEW 3: EDITOR STRÁNEK -->
     <div class="admin-view" id="view-page-editor">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-            <button class="btn-secondary" onclick="showDashboard()">← Zpět</button>
+            <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
             <h3 style="font-size: 1.1rem; text-transform: uppercase;" id="editor-page-heading">Úprava stránky</h3>
         </div>
 
@@ -395,6 +395,8 @@
 
 <script>
     let productsData = [];
+    let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
+    let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
     let pagesData = [];
 
     const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
@@ -469,7 +471,7 @@
                     </div>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-primary" onclick="openSection('${item.id}')">Spravovat</button>
+                    <button class="btn-primary" onclick="openSection('${item.id}')" type="button">Spravovat</button>
                 </div>
             `;
             container.appendChild(card);
@@ -483,7 +485,15 @@
         if (item.type === 'products') {
             try {
                 const prodRes = await fetch(`../public/${item.dataFile}?t=` + Date.now());
-                productsData = await prodRes.json();
+                const shopData = await prodRes.json();
+                
+                if (Array.isArray(shopData)) {
+                    productsData = shopData;
+                } else {
+                    shopMainTitle = shopData.mainTitle || shopMainTitle;
+                    shopMainSubtitle = shopData.mainSubtitle || shopMainSubtitle;
+                    productsData = shopData.products || [];
+                }
                 renderProductsList();
             } catch (e) {
                 log('Chyba při načítání produktů: ' + e.message, 'error');
@@ -507,6 +517,8 @@
 
                 Object.keys(pageContent).forEach(key => {
                     const val = pageContent[key];
+                    if (typeof val === 'object' && val !== null) return; // Jednoduché mapování plochých klíčů
+
                     const fieldGroup = document.createElement('div');
                     fieldGroup.className = 'field-group';
 
@@ -546,7 +558,7 @@
             const card = document.createElement('div');
             card.className = 'item-card';
 
-            const imgPath = p.image || '../public/img/drone.png';
+            const imgPath = p.image || '../img/drone.png';
             const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
 
             card.innerHTML = `
@@ -558,8 +570,8 @@
                     </div>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-secondary" onclick="editProduct('${p.id}')">Upravit</button>
-                    <button class="btn-delete" onclick="deleteProduct('${p.id}')">Smazat</button>
+                    <button class="btn-secondary" onclick="editProduct('${p.id}')" type="button">Upravit</button>
+                    <button class="btn-delete" onclick="deleteProduct('${p.id}')" type="button">Smazat</button>
                 </div>
             `;
             container.appendChild(card);
@@ -662,7 +674,7 @@
         }
     }
 
-    // Uložení editu stránky (home.json, contact.json apod.)
+    // Uložení editu stránky
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -681,6 +693,7 @@
         showDashboard();
     });
 
+    // Uložení / vytvoření produktu (e-shop.json)
     document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -716,13 +729,21 @@
                 title, price, category, tag, description: desc, specs,
                 categoryLabel: catLabels[category],
                 eurPrice: Math.round(price / 25),
-                image: '../public/img/drone.png'
+                stock: "skladem",
+                image: "../img/drone.png"
             };
             productsData.push(newProd);
         }
 
         renderProductsList();
-        await commitFileToGithub('data/products.json', productsData, `CMS: Uložen dron ${title}`);
+
+        const shopPayload = {
+            mainTitle: shopMainTitle,
+            mainSubtitle: shopMainSubtitle,
+            products: productsData
+        };
+
+        await commitFileToGithub('data/e-shop.json', shopPayload, `CMS: Uložen dron ${title}`);
         resetProductForm();
     });
 
@@ -732,7 +753,14 @@
 
         productsData = productsData.filter(p => String(p.id) !== String(id));
         renderProductsList();
-        await commitFileToGithub('data/products.json', productsData, `CMS: Smazán dron ${prod ? prod.title : id}`);
+
+        const shopPayload = {
+            mainTitle: shopMainTitle,
+            mainSubtitle: shopMainSubtitle,
+            products: productsData
+        };
+
+        await commitFileToGithub('data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
 
     loadConfig();
