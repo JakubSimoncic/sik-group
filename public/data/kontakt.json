@@ -1,44 +1,5 @@
 {
-  "global": {
-    "phone": "732 520 715",
-    "email": "info@sik-group.cz",
-    "instagram": "https://www.instagram.com/group_sik/",
-    "facebook": "#",
-    "youtube": "https://www.youtube.com/@Group_SIK_Czech"
-  },
-  "home": {
-    "heroTitle": "FILMING WITHOUT LIMITS",
-    "heroSubtitle": "Prémiové FPV záběry a vývoj dronů na míru.",
-    "aboutTitle": "O NÁS",
-    "aboutText": "Jsme tým profesionálních FPV pilotů specializovaných na filmové záběry a vývoj FPV techniky."
-  },
-  "eshop": {
-    "mainTitle": "CHCETE LÉTAT JAKO MY?",
-    "mainSubtitle": "Co postavíme to i prodáme. Ready to fly."
-  },
-  "contactPage": {
-    "teamSectionTitle": "LIDÉ ZA KAMEROU",
-    "faqSectionTitle": "ČASTO KLADENÉ OTÁZKY",
-    "contactSectionTitle": "KONTAKTNÍ ÚDAJE",
-    "businessTitle": "OBCHODNÍ JEDNÁNÍ",
-    "billingTitle": "FAKTURAČNÍ ÚDAJE",
-    "labels": {
-      "email": "E-mail",
-      "phone": "Telefon",
-      "address": "Sídlo",
-      "ico": "IČO",
-      "dic": "DIČ",
-      "bank": "Bankovní účet"
-    }
-  },
-  "contact": {
-    "email": "info@sik-group.cz",
-    "phone": "732 520 715",
-    "address": "Tvoje fakturační adresa 456, 150 00 Praha",
-    "ico": "12345678",
-    "dic": "CZ12345678",
-    "bank": "2000123456/2010"
-  },
+  "teamSectionTitle": "LIDÉ ZA KAMEROU",
   "team": [
     {
       "name": "Honza",
@@ -80,7 +41,7 @@
       "name": "Vojtech",
       "role": "// HLAVNÍ KAMERAMAN",
       "image": "../img/team/vojtech.png",
-      "bio": "Vojtech doplňuje kameramanský tým a zajišťuje stabilní záběry i v náročných podmínkách.",
+      "bio": "",
       "tags": [
         "Kamerová práce",
         "Střih videí",
@@ -90,37 +51,61 @@
     },
     {
       "name": "Lukas",
-      "role": "// TECH SPECIALIST",
+      "role": "// lukas",
       "image": "../img/team/lukas.jpg",
-      "bio": "Lukas má na starosti technické zázemí a podporu při složitějších dronech.",
+      "bio": "lukas",
       "tags": [
-        "Technická podpora",
-        "Drony",
-        "Logistika",
-        "Servis"
+        "lukas",
+        "lukas",
+        "lukas",
+        "lukas"
       ]
     }
   ],
+  "faqSectionTitle": "ČASTO KLADENÉ OTÁZKY",
   "faq": [
     {
       "question": "Jak dlouho trvá výroba videa?",
-      "answer": "Natáčení probíhá přímo během vaší akce nebo podle domluveného scénáře. Jakmile máme natočeno, pustíme se do střihu. Průběžně s vámi konzultujeme směr videa a před finálním dokončením vám dáme prostor pro připomínky."
+      "answer": "Natáčení probíhá přímo během vaší akce nebo podle domluveného scénáře. Jakmile máme natočeno, pustíme se do střihu. Průběžně s vámi konzultujeme směr videa a před finálním dokončením vám dáme prostor pro připomínky. Pokud potřebujete obsah co nejrychleji, zvládneme připravit i krátké klipy přímo během akce, například pro okamžité zveřejnění na sociálních sítích."
     },
     {
       "question": "Máte potřebné certifikace pro létání s drony?",
-      "answer": "Naši piloti mají potřebná oprávnění a certifikace pro provoz dronů. Podle konkrétní lokality, typu natáčení a podmínek letu volíme odpovídající techniku a postup."
+      "answer": "Naši piloti mají potřebná oprávnění a certifikace pro provoz dronů. Podle konkrétní lokality, typu natáčení a podmínek letu volíme odpovídající techniku a postup. Pokud vaše natáčení vyžaduje specifické povolení, řešíme ho předem tak, aby vše proběhlo bezpečně a v souladu s platnými pravidly."
     },
     {
       "question": "Létáte s drony i za nepříznivého počasí?",
-      "answer": "Podmínky při natáčení dokážeme přizpůsobit situaci. Naše technika je připravená i na náročnější prostředí a podle konkrétního vybavení zvládáme natáčení například za lehkého deště nebo ve větru."
+      "answer": "Podmínky při natáčení dokážeme přizpůsobit situaci. Naše technika je připravená i na náročnější prostředí a podle konkrétního vybavení zvládáme natáčení například za lehkého deště nebo ve větru. Počasí ale vždy posuzujeme s ohledem na bezpečnost lidí, techniky a samotného letu. Když dron není vhodná volba, máme připravené i jiné způsoby, jak záběr natočit."
     },
     {
       "question": "Jak řešíte hudbu a autorská práva?",
-      "answer": "Finální video můžeme dodat ve více verzích. Kromě verze s hudbou můžeme dodat také čistou verzi bez hudby, kterou můžete dále využít podle svých potřeb."
+      "answer": "Finální video můžeme dodat ve více verzích. Kromě verze s hudbou můžeme dodat také čistou verzi bez hudby, kterou můžete dále využít podle svých potřeb. Hudbu vybíráme tak, aby bylo možné video legálně použít na dohodnutých platformách. Pokud máte vlastní hudbu nebo konkrétní představu, samozřejmě ji můžeme zapracovat."
     },
     {
       "question": "Kde všude natáčíte?",
-      "answer": "Prakticky všude, kde to dává smysl a kde to podmínky dovolují. Natáčíme venku i uvnitř, z výšky i těsně nad zemí."
+      "answer": "Prakticky všude, kde to dává smysl a kde to podmínky dovolují. Natáčíme venku i uvnitř, z výšky i těsně nad zemí. A když se do některého místa dron jednoduše nedostane, neznamená to, že záběr nebude. Náš tým zvládá i klasické pozemní natáčení, takže můžeme kombinovat FPV, klasické drony a kamery ze země v jednom videu."
     }
-  ]
+  ],
+  "contactSectionTitle": "KONTAKTNÍ ÚDAJE",
+  "businessTitle": "OBCHODNÍ JEDNÁNÍ",
+  "labelEmail": "E-mail",
+  "contactEmail": "info@sik-group.cz",
+  "labelPhone": "Telefon",
+  "contactPhone": "732 520 715",
+  "billingTitle": "FAKTURAČNÍ ÚDAJE",
+  "labelAddress": "Sídlo",
+  "contactAddress": "Tvoje fakturační adresa 456, 150 00 Praha",
+  "labelIco": "IČO",
+  "contactIco": "12345678",
+  "labelDic": "DIČ",
+  "contactDic": "CZ12345678",
+  "labelBank": "Bankovní účet",
+  "contactBank": "2000123456/2010",
+  "footer": {
+    "brand": "sik-group.cz",
+    "slogan": "Filming without limits",
+    "col1Title": "Zaměření",
+    "col2Title": "O Nás",
+    "col3Title": "Sociální sítě",
+    "copyright": "© 2026 SIK-GROUP. Všechna práva vyhrazena."
+  }
 }
