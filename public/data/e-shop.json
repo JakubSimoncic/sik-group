@@ -3,6 +3,24 @@
   "mainSubtitle": "Co postavíme to i prodáme. Ready to fly.",
   "products": [
     {
+      "id": "1",
+      "title": "SpeedIK",
+      "category": "cinematic",
+      "categoryLabel": "FPV Cinematic",
+      "tag": "Cinematic Spec",
+      "price": 25000,
+      "eurPrice": 1000,
+      "stock": "skladem",
+      "image": "../img/drone.png",
+      "description": "Vlajková loď pro špičkové filmové záběry a dokonalou plynulost FPV letu. Osazeno nejmodernější stabilizací.",
+      "specs": {
+        "Rám": "5 inch Cinematic Carbon",
+        "Video vysílač": "DJI O3 Air Unit",
+        "Motor": "2207 1800KV",
+        "Baterie": "6S 1400mAh"
+      }
+    },
+    {
       "id": "2",
       "title": "Paladin",
       "category": "longrange",
