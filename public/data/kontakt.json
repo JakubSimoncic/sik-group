@@ -16,6 +16,21 @@
     "mainTitle": "CHCETE LÉTAT JAKO MY?",
     "mainSubtitle": "Co postavíme to i prodáme. Ready to fly."
   },
+  "contactPage": {
+    "teamSectionTitle": "LIDÉ ZA KAMEROU",
+    "faqSectionTitle": "ČASTO KLADENÉ OTÁZKY",
+    "contactSectionTitle": "KONTAKTNÍ ÚDAJE",
+    "businessTitle": "OBCHODNÍ JEDNÁNÍ",
+    "billingTitle": "FAKTURAČNÍ ÚDAJE",
+    "labels": {
+      "email": "E-mail",
+      "phone": "Telefon",
+      "address": "Sídlo",
+      "ico": "IČO",
+      "dic": "DIČ",
+      "bank": "Bankovní účet"
+    }
+  },
   "contact": {
     "email": "info@sik-group.cz",
     "phone": "732 520 715",
@@ -23,5 +38,89 @@
     "ico": "12345678",
     "dic": "CZ12345678",
     "bank": "2000123456/2010"
-  }
+  },
+  "team": [
+    {
+      "name": "Honza",
+      "role": "// PILOT DRONŮ A PROJEKTOVÝ MANAŽER",
+      "image": "../img/team/honza.jpg",
+      "bio": "Honza spojuje technické znalosti s praktickými zkušenostmi z natáčení. Létá jak s DJI drony, tak s FPV drony, které si sám staví a ladí podle konkrétních požadavků projektu. Díky tomu dokáže vybrat nebo postavit ideální sestavu pro každé natáčení, ať už jde o dynamické akční záběry, nebo plynulé filmové průlety. Kromě létání má na starosti také řízení projektů.",
+      "tags": [
+        "Pilotáž DJI & FPV",
+        "Stavba FPV dronů",
+        "Letecké záběry",
+        "Koordinace projektů"
+      ]
+    },
+    {
+      "name": "Áďa",
+      "role": "// EDITORKA A EVENTOVÁ FOTOGRAFKA",
+      "image": "../img/team/ada.jpg",
+      "bio": "Áďa se specializuje na zachycení atmosféry akcí tak, aby si ji lidé mohli znovu prožít i po jejich skončení. Nejvíce zkušeností má s focením, natáčením a následnou postprodukcí materiálů z eventů, koncertů a společenských akcí. Díky citu pro správný okamžik a pečlivé editaci vznikají fotografie i videa, která věrně vystihnou energii každé události.",
+      "tags": [
+        "Fotografování eventů",
+        "Natáčení eventových videí",
+        "Profesionální úprava fotografií",
+        "Střih videí z akcí"
+      ]
+    },
+    {
+      "name": "Filip",
+      "role": "// HLAVNÍ KAMERAMAN",
+      "image": "../img/team/filip.jpg",
+      "bio": "Filip je hlavním kameramanem našeho týmu a za kamerou je jako doma. Má zkušenosti z marketingových kampaní i filmových projektů, díky kterým ví, jak zachytit záběry, které zaujmou a zároveň podpoří příběh. Nezůstává ale jen u natáčení. Věnuje se také střihu, takže dokáže celý projekt dotáhnout od prvního záběru až po finální video s důrazem na kvalitu, plynulost a každý detail.",
+      "tags": [
+        "Kamerová práce",
+        "Střih videí",
+        "Kompozice a světlo",
+        "Důraz na detail"
+      ]
+    },
+    {
+      "name": "Vojtech",
+      "role": "// HLAVNÍ KAMERAMAN",
+      "image": "../img/team/vojtech.png",
+      "bio": "Vojtech doplňuje kameramanský tým a zajišťuje stabilní záběry i v náročných podmínkách.",
+      "tags": [
+        "Kamerová práce",
+        "Střih videí",
+        "Kompozice a světlo",
+        "Důraz na detail"
+      ]
+    },
+    {
+      "name": "Lukas",
+      "role": "// TECH SPECIALIST",
+      "image": "../img/team/lukas.jpg",
+      "bio": "Lukas má na starosti technické zázemí a podporu při složitějších dronech.",
+      "tags": [
+        "Technická podpora",
+        "Drony",
+        "Logistika",
+        "Servis"
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Jak dlouho trvá výroba videa?",
+      "answer": "Natáčení probíhá přímo během vaší akce nebo podle domluveného scénáře. Jakmile máme natočeno, pustíme se do střihu. Průběžně s vámi konzultujeme směr videa a před finálním dokončením vám dáme prostor pro připomínky."
+    },
+    {
+      "question": "Máte potřebné certifikace pro létání s drony?",
+      "answer": "Naši piloti mají potřebná oprávnění a certifikace pro provoz dronů. Podle konkrétní lokality, typu natáčení a podmínek letu volíme odpovídající techniku a postup."
+    },
+    {
+      "question": "Létáte s drony i za nepříznivého počasí?",
+      "answer": "Podmínky při natáčení dokážeme přizpůsobit situaci. Naše technika je připravená i na náročnější prostředí a podle konkrétního vybavení zvládáme natáčení například za lehkého deště nebo ve větru."
+    },
+    {
+      "question": "Jak řešíte hudbu a autorská práva?",
+      "answer": "Finální video můžeme dodat ve více verzích. Kromě verze s hudbou můžeme dodat také čistou verzi bez hudby, kterou můžete dále využít podle svých potřeb."
+    },
+    {
+      "question": "Kde všude natáčíte?",
+      "answer": "Prakticky všude, kde to dává smysl a kde to podmínky dovolují. Natáčíme venku i uvnitř, z výšky i těsně nad zemí."
+    }
+  ]
 }
