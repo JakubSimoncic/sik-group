@@ -529,7 +529,7 @@
         });
     }
 
-    // Rekurzivní vykreslení všech textů postupně pod sebou BEZ nadpisů a boxů
+    // Rekurzivní vykreslení všech textů s hezkým českým popiskem
     function renderFlatFields(obj, prefix = '', container) {
         if (obj === null || obj === undefined) return;
 
@@ -538,14 +538,14 @@
             const val = obj[key];
 
             if (val !== null && typeof val === 'object') {
-                // Rekurzivně projde objekty i pole bez vytváření jakýchkoliv rámců či nadpisů
                 renderFlatFields(val, fullKey, container);
             } else {
                 const fieldGroup = document.createElement('div');
                 fieldGroup.className = 'field-group';
 
                 const label = document.createElement('label');
-                label.textContent = fullKey; // Zobrazí jasný klíč/cestu k textu
+                // Použití překladové funkce na hezký český název
+                label.textContent = getFriendlyCmsLabel(fullKey);
 
                 let input;
                 if (typeof val === 'string' && val.length > 60) {
@@ -615,7 +615,6 @@
                 dynamicFields.innerHTML = '';
                 dynamicFields.dataset.dataFile = dataFile;
 
-                // Vykreslí veškerý text postupně pod sebou
                 renderFlatFields(currentLoadedPageData, '', dynamicFields);
 
                 switchView('view-page-editor');
@@ -777,7 +776,7 @@
         await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Aktualizovány nadpisy e-shopu`);
     });
 
-    // Uložení editu stránky (index.json, kontakt.json atd.)
+    // Uložení editu stránky
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -869,6 +868,80 @@
 
     loadConfig();
     initData();
+
+    // ==========================================================================
+    // PREKLADOVY SLOVNIK DEDIKOVANY PRO POPISKY V ADMIN / CMS
+    // ==========================================================================
+    const cmsFieldLabels = {
+        // --- INDEX.JSON ---
+        "heroTitle": "Úvodní stránka – Hlavní nadpis",
+        "heroBtnDrony": "Úvodní stránka – Text tlačítka 'Drony'",
+        "heroBtnFpv": "Úvodní stránka – Text tlačítka 'FPV'",
+        "divisionsTitle": "Úvodní stránka – Nadpis sekce specializací",
+        "trustTitle": "Úvodní stránka – Nadpis partnerů",
+        "trustText": "Úvodní stránka – Text u partnerů",
+        "bookingTitle": "Úvodní stránka – Nadpis rezervací",
+        "bookingHeading": "Úvodní stránka – Podnadpis kalendáře",
+        "dateUnselectedText": "Úvodní stránka – Text před vývěrem data",
+        "formPlaceholderName": "Formulář – Placeholder pro Jméno/Firmu",
+        "formPlaceholderEmail": "Formulář – Placeholder pro Email",
+        "formPlaceholderPhone": "Formulář – Placeholder pro Telefon",
+        "formPlaceholderProject": "Formulář – Placeholder pro Projekt",
+        "formSubmitBtn": "Formulář – Text tlačítka 'Odeslat'",
+
+        // --- KONTAKT.JSON ---
+        "contactPage.teamSectionTitle": "Kontakt – Nadpis týmu",
+        "contactPage.faqSectionTitle": "Kontakt – Nadpis Často kladených otázek (FAQ)",
+        "contactPage.contactSectionTitle": "Kontakt – Nadpis sekce Kontaktní údaje",
+        "contactPage.businessTitle": "Kontakt – Nadpis bloku 'Obchodní jednání'",
+        "contactPage.billingTitle": "Kontakt – Nadpis bloku 'Fakturační údaje'",
+        "contactPage.labels.email": "Popisek pole – E-mail",
+        "contactPage.labels.phone": "Popisek pole – Telefon",
+        "contactPage.labels.address": "Popisek pole – Sídlo",
+        "contactPage.labels.ico": "Popisek pole – IČO",
+        "contactPage.labels.dic": "Popisek pole – DIČ",
+        "contactPage.labels.bank": "Popisek pole – Bankovní účet",
+        "contact.email": "Kontaktní e-mail společnosti",
+        "contact.phone": "Kontaktní telefon společnosti",
+        "contact.address": "Sídlo společnosti (adresa)",
+        "contact.ico": "IČO společnosti",
+        "contact.dic": "DIČ společnosti",
+        "contact.bank": "Bankovní účet společnosti"
+    };
+
+    function getFriendlyCmsLabel(key) {
+        // Direct match
+        if (cmsFieldLabels[key]) return cmsFieldLabels[key];
+
+        // Dynamic keys for Arrays
+        if (key.startsWith('divisions.')) {
+            const index = parseInt(key.split('.')[1], 10) + 1;
+            if (key.endsWith('.number')) return `Divize č. ${index} – Číslo položky`;
+            if (key.endsWith('.badge')) return `Divize č. ${index} – Štítek / Badge`;
+            if (key.endsWith('.title')) return `Divize č. ${index} – Název specializace`;
+            if (key.endsWith('.description')) return `Divize č. ${index} – Popis specializace`;
+            if (key.endsWith('.btnText')) return `Divize č. ${index} – Text tlačítka`;
+            if (key.endsWith('.image')) return `Divize č. ${index} – Cesta k obrázku`;
+            if (key.endsWith('.link')) return `Divize č. ${index} – Odkaz na podstránku`;
+        }
+
+        if (key.startsWith('team.')) {
+            const index = parseInt(key.split('.')[1], 10) + 1;
+            if (key.endsWith('.name')) return `Člen týmu č. ${index} – Jméno`;
+            if (key.endsWith('.role')) return `Člen týmu č. ${index} – Pozice / Role`;
+            if (key.endsWith('.image')) return `Člen týmu č. ${index} – Cesta k fotce`;
+            if (key.endsWith('.bio')) return `Člen týmu č. ${index} – Popis / Bio`;
+            if (key.includes('.tags.')) return `Člen týmu č. ${index} – Štítek dovednosti`;
+        }
+
+        if (key.startsWith('faq.')) {
+            const index = parseInt(key.split('.')[1], 10) + 1;
+            if (key.endsWith('.question')) return `FAQ otázka č. ${index}`;
+            if (key.endsWith('.answer')) return `FAQ odpověď č. ${index}`;
+        }
+
+        return key;
+    }
 </script>
 
 </body>
