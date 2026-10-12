@@ -141,3 +141,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadKontaktData();
 });
+
+// ==========================================================================
+// SLOVNÍK ČESKÝCH POPISKŮ PRO PŘEHLEDNOST V CMS (ADMINISTRACI)
+// ==========================================================================
+const cmsFieldLabels = {
+    "contactPage.teamSectionTitle": "Nadpis sekce: Lidé za kamerou",
+    "contactPage.faqSectionTitle": "Nadpis sekce: Často kladené otázky",
+    "contactPage.contactSectionTitle": "Nadpis sekce: Kontaktní údaje",
+    "contactPage.businessTitle": "Nadpis bloku: Obchodní jednání",
+    "contactPage.billingTitle": "Nadpis bloku: Fakturační údaje",
+    "contactPage.labels.email": "Popisek pole: E-mail",
+    "contactPage.labels.phone": "Popisek pole: Telefon",
+    "contactPage.labels.address": "Popisek pole: Sídlo",
+    "contactPage.labels.ico": "Popisek pole: IČO",
+    "contactPage.labels.dic": "Popisek pole: DIČ",
+    "contactPage.labels.bank": "Popisek pole: Bankovní účet",
+    "contact.email": "E-mailová adresa společnosti",
+    "contact.phone": "Telefonní číslo společnosti",
+    "contact.address": "Sídlo / Adresa",
+    "contact.ico": "IČO",
+    "contact.dic": "DIČ",
+    "contact.bank": "Bankovní spojení"
+};
+
+function getFriendlyCmsLabel(key) {
+    if (cmsFieldLabels[key]) return cmsFieldLabels[key];
+    if (key.includes('team.')) {
+        return key
+            .replace('team.', 'Člen týmu – ')
+            .replace('.name', 'Jméno')
+            .replace('.role', 'Pracovní pozice')
+            .replace('.image', 'Obrázek (cesta k fotce)')
+            .replace('.bio', 'Biografie / Popis')
+            .replace('.tags', 'Dovednosti (štětky)');
+    }
+    if (key.includes('faq.')) {
+        return key
+            .replace('faq.', 'FAQ položka – ')
+            .replace('.question', 'Otázka')
+            .replace('.answer', 'Odpověď');
+    }
+    return key;
+}
