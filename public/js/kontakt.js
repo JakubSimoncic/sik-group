@@ -9,62 +9,54 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) return;
             const data = await res.json();
 
-            // 0. Hlavní nadpisy a popisky stránek z CMS (contactPage)
-            const cPage = data.contactPage;
-            if (cPage) {
-                const teamTitleEl = document.getElementById('team-section-title');
-                if (teamTitleEl && cPage.teamSectionTitle) teamTitleEl.textContent = cPage.teamSectionTitle;
+            // 0. Hlavní nadpisy a sekce
+            const teamTitleEl = document.getElementById('team-section-title');
+            if (teamTitleEl && data.teamSectionTitle) teamTitleEl.textContent = data.teamSectionTitle;
 
-                const faqTitleEl = document.getElementById('faq-section-title');
-                if (faqTitleEl && cPage.faqSectionTitle) faqTitleEl.textContent = cPage.faqSectionTitle;
+            const faqTitleEl = document.getElementById('faq-section-title');
+            if (faqTitleEl && data.faqSectionTitle) faqTitleEl.textContent = data.faqSectionTitle;
 
-                const contactTitleEl = document.getElementById('contact-section-title');
-                if (contactTitleEl && cPage.contactSectionTitle) contactTitleEl.textContent = cPage.contactSectionTitle;
+            const contactTitleEl = document.getElementById('contact-section-title');
+            if (contactTitleEl && data.contactSectionTitle) contactTitleEl.textContent = data.contactSectionTitle;
 
-                const businessTitleEl = document.getElementById('business-block-title');
-                if (businessTitleEl && cPage.businessTitle) businessTitleEl.textContent = cPage.businessTitle;
+            const businessTitleEl = document.getElementById('business-block-title');
+            if (businessTitleEl && data.businessTitle) businessTitleEl.textContent = data.businessTitle;
 
-                const billingTitleEl = document.getElementById('billing-block-title');
-                if (billingTitleEl && cPage.billingTitle) billingTitleEl.textContent = cPage.billingTitle;
+            const billingTitleEl = document.getElementById('billing-block-title');
+            if (billingTitleEl && data.billingTitle) billingTitleEl.textContent = data.billingTitle;
 
-                if (cPage.labels) {
-                    const l = cPage.labels;
-                    if (l.email) { const el = document.getElementById('label-email'); if (el) el.textContent = l.email; }
-                    if (l.phone) { const el = document.getElementById('label-phone'); if (el) el.textContent = l.phone; }
-                    if (l.address) { const el = document.getElementById('label-address'); if (el) el.textContent = l.address; }
-                    if (l.ico) { const el = document.getElementById('label-ico'); if (el) el.textContent = l.ico; }
-                    if (l.dic) { const el = document.getElementById('label-dic'); if (el) el.textContent = l.dic; }
-                    if (l.bank) { const el = document.getElementById('label-bank'); if (el) el.textContent = l.bank; }
-                }
-            }
+            // Popisky (labels)
+            if (data.labelEmail) { const el = document.getElementById('label-email'); if (el) el.textContent = data.labelEmail; }
+            if (data.labelPhone) { const el = document.getElementById('label-phone'); if (el) el.textContent = data.labelPhone; }
+            if (data.labelAddress) { const el = document.getElementById('label-address'); if (el) el.textContent = data.labelAddress; }
+            if (data.labelIco) { const el = document.getElementById('label-ico'); if (el) el.textContent = data.labelIco; }
+            if (data.labelDic) { const el = document.getElementById('label-dic'); if (el) el.textContent = data.labelDic; }
+            if (data.labelBank) { const el = document.getElementById('label-bank'); if (el) el.textContent = data.labelBank; }
 
             // 1. Kontakty a fakturační údaje
-            const contactData = data.contact;
-            if (contactData) {
-                if (contactData.email) {
-                    document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
-                        el.textContent = contactData.email;
-                        el.href = `mailto:${contactData.email}`;
-                    });
-                }
-                if (contactData.phone) {
-                    document.querySelectorAll('#contact-phone, .contact-phone-target').forEach(el => {
-                        el.textContent = contactData.phone;
-                        el.href = `tel:${contactData.phone.replace(/\s+/g, '')}`;
-                    });
-                }
-                const addressEl = document.getElementById('contact-address');
-                if (addressEl && contactData.address) addressEl.textContent = contactData.address;
-
-                const icoEl = document.getElementById('contact-ico');
-                if (icoEl && contactData.ico) icoEl.textContent = contactData.ico;
-
-                const dicEl = document.getElementById('contact-dic');
-                if (dicEl && contactData.dic) dicEl.textContent = contactData.dic;
-
-                const bankEl = document.getElementById('contact-bank');
-                if (bankEl && contactData.bank) bankEl.textContent = contactData.bank;
+            if (data.contactEmail) {
+                document.querySelectorAll('#contact-email, .contact-email-target').forEach(el => {
+                    el.textContent = data.contactEmail;
+                    el.href = `mailto:${data.contactEmail}`;
+                });
             }
+            if (data.contactPhone) {
+                document.querySelectorAll('#contact-phone, .contact-phone-target').forEach(el => {
+                    el.textContent = data.contactPhone;
+                    el.href = `tel:${data.contactPhone.replace(/\s+/g, '')}`;
+                });
+            }
+            const addressEl = document.getElementById('contact-address');
+            if (addressEl && data.contactAddress) addressEl.textContent = data.contactAddress;
+
+            const icoEl = document.getElementById('contact-ico');
+            if (icoEl && data.contactIco) icoEl.textContent = data.contactIco;
+
+            const dicEl = document.getElementById('contact-dic');
+            if (dicEl && data.contactDic) dicEl.textContent = data.contactDic;
+
+            const bankEl = document.getElementById('contact-bank');
+            if (bankEl && data.contactBank) bankEl.textContent = data.contactBank;
 
             // 2. Tým
             const teamContainer = document.getElementById('team-rows-container');
@@ -146,23 +138,23 @@ document.addEventListener('DOMContentLoaded', () => {
 // SLOVNÍK ČESKÝCH POPISKŮ PRO PŘEHLEDNOST V CMS (ADMINISTRACI)
 // ==========================================================================
 const cmsFieldLabels = {
-    "contactPage.teamSectionTitle": "Nadpis sekce: Lidé za kamerou",
-    "contactPage.faqSectionTitle": "Nadpis sekce: Často kladené otázky",
-    "contactPage.contactSectionTitle": "Nadpis sekce: Kontaktní údaje",
-    "contactPage.businessTitle": "Nadpis bloku: Obchodní jednání",
-    "contactPage.billingTitle": "Nadpis bloku: Fakturační údaje",
-    "contactPage.labels.email": "Popisek pole: E-mail",
-    "contactPage.labels.phone": "Popisek pole: Telefon",
-    "contactPage.labels.address": "Popisek pole: Sídlo",
-    "contactPage.labels.ico": "Popisek pole: IČO",
-    "contactPage.labels.dic": "Popisek pole: DIČ",
-    "contactPage.labels.bank": "Popisek pole: Bankovní účet",
-    "contact.email": "E-mailová adresa společnosti",
-    "contact.phone": "Telefonní číslo společnosti",
-    "contact.address": "Sídlo / Adresa",
-    "contact.ico": "IČO",
-    "contact.dic": "DIČ",
-    "contact.bank": "Bankovní spojení"
+    "teamSectionTitle": "Nadpis sekce: Lidé za kamerou",
+    "faqSectionTitle": "Nadpis sekce: Často kladené otázky",
+    "contactSectionTitle": "Nadpis sekce: Kontaktní údaje",
+    "businessTitle": "Nadpis bloku: Obchodní jednání",
+    "labelEmail": "Popisek pole: E-mail",
+    "contactEmail": "E-mailová adresa společnosti",
+    "labelPhone": "Popisek pole: Telefon",
+    "contactPhone": "Telefonní číslo společnosti",
+    "billingTitle": "Nadpis bloku: Fakturační údaje",
+    "labelAddress": "Popisek pole: Sídlo",
+    "contactAddress": "Sídlo / Adresa",
+    "labelIco": "Popisek pole: IČO",
+    "contactIco": "IČO",
+    "labelDic": "Popisek pole: DIČ",
+    "contactDic": "DIČ",
+    "labelBank": "Popisek pole: Bankovní účet",
+    "contactBank": "Bankovní spojení"
 };
 
 function getFriendlyCmsLabel(key) {
@@ -174,7 +166,7 @@ function getFriendlyCmsLabel(key) {
             .replace('.role', 'Pracovní pozice')
             .replace('.image', 'Obrázek (cesta k fotce)')
             .replace('.bio', 'Biografie / Popis')
-            .replace('.tags', 'Dovednosti (štětky)');
+            .replace('.tags', 'Dovednosti (štítky)');
     }
     if (key.includes('faq.')) {
         return key
