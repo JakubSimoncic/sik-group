@@ -529,7 +529,7 @@
         });
     }
 
-    // Rekurzivní vykreslení všech textů s hezkým českým popiskem
+    // Rekurzivní vykreslení všech textů BEZ nadpisů – český popis je uvnitř pole jako placeholder
     function renderFlatFields(obj, prefix = '', container) {
         if (obj === null || obj === undefined) return;
 
@@ -543,9 +543,7 @@
                 const fieldGroup = document.createElement('div');
                 fieldGroup.className = 'field-group';
 
-                const label = document.createElement('label');
-                // Použití překladové funkce na hezký český název
-                label.textContent = getFriendlyCmsLabel(fullKey);
+                const friendlyName = getFriendlyCmsLabel(fullKey);
 
                 let input;
                 if (typeof val === 'string' && val.length > 60) {
@@ -559,8 +557,9 @@
                 input.className = 'page-field-input';
                 input.dataset.keyPath = fullKey;
                 input.value = val !== undefined && val !== null ? val : '';
+                input.placeholder = friendlyName; // Český popis jako vnitřní nápověda
 
-                fieldGroup.appendChild(label);
+                // Nadpis / label se již nevytváří ani nepřipojuje
                 fieldGroup.appendChild(input);
                 container.appendChild(fieldGroup);
             }
@@ -910,10 +909,8 @@
     };
 
     function getFriendlyCmsLabel(key) {
-        // Direct match
         if (cmsFieldLabels[key]) return cmsFieldLabels[key];
 
-        // Dynamic keys for Arrays
         if (key.startsWith('divisions.')) {
             const index = parseInt(key.split('.')[1], 10) + 1;
             if (key.endsWith('.number')) return `Divize č. ${index} – Číslo položky`;
