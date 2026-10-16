@@ -21,5 +21,13 @@
     "file": "contact.html",
     "dataFile": "data/kontakt.json",
     "icon": "📞"
-  }
+  },
+  {
+  "id": "gdpr",
+  "title": "Zásady GDPR",
+  "type": "page",
+  "file": "public/pages/gdpr.html",
+  "dataFile": "data/gdpr.json",
+  "icon": "🔒"
+}
 ]
