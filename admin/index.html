@@ -337,12 +337,16 @@
                         <input type="text" id="prod-title" required placeholder="SpeedIK v2">
                     </div>
                     <div class="field-group">
-                        <label>Cena</label>
+                        <label>Cena (Kč)</label>
                         <input type="number" id="prod-price" required placeholder="25000">
                     </div>
                 </div>
 
                 <div class="form-grid-2">
+                    <div class="field-group">
+                        <label>Cena v EUR</label>
+                        <input type="number" id="prod-eur-price" required placeholder="1000">
+                    </div>
                     <div class="field-group">
                         <label>Kategorie</label>
                         <select id="prod-category">
@@ -351,10 +355,11 @@
                             <option value="freestyle">Freestyle</option>
                         </select>
                     </div>
-                    <div class="field-group">
-                        <label>Specifikace / Tag</label>
-                        <input type="text" id="prod-tag" placeholder="Cinematic 3.5&quot;">
-                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>Specifikace / Tag</label>
+                    <input type="text" id="prod-tag" placeholder="Cinematic 3.5&quot;">
                 </div>
 
                 <div class="field-group">
@@ -376,7 +381,7 @@
         </div>
     </div>
 
-    <!-- VIEW 3: EDITOR OBSAHU STRÁNEK (PLOCHÝ SEZNAM POLÍ BEZ NADPISŮ) -->
+    <!-- VIEW 3: EDITOR OBSAHU STRÁNEK -->
     <div class="admin-view" id="view-page-editor">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
@@ -392,7 +397,6 @@
                     <input type="text" id="page-title" required readonly>
                 </div>
 
-                <!-- Zde budou všechna textová pole postupně pod sebou bez boxů a nadpisů -->
                 <div id="page-dynamic-fields"></div>
 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
@@ -529,7 +533,6 @@
         });
     }
 
-    // Rekurzivní vykreslení všech textů BEZ nadpisů – český popis je uvnitř pole jako placeholder
     function renderFlatFields(obj, prefix = '', container) {
         if (obj === null || obj === undefined) return;
 
@@ -557,9 +560,8 @@
                 input.className = 'page-field-input';
                 input.dataset.keyPath = fullKey;
                 input.value = val !== undefined && val !== null ? val : '';
-                input.placeholder = friendlyName; // Český popis jako vnitřní nápověda
+                input.placeholder = friendlyName;
 
-                // Nadpis / label se již nevytváří ani nepřipojuje
                 fieldGroup.appendChild(input);
                 container.appendChild(fieldGroup);
             }
@@ -633,13 +635,14 @@
 
             const imgPath = p.image ? '../public/' + p.image.replace(/^\.\//, '') : '../public/img/drone.png';
             const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
+            const eurPrice = p.eurPrice ? p.eurPrice.toLocaleString('cs-CZ') : Math.round((p.price || 0) / 25);
 
             card.innerHTML = `
                 <div class="item-info">
                     <img src="${imgPath}" alt="${p.title}" class="item-thumb" style="object-fit: cover;">
                     <div class="item-details">
                         <h4>${p.title}</h4>
-                        <p>${p.categoryLabel || p.category} // ${formattedPrice} Kč</p>
+                        <p>${p.categoryLabel || p.category} // ${formattedPrice} Kč / ${eurPrice} EUR</p>
                     </div>
                 </div>
                 <div class="item-actions">
@@ -672,6 +675,7 @@
         document.getElementById('edit-prod-id').value = prod.id;
         document.getElementById('prod-title').value = prod.title;
         document.getElementById('prod-price').value = prod.price;
+        document.getElementById('prod-eur-price').value = prod.eurPrice || Math.round(prod.price / 25);
         document.getElementById('prod-category').value = prod.category;
         document.getElementById('prod-tag').value = prod.tag || '';
         document.getElementById('prod-desc').value = prod.description || '';
@@ -761,7 +765,6 @@
         curr[parts[parts.length - 1]] = value;
     }
 
-    // Uložení nadpisů e-shopu
     document.getElementById('save-shop-texts-btn').addEventListener('click', async () => {
         shopMainTitle = document.getElementById('shop-main-title-input').value;
         shopMainSubtitle = document.getElementById('shop-main-subtitle-input').value;
@@ -775,7 +778,6 @@
         await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Aktualizovány nadpisy e-shopu`);
     });
 
-    // Uložení editu stránky
     document.getElementById('page-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -795,13 +797,13 @@
         showDashboard();
     });
 
-    // Uložení / vytvoření produktu
     document.getElementById('product-form').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const editId = document.getElementById('edit-prod-id').value;
         const title = document.getElementById('prod-title').value;
         const price = parseFloat(document.getElementById('prod-price').value);
+        const eurPrice = parseFloat(document.getElementById('prod-eur-price').value) || Math.round(price / 25);
         const category = document.getElementById('prod-category').value;
         const tag = document.getElementById('prod-tag').value;
         const desc = document.getElementById('prod-desc').value;
@@ -820,17 +822,15 @@
             if (idx !== -1) {
                 productsData[idx] = {
                     ...productsData[idx],
-                    title, price, category, tag, description: desc, specs,
-                    categoryLabel: catLabels[category],
-                    eurPrice: Math.round(price / 25)
+                    title, price, eurPrice, category, tag, description: desc, specs,
+                    categoryLabel: catLabels[category]
                 };
             }
         } else {
             const newProd = {
                 id: String(Date.now()),
-                title, price, category, tag, description: desc, specs,
+                title, price, eurPrice, category, tag, description: desc, specs,
                 categoryLabel: catLabels[category],
-                eurPrice: Math.round(price / 25),
                 stock: "skladem",
                 image: "../img/drone.png"
             };
@@ -868,11 +868,7 @@
     loadConfig();
     initData();
 
-    // ==========================================================================
-    // PREKLADOVY SLOVNIK DEDIKOVANY PRO POPISKY V ADMIN / CMS
-    // ==========================================================================
     const cmsFieldLabels = {
-        // --- INDEX.JSON ---
         "heroTitle": "Úvodní stránka – Hlavní nadpis",
         "heroBtnDrony": "Úvodní stránka – Text tlačítka 'Drony'",
         "heroBtnFpv": "Úvodní stránka – Text tlačítka 'FPV'",
@@ -888,7 +884,6 @@
         "formPlaceholderProject": "Formulář – Placeholder pro Projekt",
         "formSubmitBtn": "Formulář – Text tlačítka 'Odeslat'",
 
-        // --- KONTAKT.JSON ---
         "contactPage.teamSectionTitle": "Kontakt – Nadpis týmu",
         "contactPage.faqSectionTitle": "Kontakt – Nadpis Často kladených otázek (FAQ)",
         "contactPage.contactSectionTitle": "Kontakt – Nadpis sekce Kontaktní údaje",
