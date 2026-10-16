@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (VČETNĚ EUR CENY)
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="tech-card-meta">
                     <div class="tech-card-row">
                         <span class="tech-spec-tag">${tagText}</span>
-                        <span class="tech-card-price">${formattedPrice} Kč / ${eurPrice} EUR</span>
+                        <span class="tech-card-price">${formattedPrice} Kč <span class="card-price-eur">/ ${eurPrice} EUR</span></span>
                     </div>
                     <h3 class="tech-card-title">${product.title}</h3>
                 </div>
