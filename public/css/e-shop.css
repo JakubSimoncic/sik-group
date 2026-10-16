@@ -447,6 +447,14 @@
   color: #ffffff;
 }
 
+.card-price-eur {
+  font-size: 0.85rem;
+  color: #00D1C7;
+  font-weight: 600;
+  font-family: monospace;
+  margin-left: 6px;
+}
+
 .tech-card-title {
   font-size: 1.1rem;
   font-weight: 400;
