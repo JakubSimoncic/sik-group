@@ -1,7 +1,7 @@
 [
   {
     "id": "eshop-products",
-    "title": "E-shop Produkty",
+    "title": "E-shop",
     "type": "products",
     "dataFile": "data/e-shop.json",
     "icon": "🛒"
