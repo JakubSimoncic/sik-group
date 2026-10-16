@@ -1,33 +1,50 @@
 [
   {
-    "id": "eshop-products",
-    "title": "E-shop",
-    "type": "products",
-    "dataFile": "data/e-shop.json",
-    "icon": "🛒"
+    "id": "common-cz",
+    "title": "Globální prvky (Hlavička & Patička) - CZ",
+    "description": "Správa odkazů v navigaci, kontaktů a patičky",
+    "type": "page",
+    "dataFile": "public/data/common.json",
+    "icon": "⚙️",
+    "lang": "cz"
   },
   {
-    "id": "home",
-    "title": "Úvodní stránka",
+    "id": "eshop-products-cz",
+    "title": "E-shop Produkty - CZ",
+    "description": "Správa aktivních dronů, specifikací a cen v Kč/EUR",
+    "type": "products",
+    "dataFile": "public/data/e-shop.json",
+    "icon": "🛒",
+    "lang": "cz"
+  },
+  {
+    "id": "home-cz",
+    "title": "Úvodní stránka - CZ",
+    "description": "Správa obsahu hlavní stránky",
     "type": "page",
     "file": "index.html",
-    "dataFile": "data/index.json",
-    "icon": "📄"
+    "dataFile": "public/data/index.json",
+    "icon": "📄",
+    "lang": "cz"
   },
   {
-    "id": "contact",
-    "title": "Kontakt",
+    "id": "contact-cz",
+    "title": "Kontakt & Tým - CZ",
+    "description": "Správa kontaktů, týmu a FAQ",
     "type": "page",
-    "file": "contact.html",
-    "dataFile": "data/kontakt.json",
-    "icon": "📞"
+    "file": "public/pages/kontakt.html",
+    "dataFile": "public/data/kontakt.json",
+    "icon": "📞",
+    "lang": "cz"
   },
   {
-  "id": "gdpr",
-  "title": "Zásady GDPR",
-  "type": "page",
-  "file": "public/pages/gdpr.html",
-  "dataFile": "data/gdpr.json",
-  "icon": "🔒"
-}
+    "id": "gdpr-cz",
+    "title": "Zásady GDPR - CZ",
+    "description": "Správa právních podmínek",
+    "type": "page",
+    "file": "public/pages/gdpr.html",
+    "dataFile": "public/data/gdpr.json",
+    "icon": "🔒",
+    "lang": "cz"
+  }
 ]
