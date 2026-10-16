@@ -1,7 +1,7 @@
 [
   {
     "id": "common-cz",
-    "title": "Globální prvky (Hlavička & Patička) - CZ",
+    "title": "Globální prvky (Hlavička & Patička)",
     "description": "Správa odkazů v navigaci, kontaktů a patičky",
     "type": "page",
     "dataFile": "public/data/common.json",
@@ -10,7 +10,7 @@
   },
   {
     "id": "eshop-products-cz",
-    "title": "E-shop Produkty - CZ",
+    "title": "E-shop Produkty",
     "description": "Správa aktivních dronů, specifikací a cen v Kč/EUR",
     "type": "products",
     "dataFile": "public/data/e-shop.json",
@@ -19,7 +19,7 @@
   },
   {
     "id": "home-cz",
-    "title": "Úvodní stránka - CZ",
+    "title": "Úvodní stránka",
     "description": "Správa obsahu hlavní stránky",
     "type": "page",
     "file": "index.html",
@@ -29,7 +29,7 @@
   },
   {
     "id": "contact-cz",
-    "title": "Kontakt & Tým - CZ",
+    "title": "Kontakt & Tým",
     "description": "Správa kontaktů, týmu a FAQ",
     "type": "page",
     "file": "public/pages/kontakt.html",
@@ -39,7 +39,7 @@
   },
   {
     "id": "gdpr-cz",
-    "title": "Zásady GDPR - CZ",
+    "title": "Zásady GDPR",
     "description": "Správa právních podmínek",
     "type": "page",
     "file": "public/pages/gdpr.html",
