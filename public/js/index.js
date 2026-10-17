@@ -3,6 +3,114 @@ const makeWebhookUrl = "https://hook.eu1.make.com/kk5lv67txlhlqo1w2wsmftvuxyk62i
 document.addEventListener('DOMContentLoaded', () => {
     
     // ==========================================================================
+    // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička)
+    // ==========================================================================
+    async function loadCommonData() {
+        try {
+            const isInSubfolder = window.location.pathname.includes('/public/pages/');
+            const pathPrefix = isInSubfolder ? '../../' : '';
+            const commonJsonPath = isInSubfolder ? '../../public/data/common.json' : 'public/data/common.json';
+
+            const resCommon = await fetch(commonJsonPath + '?t=' + Date.now());
+            if (!resCommon.ok) return;
+            const cData = await resCommon.json();
+
+            // Logo
+            const logoLink = document.getElementById('header-logo-link');
+            if (logoLink) logoLink.href = pathPrefix + 'index.html';
+
+            // Štítky / Popisky
+            if (cData.header && cData.header.labels) {
+                if (document.getElementById('label-header-email') && cData.header.labels.email) {
+                    document.getElementById('label-header-email').textContent = cData.header.labels.email;
+                }
+                if (document.getElementById('label-header-phone') && cData.header.labels.phone) {
+                    document.getElementById('label-header-phone').textContent = cData.header.labels.phone;
+                }
+                if (document.getElementById('label-header-socials') && cData.header.labels.socials) {
+                    document.getElementById('label-header-socials').textContent = cData.header.labels.socials;
+                }
+            }
+
+            // Email & Telefon
+            const emailEl = document.getElementById('header-email');
+            if (emailEl && cData.header.email) {
+                emailEl.textContent = cData.header.email;
+                emailEl.href = 'mailto:' + cData.header.email;
+            }
+
+            const phoneEl = document.getElementById('header-phone');
+            if (phoneEl && cData.header.phone) {
+                phoneEl.textContent = cData.header.phone;
+                phoneEl.href = 'tel:' + cData.header.phone.replace(/\s+/g, '');
+            }
+
+            // Sociální sítě
+            const socialsContainer = document.getElementById('header-socials');
+            if (socialsContainer && cData.header.socials) {
+                socialsContainer.innerHTML = `
+                    <a href="${cData.header.socials.instagram}" target="_blank">Instagram</a>
+                    <a href="${cData.header.socials.facebook}" target="_blank">Facebook</a>
+                    <a href="${cData.header.socials.youtube}" target="_blank">YouTube</a>
+                `;
+            }
+
+            // Navigační lišta
+            const navList = document.getElementById('dynamic-nav-list');
+            if (navList && cData.header.navLinks) {
+                navList.innerHTML = cData.header.navLinks.map((link, idx) => {
+                    let finalUrl = link.url;
+                    if (!finalUrl.startsWith('http') && !finalUrl.startsWith('#')) {
+                        finalUrl = pathPrefix + finalUrl.replace(/^(\.\.\/)+/, '');
+                    }
+                    const isActive = (idx === 0 && window.location.pathname.endsWith('index.html')) ? 'class="active"' : '';
+                    return `<li ${isActive}><a href="${finalUrl}">${link.text}</a></li>`;
+                }).join('');
+            }
+
+            // Patička
+            const footerGrid = document.getElementById('dynamic-footer-grid');
+            if (footerGrid && cData.footer.columns) {
+                let brandHtml = `
+                    <div class="footer-brand">
+                        <h3>${cData.footer.brandTitle}</h3>
+                        <p>${cData.footer.tagline}</p>
+                    </div>
+                `;
+
+                let colsHtml = cData.footer.columns.map(col => {
+                    let linksList = col.links.map(l => {
+                        let fUrl = l.url;
+                        if (!fUrl.startsWith('http') && !fUrl.startsWith('#')) {
+                            fUrl = pathPrefix + fUrl.replace(/^(\.\.\/)+/, '');
+                        }
+                        return `<li><a href="${fUrl}">${l.text}</a></li>`;
+                    }).join('');
+
+                    return `
+                        <div class="footer-column">
+                            <h4>${col.title}</h4>
+                            <ul>${linksList}</ul>
+                        </div>
+                    `;
+                }).join('');
+
+                footerGrid.innerHTML = brandHtml + colsHtml;
+            }
+
+            const copyrightEl = document.getElementById('footer-copyright');
+            if (copyrightEl && cData.footer.copyright) {
+                copyrightEl.textContent = cData.footer.copyright;
+            }
+
+        } catch (err) {
+            console.error('Chyba při načítání common.json:', err);
+        }
+    }
+
+    loadCommonData();
+
+    // ==========================================================================
     // 1. DYNAMICKÉ NAČTENÍ Z index.json
     // ==========================================================================
     async function loadIndexData() {
