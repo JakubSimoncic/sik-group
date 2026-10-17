@@ -1,6 +1,6 @@
 {
   "header": {
-    "labelEmail": "Email",
+    "labelEmail": "mail",
     "email": "info@sik-group.cz",
     "labelPhone": "Telefon",
     "phone": "732 520 715",
@@ -9,12 +9,30 @@
     "facebook": "#",
     "youtube": "https://www.youtube.com/@Group_SIK_Czech",
     "navLinks": [
-      { "text": "Domů", "url": "index.html" },
-      { "text": "Propagační videa", "url": "propagace.html" },
-      { "text": "Osobní akce", "url": "osobni_akce.html" },
-      { "text": "Firemní akce", "url": "firemni_akce.html" },
-      { "text": "E-shop", "url": "public/pages/e-shop.html" },
-      { "text": "Náš tým", "url": "public/pages/kontakt.html#tym" }
+      {
+        "text": "Domů",
+        "url": "index.html"
+      },
+      {
+        "text": "Propagační videa",
+        "url": "propagace.html"
+      },
+      {
+        "text": "Osobní akce",
+        "url": "osobni_akce.html"
+      },
+      {
+        "text": "Firemní akce",
+        "url": "firemni_akce.html"
+      },
+      {
+        "text": "E-shop",
+        "url": "public/pages/e-shop.html"
+      },
+      {
+        "text": "Náš tým",
+        "url": "public/pages/kontakt.html#tym"
+      }
     ]
   },
   "footer": {
@@ -24,25 +42,52 @@
       {
         "title": "Zaměření",
         "links": [
-          { "text": "Velké Eventy", "url": "firemni_akce.html" },
-          { "text": "Propagační videa", "url": "propagace.html" },
-          { "text": "Osobní akce", "url": "osobni_akce.html" }
+          {
+            "text": "Velké Eventy",
+            "url": "firemni_akce.html"
+          },
+          {
+            "text": "Propagační videa",
+            "url": "propagace.html"
+          },
+          {
+            "text": "Osobní akce",
+            "url": "osobni_akce.html"
+          }
         ]
       },
       {
         "title": "O Nás",
         "links": [
-          { "text": "Kontakt", "url": "public/pages/kontakt.html#kontakt" },
-          { "text": "Náš tým", "url": "public/pages/kontakt.html#tym" },
-          { "text": "GDPR", "url": "public/pages/gdpr.html" }
+          {
+            "text": "Kontakt",
+            "url": "public/pages/kontakt.html#kontakt"
+          },
+          {
+            "text": "Náš tým",
+            "url": "public/pages/kontakt.html#tym"
+          },
+          {
+            "text": "GDPR",
+            "url": "public/pages/gdpr.html"
+          }
         ]
       },
       {
         "title": "Sociální sítě",
         "links": [
-          { "text": "Instagram", "url": "https://www.instagram.com/group_sik/" },
-          { "text": "Facebook", "url": "#" },
-          { "text": "YouTube", "url": "https://www.youtube.com/@Group_SIK_Czech" }
+          {
+            "text": "Instagram",
+            "url": "https://www.instagram.com/group_sik/"
+          },
+          {
+            "text": "Facebook",
+            "url": "#"
+          },
+          {
+            "text": "YouTube",
+            "url": "https://www.youtube.com/@Group_SIK_Czech"
+          }
         ]
       }
     ],
