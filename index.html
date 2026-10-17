@@ -17,7 +17,7 @@
         <div id="nav-wrapper">
             <nav id="main-nav" class="global-container">
                 <div class="logo">
-                    <a href="index.html">
+                    <a href="index.html" id="header-logo-link">
                         <img src="public/img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
                     </a>
                 </div>
@@ -31,29 +31,22 @@
             <div class="nav-drop-panel" id="nav-panel">
                 <div class="panel-grid">
                     <div class="panel-main">
-                        <ul class="nav-list">
-                            <li class="active"><a href="index.html">Domů</a></li>
-                            <li><a href="propagace.html">Propagační videa</a></li>
-                            <li><a href="osobni_akce.html">Osobní akce</a></li>
-                            <li><a href="firemni_akce.html">Firemní akce</a></li>
-                            <li><a href="public/pages/e-shop.html">E-shop</a></li>
-                            <li><a href="public/pages/kontakt.html#tym">Náš tým</a></li>
+                        <ul class="nav-list" id="dynamic-nav-list">
+                            <!-- Dynamicky naplněno z common.json -->
                         </ul>
                     </div>
                     
                     <div class="panel-side">
                         <div class="side-block">
                             <span>Email</span>
-                            <a href="mailto:info@sik-group.cz" class="side-email">info@sik-group.cz</a>
+                            <a href="#" class="side-email" id="header-email">Načítá se...</a>
                             <span>Telefon</span>
-                            <a href="tel:732520715" class="side-phone">732 520 715</a>
+                            <a href="#" class="side-phone" id="header-phone">Načítá se...</a>
                         </div>
                         <div class="side-block">
                             <span>Sociální sítě</span>
-                            <div class="side-socials">
-                                <a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a>
-                                <a href="#" target="_blank">Facebook</a>
-                                <a href="https://youtube.com/@group-sik?si=j6Kayqpmj36YLkRi" target="_blank">YouTube</a>
+                            <div class="side-socials" id="header-socials">
+                                <!-- Dynamicky naplněno z common.json -->
                             </div>
                         </div>
                     </div>
@@ -118,7 +111,7 @@
 
         <section id="booking" class="booking-section global-container">
             <div class="section-meta">
-                <h2 id="booking-section-title">Načítá se...</h2>        
+                <h2 id="booking-section-title">Načítá se...</h2>    
             </div>
 
             <div class="booking-grid">
@@ -176,6 +169,7 @@
                         
                         <select name="booking-time-to" id="real-time-select-to" style="display:none;">
                             <option value="" disabled selected>Čas do...</option>
+                            <option value="8:30">8:30</option>
                             <option value="9:00">9:00</option>
                             <option value="9:30">9:30</option>
                             <option value="10:00">10:00</option>
@@ -287,43 +281,112 @@
         </section>
     </main>
 
-    <footer class="main-footer">
+    <main-footer class="main-footer">
         <div class="global-container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h3>sik-group.cz</h3>
-                    <p>Filming without limits</p>
-                </div>
-                <div class="footer-column">
-                    <h4>Zaměření</h4>
-                    <ul>
-                        <li><a href="firemni_akce.html">Velké Eventy</a></li>
-                        <li><a href="propagace.html">Propagační videa</a></li>
-                        <li><a href="osobni_akce.html">Osobní akce</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>O Nás</h4>
-                    <ul>
-                        <li><a href="public/pages/kontakt.html#kontakt">Kontakt</a></li>
-                        <li><a href="public/pages/kontakt.html#tym">Náš tým</a></li>
-                        <li><a href="public/pages/gdpr.html">GDPR</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Sociální sítě</h4>
-                    <ul>
-                        <li><a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a></li>
-                        <li><a href="#" target="_blank">Facebook</a></li>
-                        <li><a href="https://www.youtube.com/@Group_SIK_Czech" target="_blank">YouTube</a></li>
-                    </ul>
-                </div>
+            <div class="footer-grid" id="dynamic-footer-grid">
+                <!-- Dynamicky naplněno z common.json -->
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 SIK-GROUP. Všechna práva vyhrazena.</p>
+                <p id="footer-copyright">&copy; 2026 SIK-GROUP.</p>
             </div>
         </div>
-    </footer>
+    </main-footer>
+
+    <!-- Skript pro načtení common.json s přizpůsobením cest (zda jsme v kořenu nebo v podložce) -->
+    <script>
+        async function loadCommonElements() {
+            try {
+                // Zjištění, zda je stránka v podadresáři (např. /public/pages/)
+                const isInSubfolder = window.location.pathname.includes('/public/pages/');
+                const pathPrefix = isInSubfolder ? '../../' : '';
+                const jsonPath = isInSubfolder ? '../../public/data/common.json' : 'public/data/common.json';
+
+                const res = await fetch(jsonPath + '?t=' + Date.now());
+                if (!res.ok) throw new Error('Nelze načíst common.json');
+                const data = await res.json();
+
+                // 1. Hlavička - Logo link & Kontakty
+                const logoLink = document.getElementById('header-logo-link');
+                if (logoLink) logoLink.href = pathPrefix + 'index.html';
+
+                const emailEl = document.getElementById('header-email');
+                if (emailEl) {
+                    emailEl.textContent = data.header.email;
+                    emailEl.href = 'mailto:' + data.header.email;
+                }
+
+                const phoneEl = document.getElementById('header-phone');
+                if (phoneEl) {
+                    phoneEl.textContent = data.header.phone;
+                    phoneEl.href = 'tel:' + data.header.phone.replace(/\s+/g, '');
+                }
+
+                // Sociální sítě v hlavičce
+                const socialsContainer = document.getElementById('header-socials');
+                if (socialsContainer && data.header.socials) {
+                    socialsContainer.innerHTML = `
+                        <a href="${data.header.socials.instagram}" target="_blank">Instagram</a>
+                        <a href="${data.header.socials.facebook}" target="_blank">Facebook</a>
+                        <a href="${data.header.socials.youtube}" target="_blank">YouTube</a>
+                    `;
+                }
+
+                // Navigační linky v hlavičce
+                const navList = document.getElementById('dynamic-nav-list');
+                if (navList && data.header.navLinks) {
+                    navList.innerHTML = data.header.navLinks.map((link, idx) => {
+                        // Pokud cesta začíná http nebo #, necháme ji, jinak aplikujeme prefix dle umístění stránky
+                        let finalUrl = link.url;
+                        if (!finalUrl.startsWith('http') && !finalUrl.startsWith('#')) {
+                            finalUrl = pathPrefix + finalUrl.replace(/^(\.\.\/)+/, '');
+                        }
+                        const isActive = (idx === 0 && window.location.pathname.endsWith('index.html')) ? 'class="active"' : '';
+                        return `<li ${isActive}><a href="${finalUrl}">${link.text}</a></li>`;
+                    }).join('');
+                }
+
+                // 2. Patička - Sloupce a odkazy
+                const footerGrid = document.getElementById('dynamic-footer-grid');
+                if (footerGrid && data.footer.columns) {
+                    let brandHtml = `
+                        <div class="footer-brand">
+                            <h3>${data.footer.brandTitle}</h3>
+                            <p>${data.footer.tagline}</p>
+                        </div>
+                    `;
+
+                    let colsHtml = data.footer.columns.map(col => {
+                        let linksList = col.links.map(l => {
+                            let fUrl = l.url;
+                            if (!fUrl.startsWith('http') && !fUrl.startsWith('#')) {
+                                fUrl = pathPrefix + fUrl.replace(/^(\.\.\/)+/, '');
+                            }
+                            return `<li><a href="${fUrl}">${l.text}</a></li>`;
+                        }).join('');
+
+                        return `
+                            <div class="footer-column">
+                                <h4>${col.title}</h4>
+                                <ul>${linksList}</ul>
+                            </div>
+                        `;
+                    }).join('');
+
+                    footerGrid.innerHTML = brandHtml + colsHtml;
+                }
+
+                const copyrightEl = document.getElementById('footer-copyright');
+                if (copyrightEl && data.footer.copyright) {
+                    copyrightEl.textContent = data.footer.copyright;
+                }
+
+            } catch (e) {
+                console.error("Chyba při načítání common.json:", e);
+            }
+        }
+
+        loadCommonElements();
+    </script>
 
     <!-- Globální script -->
     <script src="public/js/script.js" defer></script>
