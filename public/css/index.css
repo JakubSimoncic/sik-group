@@ -5,7 +5,6 @@
     --transition-premium: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Izolace renderingu sekcí (prohlížeč ignoruje výpočty sekcí mimo obrazovku) */
 .divisions-section,
 .trust-section,
 .booking-section {
@@ -165,9 +164,8 @@
     color: #000000;
 }
 
-
 /* ==========================================================================
-   2. DRONE DIVISIONS (Maximalizovaná plynulost skrolování)
+   2. DRONE DIVISIONS
    ========================================================================== */
 
 .divisions-section {
@@ -210,14 +208,14 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.media-bg {
+/* Správné roztažení a animace dynamického obrázku */
+.media-bg-img {
     position: absolute;
     top: 0;
-    left: 0;    
+    left: 0;
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
     transition: transform 0.4s ease;
     will-change: transform;
 }
@@ -230,6 +228,7 @@
     height: 100%;
     background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.7) 100%);
     opacity: 0.6;
+    z-index: 2;
 }
 
 .media-badge {
@@ -321,12 +320,11 @@
     transition: transform 0.25s ease;
 }
 
-.showcase-row:hover .media-bg { transform: scale(1.02); }
+.showcase-row:hover .media-bg-img { transform: scale(1.02); }
 .showcase-row:hover .showcase-text { border-color: rgba(0, 209, 199, 0.4); }
 .showcase-row:hover .huge-bg-number { color: rgba(0, 209, 199, 0.06); }
 .showcase-row:hover .btn-drone-action { border-color: var(--accent-tech); }
 .showcase-row:hover .btn-drone-action svg { transform: translateX(6px); }
-
 
 /* ==========================================================================
    3. KLIENTI A PARTNEŘI
@@ -384,7 +382,6 @@
     transition: transform 0.25s ease;
     display: block;
 }
-
 
 /* ==========================================================================
    4. BOOKING SEKCE & KALENDÁŘ
@@ -864,4 +861,4 @@ body {
         flex-direction: column;
         gap: 25px;
     }
-}
+}    
