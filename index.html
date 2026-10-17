@@ -38,13 +38,13 @@
                     
                     <div class="panel-side">
                         <div class="side-block">
-                            <span id="label-header-email">Email</span>
+                            <span>Email</span>
                             <a href="#" class="side-email" id="header-email">Načítá se...</a>
-                            <span id="label-header-phone">Telefon</span>
+                            <span>Telefon</span>
                             <a href="#" class="side-phone" id="header-phone">Načítá se...</a>
                         </div>
                         <div class="side-block">
-                            <span id="label-header-socials">Sociální sítě</span>
+                            <span>Sociální sítě</span>
                             <div class="side-socials" id="header-socials">
                                 <!-- Dynamicky naplněno z common.json -->
                             </div>
@@ -310,19 +310,6 @@
                     // Logo
                     const logoLink = document.getElementById('header-logo-link');
                     if (logoLink) logoLink.href = pathPrefix + 'index.html';
-
-                    // Štítky / Nazvy
-                    if (cData.header.labels) {
-                        if (document.getElementById('label-header-email') && cData.header.labels.email) {
-                            document.getElementById('label-header-email').textContent = cData.header.labels.email;
-                        }
-                        if (document.getElementById('label-header-phone') && cData.header.labels.phone) {
-                            document.getElementById('label-header-phone').textContent = cData.header.labels.phone;
-                        }
-                        if (document.getElementById('label-header-socials') && cData.header.labels.socials) {
-                            document.getElementById('label-header-socials').textContent = cData.header.labels.socials;
-                        }
-                    }
 
                     // Kontakty
                     const emailEl = document.getElementById('header-email');
