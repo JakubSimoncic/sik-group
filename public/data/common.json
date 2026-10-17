@@ -1,17 +1,13 @@
 {
   "header": {
-    "labels": {
-      "email": "Email",
-      "phone": "Telefon",
-      "socials": "Sociální sítě"
-    },
+    "labelEmail": "Email",
     "email": "info@sik-group.cz",
+    "labelPhone": "Telefon",
     "phone": "732 520 715",
-    "socials": {
-      "instagram": "https://www.instagram.com/group_sik/",
-      "facebook": "#",
-      "youtube": "https://www.youtube.com/@Group_SIK_Czech"
-    },
+    "labelSocials": "Sociální sítě",
+    "instagram": "https://www.instagram.com/group_sik/",
+    "facebook": "#",
+    "youtube": "https://www.youtube.com/@Group_SIK_Czech",
     "navLinks": [
       { "text": "Domů", "url": "index.html" },
       { "text": "Propagační videa", "url": "propagace.html" },
