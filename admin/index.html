@@ -291,8 +291,8 @@
     <div class="header-bar">
         <div class="brand-title">SIK-GROUP <span>// CMS</span></div>
         <div class="header-right">
-            <button class="lang-switch-btn active" id="lang-cz-btn" type="button" onclick="setAdminLanguage('cz')">🇨🇿 CZ</button>
-            <button class="lang-switch-btn" id="lang-en-btn" type="button" onclick="setAdminLanguage('en')">🇬🇧 EN</button>
+            <button class="lang-switch-btn active" id="lang-cz-btn" type="button" onclick="setAdminLanguage('cz')">CZ</button>
+            <button class="lang-switch-btn" id="lang-en-btn" type="button" onclick="setAdminLanguage('en')">EN</button>
             <button class="settings-toggle-btn" id="toggle-settings-btn" type="button">⚙ NASTAVENÍ</button>
         </div>
     </div>
@@ -531,9 +531,9 @@
     }
 
     function sanitizePath(dataFile, type, id) {
-        if (type === 'products' || id === 'e-shop' || id === 'eshop-products') return 'public/data/e-shop.json';
-        if (id === 'home' || id === 'index' || (dataFile && dataFile.includes('index.json'))) return 'public/data/index.json';
-        if (id === 'kontakt' || id === 'contact' || (dataFile && (dataFile.includes('kontakt.json') || dataFile.includes('contact.json')))) return 'public/data/kontakt.json';
+        if (type === 'products' || id === 'e-shop' || id === 'eshop-products' || id === 'eshop-products-cz' || id === 'eshop-products-en') {
+            return dataFile ? (dataFile.startsWith('public/') ? dataFile : 'public/' + dataFile) : 'public/data/e-shop.json';
+        }
         
         let path = dataFile || '';
         if (path.startsWith('data/')) path = 'public/' + path;
@@ -552,8 +552,6 @@
             if (Array.isArray(loadedPages) && loadedPages.length > 0) {
                 pagesData = loadedPages.map(p => {
                     p.dataFile = sanitizePath(p.dataFile, p.type, p.id);
-                    if (p.id === 'home') p.id = 'index';
-                    if (p.id === 'contact') p.id = 'kontakt';
                     return p;
                 });
                 renderDashboard();
@@ -564,9 +562,9 @@
         } catch (e) {
             log('Chyba při načítání pages.json: ' + e.message, 'error');
             pagesData = [
-                { "id": "eshop-products", "title": "E-shop Produkty (Drony)", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
-                { "id": "index", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json", "lang": "cz" },
-                { "id": "kontakt", "title": "Kontakt & Podpora", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json", "lang": "cz" }
+                { "id": "eshop-products-cz", "title": "E-shop Produkty", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
+                { "id": "home-cz", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json", "lang": "cz" },
+                { "id": "contact-cz", "title": "Kontakt & Tým", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json", "lang": "cz" }
             ];
             renderDashboard();
             log('Použita záložní struktura rozcestníku.', 'success');
@@ -578,7 +576,7 @@
         container.innerHTML = '';
 
         const filteredPages = pagesData.filter(item => {
-            if (!item.lang) return true; // Pokud není jazyk definován, zobrazit vždy
+            if (!item.lang) return true;
             return item.lang.toLowerCase() === currentAdminLang;
         });
 
@@ -647,7 +645,7 @@
         const dataFile = sanitizePath(item.dataFile, item.type, item.id);
         const targetUrl = `../${dataFile}`;
 
-        if (item.type === 'products' || id === 'e-shop' || id === 'eshop-products') {
+        if (item.type === 'products') {
             try {
                 log(`Načítám produkty z: ${targetUrl}`);
                 const prodRes = await fetch(targetUrl + '?t=' + Date.now());
