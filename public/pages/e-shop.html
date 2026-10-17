@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SIK-GROUP</title>
+        <title>SIK-GROUP | E-shop</title>
         
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
             <div id="nav-wrapper">
                 <nav id="main-nav" class="global-container">
                     <div class="logo">
-                        <a href="../../index.html">
+                        <a href="../../index.html" id="header-logo-link">
                             <img src="../img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
                         </a>
                     </div>
@@ -31,29 +31,22 @@
                 <div class="nav-drop-panel" id="nav-panel">
                     <div class="panel-grid">
                         <div class="panel-main">
-                            <ul class="nav-list">
-                                <li><a href="../../index.html">Domů</a></li>
-                                <li><a href="propagace.html">Propagační videa</a></li>
-                                <li><a href="osobni_akce.html">Osobní akce</a></li>
-                                <li><a href="firemni_akce.html">Firemní akce</a></li>
-                                <li class="active"><a href="e-shop.html">E-shop</a></li>
-                                <li><a href="kontakt.html#tym">Náš tým</a></li>
+                            <ul class="nav-list" id="dynamic-nav-list">
+                                <!-- Dynamicky naplněno z common.json -->
                             </ul>
                         </div>
                         
                         <div class="panel-side">
                             <div class="side-block">
-                                <span>Email</span>
-                                <a href="mailto:info@sik-group.cz" class="side-email contact-email-target">info@sik-group.cz</a>
-                                <span>Telefon</span>
-                                <a href="tel:732520715" class="side-phone contact-phone-target">732 520 715</a>
+                                <span id="label-header-email">Email</span>
+                                <a href="#" class="side-email" id="header-email">Načítá se...</a>
+                                <span id="label-header-phone">Telefon</span>
+                                <a href="#" class="side-phone" id="header-phone">Načítá se...</a>
                             </div>
                             <div class="side-block">
-                                <span>Sociální sítě</span>
-                                <div class="side-socials">
-                                    <a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a>
-                                    <a href="#" target="_blank">Facebook</a>
-                                    <a href="https://www.youtube.com/@Group_SIK_Czech" target="_blank">YouTube</a>
+                                <span id="label-header-socials">Sociální sítě</span>
+                                <div class="side-socials" id="header-socials">
+                                    <!-- Dynamicky naplněno z common.json -->
                                 </div>
                             </div>
                         </div>
@@ -68,24 +61,24 @@
         
         <div class="tech-top-bar">
             <div class="tech-title-block">
-                <h1 class="tech-main-title">Chcete létat jako my?</h1>
+                <h1 class="tech-main-title" id="eshop-main-title">Chcete létat jako my?</h1>
                 <p class="tech-subtitle" id="product-count">Co postavíme to i prodáme. Ready to fly.</p>
             </div>
             
             <div class="tech-controls">
                 <button class="tech-btn-filter" id="toggle-filter-btn" type="button">
-                    <span class="btn-text">Skrýt filtry</span>
+                    <span class="btn-text" id="eshop-filter-btn-text">Skrýt filtry</span>
                     <span class="filter-indicator"></span>
                 </button>
                 <div class="tech-sort-box" id="tech-custom-dropdown">
                     <div class="tech-dropdown-toggle">
-                        <span class="current-sort">Doporučené</span>
+                        <span class="current-sort" id="eshop-sort-current">Doporučené</span>
                         <span class="dropdown-arrow">▼</span>
                     </div>
                     <ul class="tech-dropdown-menu">
-                        <li data-value="recommended" class="active">Doporučené</li>
-                        <li data-value="price-asc">NEJNIŽŠÍ > NEJVYŠŠÍ</li>
-                        <li data-value="price-desc">NEJVYŠŠÍ > NEJNIŽŠÍ</li>
+                        <li data-value="recommended" class="active" id="eshop-sort-recommended">Doporučené</li>
+                        <li data-value="price-asc" id="eshop-sort-price-asc">NEJNIŽŠÍ > NEJVYŠŠÍ</li>
+                        <li data-value="price-desc" id="eshop-sort-price-desc">NEJVYŠŠÍ > NEJNIŽŠÍ</li>
                     </ul>
                 </div>
             </div>
@@ -100,31 +93,31 @@
                 </div>
 
                 <div class="tech-filter-group">
-                    <h4 class="tech-filter-caption">Kategorie //</h4>
+                    <h4 class="tech-filter-caption" id="caption-categories">Kategorie //</h4>
                     <ul class="tech-filter-list">
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="category-filter" value="cinematic">
-                                <span class="custom-box"></span> FPV Cinematic
+                                <span class="custom-box"></span> <span id="label-cat-cinematic">FPV Cinematic</span>
                             </label>
                         </li>
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="category-filter" value="longrange">
-                                <span class="custom-box"></span> Longrange
+                                <span class="custom-box"></span> <span id="label-cat-longrange">Longrange</span>
                             </label>
                         </li>
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="category-filter" value="freestyle">
-                                <span class="custom-box"></span> Freestyle
+                                <span class="custom-box"></span> <span id="label-cat-freestyle">Freestyle</span>
                             </label>
                         </li>
                     </ul>
                 </div>
 
                 <div class="tech-filter-group">
-                    <h4 class="tech-filter-caption">Cenové rozpětí</h4>
+                    <h4 class="tech-filter-caption" id="caption-price-range">Cenové rozpětí</h4>
                     <div class="tech-price-box">
                         <div class="price-display">
                             Od <span id="price-min-value">0</span> do <span id="price-max-value">0</span> Kč
@@ -143,12 +136,12 @@
                 </div>
 
                 <div class="tech-filter-group">
-                    <h4 class="tech-filter-caption">Dostupnost //</h4>
+                    <h4 class="tech-filter-caption" id="caption-stock">Dostupnost //</h4>
                     <ul class="tech-filter-list">
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="stock-filter" value="skladem">
-                                <span class="custom-box"></span> Komponenty skladem
+                                <span class="custom-box"></span> <span id="label-stock-instock">Komponenty skladem</span>
                             </label>
                         </li>
                     </ul>
@@ -188,7 +181,7 @@
 
                 <div class="tech-modal-actions">
                     <a href="kontakt.html" class="tech-modal-btn">
-                        <span>Nezávazně poptat stavbu</span>
+                        <span id="modal-btn-text">Nezávazně poptat stavbu</span>
                         <span class="btn-arrow">→</span>
                     </a>
                 </div>
@@ -199,38 +192,11 @@
 
 <footer class="main-footer">
     <div class="global-container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <h3>sik-group.cz</h3>
-                <p>Filming without limits</p>
-            </div>
-            <div class="footer-column">
-                <h4>Zaměření</h4>
-                <ul>
-                    <li><a href="firemni_akce.html">Velké Eventy</a></li>
-                    <li><a href="propagace.html">Propagační videa</a></li>
-                    <li><a href="osobni_akce.html">Osobní akce</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>O Nás</h4>
-                <ul>
-                    <li><a href="kontakt.html#kontakt">Kontakt</a></li>
-                    <li><a href="kontakt.html#tym">Náš tým</a></li>
-                    <li><a href="gdpr.html">GDPR</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Sociální sítě</h4>
-                <ul>
-                    <li><a href="https://www.instagram.com/group_sik/" target="_blank">Instagram</a></li>
-                    <li><a href="#" target="_blank">Facebook</a></li>
-                    <li><a href="https://www.youtube.com/@Group_SIK_Czech" target="_blank">YouTube</a></li>
-                </ul>
-            </div>
+        <div class="footer-grid" id="dynamic-footer-grid">
+            <!-- Dynamicky naplněno z common.json -->
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 SIK-GROUP. Všechna práva vyhrazena.</p>
+            <p id="footer-copyright">&copy; 2026 SIK-GROUP. Všechna práva vyhrazena.</p>
         </div>
     </div>
 </footer>
