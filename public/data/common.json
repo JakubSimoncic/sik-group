@@ -1,5 +1,10 @@
 {
   "header": {
+    "labels": {
+      "email": "Email",
+      "phone": "Telefon",
+      "socials": "Sociální sítě"
+    },
     "email": "info@sik-group.cz",
     "phone": "732 520 715",
     "socials": {
