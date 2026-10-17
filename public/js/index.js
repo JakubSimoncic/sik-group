@@ -20,15 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (logoLink) logoLink.href = pathPrefix + 'index.html';
 
             // Štítky / Popisky
-            if (cData.header && cData.header.labels) {
-                if (document.getElementById('label-header-email') && cData.header.labels.email) {
-                    document.getElementById('label-header-email').textContent = cData.header.labels.email;
+            if (cData.header) {
+                if (document.getElementById('label-header-email') && cData.header.labelEmail) {
+                    document.getElementById('label-header-email').textContent = cData.header.labelEmail;
                 }
-                if (document.getElementById('label-header-phone') && cData.header.labels.phone) {
-                    document.getElementById('label-header-phone').textContent = cData.header.labels.phone;
+                if (document.getElementById('label-header-phone') && cData.header.labelPhone) {
+                    document.getElementById('label-header-phone').textContent = cData.header.labelPhone;
                 }
-                if (document.getElementById('label-header-socials') && cData.header.labels.socials) {
-                    document.getElementById('label-header-socials').textContent = cData.header.labels.socials;
+                if (document.getElementById('label-header-socials') && cData.header.labelSocials) {
+                    document.getElementById('label-header-socials').textContent = cData.header.labelSocials;
                 }
             }
 
@@ -47,11 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Sociální sítě
             const socialsContainer = document.getElementById('header-socials');
-            if (socialsContainer && cData.header.socials) {
+            if (socialsContainer && cData.header.instagram) {
                 socialsContainer.innerHTML = `
-                    <a href="${cData.header.socials.instagram}" target="_blank">Instagram</a>
-                    <a href="${cData.header.socials.facebook}" target="_blank">Facebook</a>
-                    <a href="${cData.header.socials.youtube}" target="_blank">YouTube</a>
+                    <a href="${cData.header.instagram}" target="_blank">Instagram</a>
+                    <a href="${cData.header.facebook}" target="_blank">Facebook</a>
+                    <a href="${cData.header.youtube}" target="_blank">YouTube</a>
                 `;
             }
 
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const monthName = monthsCZ[selectedStartDate.getMonth()].toLowerCase();
                 const year = selectedStartDate.getFullYear();
                 
-                datePresenter.textContent = `${dayName}, ${dayNum}. ${monthName} ${year}`;
+                datePresenter.textContent = `${dayName}, ${dayNum}. ${monthname = monthName} ${year}`;
                 datePresenter.className = "date-selected";
             } else {
                 const startDay = selectedStartDate.getDate();
