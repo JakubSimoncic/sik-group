@@ -1,55 +1,45 @@
 {
-  "header": {
-    "labels": {
-      "email": "Email",
-      "phone": "Telefon",
-      "socials": "Sociální sítě"
+  "heroTitle": "Jeden tým pro celý záběr",
+  "heroBtnDrony": "Drony",
+  "heroBtnFpv": "FPV",
+  "divisionsTitle": "Naše specializace",
+  "divisions": [
+    {
+      "number": "01",
+      "badge": "nazev 123",
+      "title": "Propagační videa",
+      "description": "Chcete ukázat svou práci z výšky i zblízka? Potřebujete B-roll pro sociální sítě, video na web nebo rovnou kompletní obsah pro prezentaci vašeho projektu? Postaráme se o natáčení, střih i finální podobu videa.",
+      "btnText": "Prozkoumat divizi",
+      "image": "public/img/drone.png",
+      "link": "public/pages/propagace.html"
     },
-    "email": "info@sik-group.cz",
-    "phone": "732 520 715",
-    "socials": {
-      "instagram": "https://www.instagram.com/group_sik/",
-      "facebook": "#",
-      "youtube": "https://www.youtube.com/@Group_SIK_Czech"
+    {
+      "number": "02",
+      "badge": "nazev 123",
+      "title": "Velké eventy",
+      "description": "Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete. Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě. Podle toho, co potřebujete, můžeme dodat jeden hlavní aftermovie, krátké klipy pro sociální sítě nebo celý balíček obsahu.",
+      "btnText": "Prozkoumat divizi",
+      "image": "public/img/drone.png",
+      "link": "public/pages/firemni_akce.html"
     },
-    "navLinks": [
-      { "text": "Domů", "url": "index.html" },
-      { "text": "Propagační videa", "url": "propagace.html" },
-      { "text": "Osobní akce", "url": "osobni_akce.html" },
-      { "text": "Firemní akce", "url": "firemni_akce.html" },
-      { "text": "E-shop", "url": "public/pages/e-shop.html" },
-      { "text": "Náš tým", "url": "public/pages/kontakt.html#tym" }
-    ]
-  },
-  "footer": {
-    "brandTitle": "sik-group.cz",
-    "tagline": "Filming without limits",
-    "columns": [
-      {
-        "title": "Zaměření",
-        "links": [
-          { "text": "Velké Eventy", "url": "firemni_akce.html" },
-          { "text": "Propagační videa", "url": "propagace.html" },
-          { "text": "Osobní akce", "url": "osobni_akce.html" }
-        ]
-      },
-      {
-        "title": "O Nás",
-        "links": [
-          { "text": "Kontakt", "url": "public/pages/kontakt.html#kontakt" },
-          { "text": "Náš tým", "url": "public/pages/kontakt.html#tym" },
-          { "text": "GDPR", "url": "public/pages/gdpr.html" }
-        ]
-      },
-      {
-        "title": "Sociální sítě",
-        "links": [
-          { "text": "Instagram", "url": "https://www.instagram.com/group_sik/" },
-          { "text": "Facebook", "url": "#" },
-          { "text": "YouTube", "url": "https://www.youtube.com/@Group_SIK_Czech" }
-        ]
-      }
-    ],
-    "copyright": "© 2026 SIK-GROUP. Všechna práva vyhrazena."
-  }
+    {
+      "number": "03",
+      "badge": "nazev 123",
+      "title": "Osobní akce",
+      "description": "Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku? Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily, které během samotné akce často ani nestihnete vnímat.",
+      "btnText": "Prozkoumat divizi",
+      "image": "public/img/drone.png",
+      "link": "public/pages/osobni_akce.html"
+    }
+  ],
+  "trustTitle": "Klienti a Partneři",
+  "trustText": "Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?",
+  "bookingTitle": "Sjednat akci",
+  "bookingHeading": "Vyberte čas akce",
+  "dateUnselectedText": "Žádné datum nebylo vybráno",
+  "formPlaceholderName": "Jméno / název společnosti",
+  "formPlaceholderEmail": "Email",
+  "formPlaceholderPhone": "Telefonní číslo",
+  "formPlaceholderProject": "Popis vašeho projektu",
+  "formSubmitBtn": "Potvrdit termín"
 }
