@@ -1,6 +1,21 @@
 {
   "mainTitle": "Chcete létat jako my?",
   "mainSubtitle": "Co postavíme to i prodáme. Ready to fly.",
+  "filterBtnHideText": "Skrýt filtry",
+  "filterBtnShowText": "Zobrazit filtry",
+  "sortRecommended": "Doporučené",
+  "sortPriceAsc": "NEJNIŽŠÍ > NEJVYŠŠÍ",
+  "sortPriceDesc": "NEJVYŠŠÍ > NEJNIŽŠÍ",
+  "resetAllFiltersText": "✕ Resetovat všechny filtry",
+  "captionCategories": "Kategorie //",
+  "catCinematicText": "FPV Cinematic",
+  "catLongrangeText": "Longrange",
+  "catFreestyleText": "Freestyle",
+  "captionPriceRange": "Cenové rozpětí",
+  "resetPriceText": "✕ Resetovat cenu",
+  "captionStock": "Dostupnost //",
+  "stockInStockText": "Komponenty skladem",
+  "modalButtonText": "Nezávazně poptat stavbu",
   "products": [
     {
       "id": "1",
