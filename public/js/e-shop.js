@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let productsData = [];
     let baseSubtitleText = "Co postavíme to i prodáme. Ready to fly.";
+    let filterBtnHide = "Skrýt filtry";
+    let filterBtnShow = "Zobrazit filtry";
 
     const productGrid = document.getElementById('product-grid');
     const categoryCheckboxes = document.querySelectorAll('.category-filter');
@@ -22,6 +24,110 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceGap = 500;
 
     // ==========================================================================
+    // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička)
+    // ==========================================================================
+    async function loadCommonData() {
+        try {
+            const resCommon = await fetch('../data/common.json?t=' + Date.now());
+            if (!resCommon.ok) return;
+            const cData = await resCommon.json();
+
+            // Logo
+            const logoLink = document.getElementById('header-logo-link');
+            if (logoLink) logoLink.href = '../../index.html';
+
+            // Štítky
+            if (cData.header) {
+                if (document.getElementById('label-header-email') && cData.header.labelEmail) {
+                    document.getElementById('label-header-email').textContent = cData.header.labelEmail;
+                }
+                if (document.getElementById('label-header-phone') && cData.header.labelPhone) {
+                    document.getElementById('label-header-phone').textContent = cData.header.labelPhone;
+                }
+                if (document.getElementById('label-header-socials') && cData.header.labelSocials) {
+                    document.getElementById('label-header-socials').textContent = cData.header.labelSocials;
+                }
+            }
+
+            // Email & Telefon
+            const emailEl = document.getElementById('header-email');
+            if (emailEl && cData.header.email) {
+                emailEl.textContent = cData.header.email;
+                emailEl.href = 'mailto:' + cData.header.email;
+            }
+
+            const phoneEl = document.getElementById('header-phone');
+            if (phoneEl && cData.header.phone) {
+                phoneEl.textContent = cData.header.phone;
+                phoneEl.href = 'tel:' + cData.header.phone.replace(/\s+/g, '');
+            }
+
+            // Sociální sítě
+            const socialsContainer = document.getElementById('header-socials');
+            if (socialsContainer && cData.header.instagram) {
+                socialsContainer.innerHTML = `
+                    <a href="${cData.header.instagram}" target="_blank">Instagram</a>
+                    <a href="${cData.header.facebook}" target="_blank">Facebook</a>
+                    <a href="${cData.header.youtube}" target="_blank">YouTube</a>
+                `;
+            }
+
+            // Navigační lišta
+            const navList = document.getElementById('dynamic-nav-list');
+            if (navList && cData.header.navLinks) {
+                navList.innerHTML = cData.header.navLinks.map((link) => {
+                    let finalUrl = link.url;
+                    if (!finalUrl.startsWith('http') && !finalUrl.startsWith('#')) {
+                        finalUrl = '../../' + finalUrl.replace(/^(\.\.\/)+/, '');
+                    }
+                    const isActive = link.url.includes('e-shop.html') ? 'class="active"' : '';
+                    return `<li ${isActive}><a href="${finalUrl}">${link.text}</a></li>`;
+                }).join('');
+            }
+
+            // Patička
+            const footerGrid = document.getElementById('dynamic-footer-grid');
+            if (footerGrid && cData.footer.columns) {
+                let brandHtml = `
+                    <div class="footer-brand">
+                        <h3>${cData.footer.brandTitle}</h3>
+                        <p>${cData.footer.tagline}</p>
+                    </div>
+                `;
+
+                let colsHtml = cData.footer.columns.map(col => {
+                    let linksList = col.links.map(l => {
+                        let fUrl = l.url;
+                        if (!fUrl.startsWith('http') && !fUrl.startsWith('#')) {
+                            fUrl = '../../' + fUrl.replace(/^(\.\.\/)+/, '');
+                        }
+                        return `<li><a href="${fUrl}">${l.text}</a></li>`;
+                    }).join('');
+
+                    return `
+                        <div class="footer-column">
+                            <h4>${col.title}</h4>
+                            <ul>${linksList}</ul>
+                        </div>
+                    `;
+                }).join('');
+
+                footerGrid.innerHTML = brandHtml + colsHtml;
+            }
+
+            const copyrightEl = document.getElementById('footer-copyright');
+            if (copyrightEl && cData.footer.copyright) {
+                copyrightEl.textContent = cData.footer.copyright;
+            }
+
+        } catch (err) {
+            console.error('Chyba při načítání common.json:', err);
+        }
+    }
+
+    loadCommonData();
+
+    // ==========================================================================
     // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S OŠETŘENÍM CACHE)
     // ==========================================================================
     async function fetchAllShopData() {
@@ -30,21 +136,61 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 const shopData = await res.json();
 
-                let items = [];
-                if (Array.isArray(shopData)) {
-                    items = shopData;
-                } else {
-                    if (shopData.mainTitle) {
-                        const titleEl = document.querySelector('.tech-main-title');
-                        if (titleEl) titleEl.textContent = shopData.mainTitle;
-                    }
-                    if (shopData.mainSubtitle) {
-                        baseSubtitleText = shopData.mainSubtitle;
-                    }
-                    items = shopData.products || [];
+                if (shopData.mainTitle && document.getElementById('eshop-main-title')) {
+                    document.getElementById('eshop-main-title').textContent = shopData.mainTitle;
+                }
+                if (shopData.mainSubtitle) {
+                    baseSubtitleText = shopData.mainSubtitle;
+                }
+                if (shopData.filterBtnHideText) filterBtnHide = shopData.filterBtnHideText;
+                if (shopData.filterBtnShowText) filterBtnShow = shopData.filterBtnShowText;
+
+                const filterBtnTextEl = document.getElementById('eshop-filter-btn-text');
+                if (filterBtnTextEl) filterBtnTextEl.textContent = filterBtnHide;
+
+                if (shopData.sortRecommended) {
+                    if (document.getElementById('eshop-sort-current')) document.getElementById('eshop-sort-current').textContent = shopData.sortRecommended;
+                    if (document.getElementById('eshop-sort-recommended')) document.getElementById('eshop-sort-recommended').textContent = shopData.sortRecommended;
+                }
+                if (shopData.sortPriceAsc && document.getElementById('eshop-sort-price-asc')) {
+                    document.getElementById('eshop-sort-price-asc').textContent = shopData.sortPriceAsc;
+                }
+                if (shopData.sortPriceDesc && document.getElementById('eshop-sort-price-desc')) {
+                    document.getElementById('eshop-sort-price-desc').textContent = shopData.sortPriceDesc;
                 }
 
-                productsData = items;
+                if (shopData.resetAllFiltersText && document.getElementById('reset-all-filters-btn')) {
+                    document.getElementById('reset-all-filters-btn').textContent = shopData.resetAllFiltersText;
+                }
+                if (shopData.captionCategories && document.getElementById('caption-categories')) {
+                    document.getElementById('caption-categories').textContent = shopData.captionCategories;
+                }
+                if (shopData.catCinematicText && document.getElementById('label-cat-cinematic')) {
+                    document.getElementById('label-cat-cinematic').textContent = shopData.catCinematicText;
+                }
+                if (shopData.catLongrangeText && document.getElementById('label-cat-longrange')) {
+                    document.getElementById('label-cat-longrange').textContent = shopData.catLongrangeText;
+                }
+                if (shopData.catFreestyleText && document.getElementById('label-cat-freestyle')) {
+                    document.getElementById('label-cat-freestyle').textContent = shopData.catFreestyleText;
+                }
+                if (shopData.captionPriceRange && document.getElementById('caption-price-range')) {
+                    document.getElementById('caption-price-range').textContent = shopData.captionPriceRange;
+                }
+                if (shopData.resetPriceText && document.getElementById('reset-price-btn')) {
+                    document.getElementById('reset-price-btn').textContent = shopData.resetPriceText;
+                }
+                if (shopData.captionStock && document.getElementById('caption-stock')) {
+                    document.getElementById('caption-stock').textContent = shopData.captionStock;
+                }
+                if (shopData.stockInStockText && document.getElementById('label-stock-instock')) {
+                    document.getElementById('label-stock-instock').textContent = shopData.stockInStockText;
+                }
+                if (shopData.modalButtonText && document.getElementById('modal-btn-text')) {
+                    document.getElementById('modal-btn-text').textContent = shopData.modalButtonText;
+                }
+
+                productsData = shopData.products || [];
                 initShop();
             }
         } catch (err) {
@@ -207,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleFilterBtn.addEventListener('click', () => {
             shopLayoutContainer.classList.toggle('filters-hidden');
             if (btnText) {
-                btnText.textContent = shopLayoutContainer.classList.contains('filters-hidden') ? 'Zobrazit filtry' : 'Skrýt filtry';
+                btnText.textContent = shopLayoutContainer.classList.contains('filters-hidden') ? filterBtnShow : filterBtnHide;
             }
         });
     }
