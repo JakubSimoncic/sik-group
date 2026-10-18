@@ -21,8 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const productCountSpan = document.getElementById('product-count') || document.querySelector('.tech-subtitle');
 
     let minPrice = 0;
-    let maxPrice = 0;
+    let maxPrice = 50000;
     const priceGap = 500;
+
+    // ==========================================================================
+    // POMOCNÁ FUNKCE PRO BEZPEČNÉ PŘEVÁDĚNÍ CENY NA ČÍSLO
+    // ==========================================================================
+    function parseSafeNumber(val, fallback = 0) {
+        if (val === null || val === undefined) return fallback;
+        if (typeof val === 'number') return isNaN(val) ? fallback : val;
+        
+        // Odstraní mezery a převádí text na čisté číslo
+        const cleaned = String(val).replace(/\s+/g, '').replace(',', '.');
+        const parsed = parseFloat(cleaned);
+        return isNaN(parsed) ? fallback : parsed;
+    }
 
     // ==========================================================================
     // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička)
@@ -33,11 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!resCommon.ok) return;
             const cData = await resCommon.json();
 
-            // Logo
             const logoLink = document.getElementById('header-logo-link');
             if (logoLink) logoLink.href = '../../index.html';
 
-            // Štítky
             if (cData.header) {
                 if (document.getElementById('label-header-email') && cData.header.labelEmail) {
                     document.getElementById('label-header-email').textContent = cData.header.labelEmail;
@@ -50,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Email & Telefon
             const emailEl = document.getElementById('header-email');
             if (emailEl && cData.header.email) {
                 emailEl.textContent = cData.header.email;
@@ -63,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 phoneEl.href = 'tel:' + cData.header.phone.replace(/\s+/g, '');
             }
 
-            // Sociální sítě
             const socialsContainer = document.getElementById('header-socials');
             if (socialsContainer && cData.header.instagram) {
                 socialsContainer.innerHTML = `
@@ -73,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
 
-            // Navigační lišta
             const navList = document.getElementById('dynamic-nav-list');
             if (navList && cData.header.navLinks) {
                 navList.innerHTML = cData.header.navLinks.map((link) => {
@@ -86,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).join('');
             }
 
-            // Patička
             const footerGrid = document.getElementById('dynamic-footer-grid');
             if (footerGrid && cData.footer.columns) {
                 let brandHtml = `
@@ -227,27 +234,31 @@ document.addEventListener('DOMContentLoaded', () => {
         items.forEach(product => {
             const card = document.createElement('div');
             card.className = 'tech-card';
-            card.setAttribute('data-price', product.price);
-            card.setAttribute('data-category', product.category);
-            card.setAttribute('data-stock', product.stock || 'skladem');
-            card.setAttribute('data-id', product.id);
+            
+            const cleanPrice = parseSafeNumber(product.price, 0);
+            const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
 
-            const formattedPrice = product.price.toLocaleString('cs-CZ');
-            const eurPrice = product.eurPrice || Math.round(product.price / 25);
+            card.setAttribute('data-price', cleanPrice);
+            card.setAttribute('data-category', (product.category || '').toLowerCase().trim());
+            card.setAttribute('data-stock', product.stock || 'skladem');
+            card.setAttribute('data-id', product.id || Date.now());
+
+            const formattedPrice = cleanPrice.toLocaleString('cs-CZ');
+            const formattedEurPrice = cleanEurPrice.toLocaleString('cs-CZ');
             const imagePath = product.image || '../img/drone.png';
             const tagText = product.tag || 'FPV Spec';
 
             card.innerHTML = `
                 <div class="tech-img-wrapper">
-                    <img src="${imagePath}" alt="${product.title}" loading="lazy">
+                    <img src="${imagePath}" alt="${product.title || 'Dron'}" loading="lazy">
                     <div class="tech-card-overlay"><span>Zobrazit specifikaci</span></div>
                 </div>
                 <div class="tech-card-meta">
                     <div class="tech-card-row">
                         <span class="tech-spec-tag">${tagText}</span>
-                        <span class="tech-card-price">${formattedPrice} ${currencyTextGlobal} <span class="card-price-eur">/ ${eurPrice} EUR</span></span>
+                        <span class="tech-card-price">${formattedPrice} ${currencyTextGlobal} <span class="card-price-eur">/ ${formattedEurPrice} EUR</span></span>
                     </div>
-                    <h3 class="tech-card-title">${product.title}</h3>
+                    <h3 class="tech-card-title">${product.title || 'Bez názvu'}</h3>
                 </div>
             `;
 
@@ -257,20 +268,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. INICIALIZACE CENOVÉHO FILTRU
+    // 3. INICIALIZACE CENOVÉHO FILTRU S OŠETŘENÍM ULTRAVYSOKÝCH HODNOT
     // ==========================================================================
     function initShop() {
         renderProducts(productsData);
 
         if (productsData.length > 0) {
-            const prices = productsData.map(p => p.price);
-            minPrice = Math.min(...prices);
-            maxPrice = Math.max(...prices);
+            const validPrices = productsData.map(p => parseSafeNumber(p.price, 0));
+            
+            minPrice = Math.min(...validPrices);
+            
+            // Pokud majitel napíše do CZK extrémní částku (např. > 500 000), ořízneme strop posuvníku pro lepší použitelnost UI
+            const realMax = Math.max(...validPrices);
+            maxPrice = realMax > 500000 ? 100000 : realMax;
+
+            if (maxPrice <= minPrice) maxPrice = minPrice + 10000;
         }
 
         if (minRange && maxRange) {
-            minRange.min = minPrice; minRange.max = maxPrice; minRange.value = minPrice;
-            maxRange.min = minPrice; maxRange.max = maxPrice; maxRange.value = maxPrice;
+            minRange.min = minPrice; 
+            minRange.max = maxPrice; 
+            minRange.value = minPrice;
+            minRange.step = "100";
+
+            maxRange.min = minPrice; 
+            maxRange.max = maxPrice; 
+            maxRange.value = maxPrice;
+            maxRange.step = "100";
 
             if (priceMinLabel) priceMinLabel.textContent = `${minPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
             if (priceMaxLabel) priceMaxLabel.textContent = `${maxPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
@@ -281,14 +305,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateSliderTrack() {
         if (!minRange || !maxRange || !sliderTrack) return;
-        const currentMin = parseFloat(minRange.value);
-        const currentMax = parseFloat(maxRange.value);
+        const currentMin = parseFloat(minRange.value) || minPrice;
+        const currentMax = parseFloat(maxRange.value) || maxPrice;
         const range = maxPrice - minPrice;
 
         if (range <= 0) return;
 
-        const percentMin = ((currentMin - minPrice) / range) * 100;
-        const percentMax = ((currentMax - minPrice) / range) * 100;
+        const percentMin = Math.max(0, Math.min(100, ((currentMin - minPrice) / range) * 100));
+        const percentMax = Math.max(0, Math.min(100, ((currentMax - minPrice) / range) * 100));
 
         sliderTrack.style.background = `linear-gradient(to right, #222222 ${percentMin}%, #00D1C7 ${percentMin}%, #00D1C7 ${percentMax}%, #222222 ${percentMax}%)`;
     }
@@ -300,11 +324,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!productGrid) return;
         const cards = productGrid.querySelectorAll('.tech-card');
 
-        const activeCategories = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+        const activeCategories = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase().trim());
         const activeStock = Array.from(stockCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
 
-        const currentMinPrice = minRange ? parseFloat(minRange.value) : -Infinity;
-        const currentMaxPrice = maxRange ? parseFloat(maxRange.value) : Infinity;
+        const currentMinPrice = minRange ? parseSafeNumber(minRange.value, -Infinity) : -Infinity;
+        const currentMaxPrice = maxRange ? parseSafeNumber(maxRange.value, Infinity) : Infinity;
 
         if (minValSpan) minValSpan.textContent = currentMinPrice.toLocaleString('cs-CZ');
         if (maxValSpan) maxValSpan.textContent = currentMaxPrice.toLocaleString('cs-CZ');
@@ -314,13 +338,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let visibleCount = 0;
 
         cards.forEach(card => {
-            const productCategory = card.getAttribute('data-category');
+            const productCategory = (card.getAttribute('data-category') || '').toLowerCase().trim();
             const productStock = card.getAttribute('data-stock');
-            const productPrice = parseFloat(card.getAttribute('data-price')) || 0;
+            const productPrice = parseSafeNumber(card.getAttribute('data-price'), 0);
 
             const matchCategory = activeCategories.length === 0 || activeCategories.includes(productCategory);
             const matchStock = activeStock.length === 0 || activeStock.includes(productStock);
-            const matchPrice = productPrice >= currentMinPrice && productPrice <= currentMaxPrice;
+            
+            // Pokud je cena produktu vyšší než strop posuvníku (kvůli překlepu), zobrazí se při nastavení posuvníku na max
+            const isAtMaxRange = minRange && maxRange && parseFloat(maxRange.value) >= maxPrice;
+            const matchPrice = (productPrice >= currentMinPrice && productPrice <= currentMaxPrice) || (isAtMaxRange && productPrice >= currentMinPrice);
 
             if (matchCategory && matchStock && matchPrice) {
                 card.style.display = 'flex';
@@ -403,24 +430,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal(product) {
         if (!modal) return;
 
-        const eurPrice = product.eurPrice || Math.round(product.price / 25);
+        const cleanPrice = parseSafeNumber(product.price, 0);
+        const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
 
         document.getElementById('modal-img').src = product.image || '../img/drone.png';
-        document.getElementById('modal-title').textContent = product.title;
+        document.getElementById('modal-title').textContent = product.title || 'Detail dronu';
         
         const catLabel = (product.categoryLabel || product.category || '').toUpperCase();
         document.getElementById('modal-category').textContent = `${catLabel} //`;
         
         const catBadge = document.getElementById('modal-category-badge');
-        if (catBadge) catBadge.textContent = product.categoryLabel || product.category;
+        if (catBadge) catBadge.textContent = product.categoryLabel || product.category || 'Dron';
 
-        const formattedPrice = product.price.toLocaleString('cs-CZ');
-        document.getElementById('modal-price').innerHTML = `${formattedPrice} ${currencyTextGlobal} <span class="price-eur">/ ${eurPrice} EUR</span>`;
+        const formattedPrice = cleanPrice.toLocaleString('cs-CZ');
+        const formattedEurPrice = cleanEurPrice.toLocaleString('cs-CZ');
+        document.getElementById('modal-price').innerHTML = `${formattedPrice} ${currencyTextGlobal} <span class="price-eur">/ ${formattedEurPrice} EUR</span>`;
         document.getElementById('modal-description').textContent = product.description || 'Detailní popis připravujeme.';
 
         const specsList = document.getElementById('modal-specs');
         specsList.innerHTML = '';
-        if (product.specs) {
+        if (product.specs && typeof product.specs === 'object') {
             Object.entries(product.specs).forEach(([k, v]) => {
                 const li = document.createElement('li');
                 li.innerHTML = `
@@ -497,11 +526,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const cards = Array.from(productGrid.querySelectorAll('.tech-card'));
 
         if (sortBy === 'price-asc') {
-            cards.sort((a, b) => parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price')));
+            cards.sort((a, b) => parseSafeNumber(a.getAttribute('data-price')) - parseSafeNumber(b.getAttribute('data-price')));
         } else if (sortBy === 'price-desc') {
-            cards.sort((a, b) => parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price')));
+            cards.sort((a, b) => parseSafeNumber(b.getAttribute('data-price')) - parseSafeNumber(a.getAttribute('data-price')));
         } else {
-            cards.sort((a, b) => parseFloat(a.getAttribute('data-id')) - parseFloat(b.getAttribute('data-id')));
+            cards.sort((a, b) => parseSafeNumber(a.getAttribute('data-id')) - parseSafeNumber(b.getAttribute('data-id')));
         }
 
         cards.forEach(card => productGrid.appendChild(card));
