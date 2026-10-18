@@ -1,84 +1,80 @@
 <!DOCTYPE html>
 <html lang="cs">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SIK-GROUP | E-shop</title>
-        
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-        
-        <link rel="stylesheet" href="../css/style.css">
-        <link rel="stylesheet" href="../css/e-shop.css">
-    </head>
-    <body>
-        <header>
-            <div id="nav-wrapper">
-                <nav id="main-nav" class="global-container">
-                    <div class="logo">
-                        <a href="../../index.html" id="header-logo-link">
-                            <img src="../img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
-                        </a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIK-GROUP | E-shop</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/e-shop.css">
+</head>
+<body>
+    <header>
+        <div id="nav-wrapper">
+            <nav id="main-nav" class="global-container">
+                <div class="logo">
+                    <a href="../../index.html" id="header-logo-link">
+                        <img src="../img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
+                    </a>
+                </div>
+                
+                <div class="menu-toggle" id="mobile-menu">
+                    <span class="bar b1"></span>
+                    <span class="bar b2"></span>
+                </div>
+            </nav>
+
+            <div class="nav-drop-panel" id="nav-panel">
+                <div class="panel-grid">
+                    <div class="panel-main">
+                        <ul class="nav-list" id="dynamic-nav-list"></ul>
                     </div>
                     
-                    <div class="menu-toggle" id="mobile-menu">
-                        <span class="bar b1"></span>
-                        <span class="bar b2"></span>
-                    </div>
-                </nav>
-
-                <div class="nav-drop-panel" id="nav-panel">
-                    <div class="panel-grid">
-                        <div class="panel-main">
-                            <ul class="nav-list" id="dynamic-nav-list">
-                                <!-- Dynamicky naplněno z common.json -->
-                            </ul>
+                    <div class="panel-side">
+                        <div class="side-block">
+                            <span id="label-header-email"></span>
+                            <a href="#" class="side-email" id="header-email"></a>
+                            <span id="label-header-phone"></span>
+                            <a href="#" class="side-phone" id="header-phone"></a>
                         </div>
-                        
-                        <div class="panel-side">
-                            <div class="side-block">
-                                <span id="label-header-email">Email</span>
-                                <a href="#" class="side-email" id="header-email">Načítá se...</a>
-                                <span id="label-header-phone">Telefon</span>
-                                <a href="#" class="side-phone" id="header-phone">Načítá se...</a>
-                            </div>
-                            <div class="side-block">
-                                <span id="label-header-socials">Sociální sítě</span>
-                                <div class="side-socials" id="header-socials">
-                                    <!-- Dynamicky naplněno z common.json -->
-                                </div>
-                            </div>
+                        <div class="side-block">
+                            <span id="label-header-socials"></span>
+                            <div class="side-socials" id="header-socials"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="nav-dim-overlay" id="nav-overlay"></div>
-        </header>
+        </div>
+        <div class="nav-dim-overlay" id="nav-overlay"></div>
+    </header>
 
 <main class="tech-shop-wrapper">
     <div class="shop-container">
         
         <div class="tech-top-bar">
             <div class="tech-title-block">
-                <h1 class="tech-main-title" id="eshop-main-title">Chcete létat jako my?</h1>
-                <p class="tech-subtitle" id="product-count">Co postavíme to i prodáme. Ready to fly.</p>
+                <h1 class="tech-main-title" id="eshop-main-title"></h1>
+                <p class="tech-subtitle" id="product-count"></p>
             </div>
             
             <div class="tech-controls">
                 <button class="tech-btn-filter" id="toggle-filter-btn" type="button">
-                    <span class="btn-text" id="eshop-filter-btn-text">Skrýt filtry</span>
+                    <span class="btn-text" id="eshop-filter-btn-text"></span>
                     <span class="filter-indicator"></span>
                 </button>
                 <div class="tech-sort-box" id="tech-custom-dropdown">
                     <div class="tech-dropdown-toggle">
-                        <span class="current-sort" id="eshop-sort-current">Doporučené</span>
+                        <span class="current-sort" id="eshop-sort-current"></span>
                         <span class="dropdown-arrow">▼</span>
                     </div>
                     <ul class="tech-dropdown-menu">
-                        <li data-value="recommended" class="active" id="eshop-sort-recommended">Doporučené</li>
-                        <li data-value="price-asc" id="eshop-sort-price-asc">NEJNIŽŠÍ > NEJVYŠŠÍ</li>
-                        <li data-value="price-desc" id="eshop-sort-price-desc">NEJVYŠŠÍ > NEJNIŽŠÍ</li>
+                        <li data-value="recommended" class="active" id="eshop-sort-recommended"></li>
+                        <li data-value="price-asc" id="eshop-sort-price-asc"></li>
+                        <li data-value="price-desc" id="eshop-sort-price-desc"></li>
                     </ul>
                 </div>
             </div>
@@ -89,38 +85,38 @@
             <aside class="tech-sidebar">
                 
                 <div class="tech-sidebar-top">
-                    <button type="button" class="tech-btn-reset-all" id="reset-all-filters-btn">✕ Resetovat všechny filtry</button>
+                    <button type="button" class="tech-btn-reset-all" id="reset-all-filters-btn"></button>
                 </div>
 
                 <div class="tech-filter-group">
-                    <h4 class="tech-filter-caption" id="caption-categories">Kategorie //</h4>
+                    <h4 class="tech-filter-caption" id="caption-categories"></h4>
                     <ul class="tech-filter-list">
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="category-filter" value="cinematic">
-                                <span class="custom-box"></span> <span id="label-cat-cinematic">FPV Cinematic</span>
+                                <span class="custom-box"></span> <span id="label-cat-cinematic"></span>
                             </label>
                         </li>
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="category-filter" value="longrange">
-                                <span class="custom-box"></span> <span id="label-cat-longrange">Longrange</span>
+                                <span class="custom-box"></span> <span id="label-cat-longrange"></span>
                             </label>
                         </li>
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="category-filter" value="freestyle">
-                                <span class="custom-box"></span> <span id="label-cat-freestyle">Freestyle</span>
+                                <span class="custom-box"></span> <span id="label-cat-freestyle"></span>
                             </label>
                         </li>
                     </ul>
                 </div>
 
                 <div class="tech-filter-group">
-                    <h4 class="tech-filter-caption" id="caption-price-range">Cenové rozpětí</h4>
+                    <h4 class="tech-filter-caption" id="caption-price-range"></h4>
                     <div class="tech-price-box">
                         <div class="price-display">
-                            Od <span id="price-min-value">0</span> do <span id="price-max-value">0</span> Kč
+                            <span id="price-prefix-from"></span> <span id="price-min-value">0</span> <span id="price-prefix-to"></span> <span id="price-max-value">0</span> <span id="price-currency"></span>
                         </div>
                         <div class="range-slider-container">
                             <div class="slider-track" id="slider-track"></div>
@@ -131,17 +127,17 @@
                             <span id="price-min-label">0 Kč</span>
                             <span id="price-max-label">0 Kč</span>
                         </div>
-                        <button type="button" class="tech-btn-reset-price" id="reset-price-btn">✕ Resetovat cenu</button>
+                        <button type="button" class="tech-btn-reset-price" id="reset-price-btn"></button>
                     </div>
                 </div>
 
                 <div class="tech-filter-group">
-                    <h4 class="tech-filter-caption" id="caption-stock">Dostupnost //</h4>
+                    <h4 class="tech-filter-caption" id="caption-stock"></h4>
                     <ul class="tech-filter-list">
                         <li>
                             <label class="tech-checkbox-label">
                                 <input type="checkbox" class="stock-filter" value="skladem">
-                                <span class="custom-box"></span> <span id="label-stock-instock">Komponenty skladem</span>
+                                <span class="custom-box"></span> <span id="label-stock-instock"></span>
                             </label>
                         </li>
                     </ul>
@@ -161,27 +157,25 @@
         <div class="tech-modal-grid">
             <div class="tech-modal-media">
                 <img id="modal-img" src="../img/drone.png" alt="Detail dronu" loading="lazy">
-                <div class="tech-modal-img-badge" id="modal-category-badge">FPV Cinematic</div>
+                <div class="tech-modal-img-badge" id="modal-category-badge"></div>
             </div>
             <div class="tech-modal-content">
                 <div class="tech-modal-header">
-                    <span class="tech-modal-tag" id="modal-category">FPV CINEMATIC //</span>
-                    <h2 class="tech-modal-title" id="modal-title">SpeedIK</h2>
-                    <div class="tech-modal-price" id="modal-price">25 000 Kč <span class="price-eur">/ 1000 EUR</span></div>
+                    <span class="tech-modal-tag" id="modal-category"></span>
+                    <h2 class="tech-modal-title" id="modal-title"></h2>
+                    <div class="tech-modal-price" id="modal-price"></div>
                 </div>
                 
-                <p class="tech-modal-desc" id="modal-description">
-                    Popis dronu...
-                </p>
+                <p class="tech-modal-desc" id="modal-description"></p>
 
                 <div class="tech-modal-specs-block">
-                    <h4 class="tech-specs-heading">Technické specifikace //</h4>
+                    <h4 class="tech-specs-heading" id="modal-specs-heading"></h4>
                     <ul class="tech-specs-list" id="modal-specs"></ul>
                 </div>
 
                 <div class="tech-modal-actions">
                     <a href="kontakt.html" class="tech-modal-btn">
-                        <span id="modal-btn-text">Nezávazně poptat stavbu</span>
+                        <span id="modal-btn-text"></span>
                         <span class="btn-arrow">→</span>
                     </a>
                 </div>
@@ -192,11 +186,9 @@
 
 <footer class="main-footer">
     <div class="global-container">
-        <div class="footer-grid" id="dynamic-footer-grid">
-            <!-- Dynamicky naplněno z common.json -->
-        </div>
+        <div class="footer-grid" id="dynamic-footer-grid"></div>
         <div class="footer-bottom">
-            <p id="footer-copyright">&copy; 2026 SIK-GROUP. Všechna práva vyhrazena.</p>
+            <p id="footer-copyright"></p>
         </div>
     </div>
 </footer>
