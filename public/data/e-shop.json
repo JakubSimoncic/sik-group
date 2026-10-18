@@ -118,6 +118,36 @@
         "Payload": "až 3 kg",
         "Baterie": "2x 6S 5000mAh"
       }
+    },
+    {
+      "id": "1792323305356",
+      "title": "Oprava Dronu",
+      "price": 1000,
+      "eurPrice": 10000,
+      "category": "cinematic",
+      "tag": "",
+      "tagEn": "",
+      "description": "",
+      "descriptionEn": "",
+      "specs": {},
+      "categoryLabel": "FPV Cinematic",
+      "stock": "skladem",
+      "image": "../img/drone.png"
+    },
+    {
+      "id": "1792324249934",
+      "title": "Sestavení na zakázku",
+      "price": 635,
+      "eurPrice": 12415326,
+      "category": "cinematic",
+      "tag": "",
+      "tagEn": "",
+      "description": "",
+      "descriptionEn": "",
+      "specs": {},
+      "categoryLabel": "FPV Cinematic",
+      "stock": "skladem",
+      "image": "../img/drone.png"
     }
   ]
 }
