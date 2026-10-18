@@ -12,9 +12,13 @@
   "catLongrangeText": "Longrange",
   "catFreestyleText": "Freestyle",
   "captionPriceRange": "Cenové rozpětí",
+  "pricePrefixFrom": "Od",
+  "pricePrefixTo": "do",
+  "currencyText": "Kč",
   "resetPriceText": "✕ Resetovat cenu",
   "captionStock": "Dostupnost //",
   "stockInStockText": "Komponenty skladem",
+  "modalSpecsHeading": "Technické specifikace //",
   "modalButtonText": "Nezávazně poptat stavbu",
   "products": [
     {
