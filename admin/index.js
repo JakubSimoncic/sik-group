@@ -14,8 +14,11 @@ function setAdminLanguage(lang) {
     currentAdminLang = lang;
     document.getElementById('lang-cz-btn').classList.toggle('active', lang === 'cz');
     document.getElementById('lang-en-btn').classList.toggle('active', lang === 'en');
-    log(`Přepnuto filtrování rozcestníku na: ${lang.toUpperCase()}`, 'success');
+    log(`Přepnuto CMS na jazyk: ${lang.toUpperCase()}`, 'success');
     renderDashboard();
+    
+    // Pokud jsme v sekci produktů, přizpůsobíme viditelnost [CZ]/[EN] políček
+    adjustProductFormLanguage();
 }
 
 function loadConfig() {
@@ -86,7 +89,8 @@ async function initData() {
     } catch (e) {
         log('Chyba při načítání pages.json: ' + e.message, 'error');
         pagesData = [
-            { "id": "eshop-products-cz", "title": "E-shop Produkty", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
+            { "id": "eshop-products-cz", "title": "E-shop Produkty [CZ]", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
+            { "id": "eshop-products-en", "title": "E-shop Products [EN]", "description": "Active drones and pricing management", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "en" },
             { "id": "home-cz", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json", "lang": "cz" },
             { "id": "contact-cz", "title": "Kontakt & Tým", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json", "lang": "cz" }
         ];
@@ -115,7 +119,7 @@ function renderDashboard() {
             <div class="item-info">
                 <div class="item-thumb">${icon}</div>
                 <div class="item-details">
-                    <h4>${item.title} ${item.lang ? `[${item.lang.toUpperCase()}]` : ''}</h4>
+                    <h4>${item.title}</h4>
                     <p>${subtitle}</p>
                 </div>
             </div>
@@ -210,6 +214,7 @@ async function openSection(id) {
                 }
             });
 
+            adjustProductFormLanguage();
             renderProductsList();
             switchView('view-products');
         } catch (e) {
@@ -239,6 +244,20 @@ async function openSection(id) {
         } catch (err) {
             log('Chyba při načítání obsahu stránky: ' + err.message, 'error');
         }
+    }
+}
+
+// Funkce pro skrytí/zobrazení políček podle zvoleného jazyka v CMS hlavičce
+function adjustProductFormLanguage() {
+    const enFields = document.querySelectorAll('.en-only-field');
+    const czFields = document.querySelectorAll('.cz-only-field');
+
+    if (currentAdminLang === 'en') {
+        enFields.forEach(el => el.style.display = 'flex');
+        czFields.forEach(el => el.style.display = 'none');
+    } else {
+        enFields.forEach(el => el.style.display = 'none');
+        czFields.forEach(el => el.style.display = 'flex');
     }
 }
 
