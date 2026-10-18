@@ -24,8 +24,8 @@
     {
       "id": "1",
       "title": "SpeedIK",
-      "category": "cinematic",
-      "categoryLabel": "FPV Cinematic",
+      "category": "longrange",
+      "categoryLabel": "Longrange",
       "tag": "Record breaking high speed drone",
       "price": 25000,
       "eurPrice": 1000,
