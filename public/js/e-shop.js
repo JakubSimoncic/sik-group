@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let minPrice = 0;
     let maxPrice = 50000;
-    const priceGap = 500;
+    const priceGap = 100;
 
     function parseSafeNumber(val, fallback = 0) {
         if (val === null || val === undefined) return fallback;
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička)
+    // 0. NAČTENÍ COMMON.JSON
     // ==========================================================================
     async function loadCommonData() {
         try {
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (ZOBRAZÍ VŽDY VŠECHNO)
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedPrice = cleanPrice.toLocaleString('cs-CZ');
             const formattedEurPrice = cleanEurPrice.toLocaleString('cs-CZ');
             const imagePath = product.image || '../img/drone.png';
-            const tagText = product.tag || 'FPV Spec';
+            const tagText = product.tag || product.categoryLabel || 'FPV Spec';
 
             card.innerHTML = `
                 <div class="tech-img-wrapper">
@@ -263,19 +263,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. INICIALIZACE CENOVÉHO FILTRU (S OŠETŘENÍM EXTRÉMŮ)
+    // 3. INICIALIZACE CENOVÉHO FILTRU
     // ==========================================================================
     function initShop() {
         renderProducts(productsData);
 
         if (productsData.length > 0) {
             const validPrices = productsData.map(p => parseSafeNumber(p.price, 0));
-            
             minPrice = Math.min(...validPrices);
-            const realMax = Math.max(...validPrices);
             
-            // Pokud majitel napíše do EUR/CZK extrémní nesmysl (např. > 500 000), ořízneme strop posuvníku, aby slider fungoval
-            maxPrice = realMax > 500000 ? 100000 : realMax;
+            // Ošetření reálné ceny bez omezení
+            const realMax = Math.max(...validPrices);
+            maxPrice = realMax;
 
             if (maxPrice <= minPrice) maxPrice = minPrice + 10000;
         }
@@ -284,12 +283,12 @@ document.addEventListener('DOMContentLoaded', () => {
             minRange.min = minPrice; 
             minRange.max = maxPrice; 
             minRange.value = minPrice;
-            minRange.step = "100";
+            minRange.step = "10";
 
             maxRange.min = minPrice; 
             maxRange.max = maxPrice; 
             maxRange.value = maxPrice;
-            maxRange.step = "100";
+            maxRange.step = "10";
 
             if (priceMinLabel) priceMinLabel.textContent = `${minPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
             if (priceMaxLabel) priceMaxLabel.textContent = `${maxPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
@@ -313,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 4. LOGIKA FILTROVÁNÍ (PRODÝCHÁ VŠECHNY PRODUKTY I NEZNÁMÉ KATEGORIE)
+    // 4. UNIVERZÁLNÍ BAZÁLNÍ LOGIKA FILTROVÁNÍ
     // ==========================================================================
     function updateShop() {
         if (!productGrid) return;
@@ -337,13 +336,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const productStock = card.getAttribute('data-stock');
             const productPrice = parseSafeNumber(card.getAttribute('data-price'), 0);
 
-            // Pokud kategorie nesedí s filtry v UI nebo jde o novou/neznámou kategorii, necháme produkt vždy projít
-            const knownCategories = ['longrange', 'freestyle', 'cinematic', 'special'];
-            const matchCategory = activeCategories.length === 0 || activeCategories.includes(productCategory) || !knownCategories.includes(productCategory);
-            
+            // Zobrazení produktu bez ohledu na kategorie, pokud není explicitně odškrtnutá aktivní kategorie
+            const matchCategory = activeCategories.length === 0 || activeCategories.includes(productCategory);
             const matchStock = activeStock.length === 0 || activeStock.includes(productStock);
-            const isAtMaxRange = minRange && maxRange && parseFloat(maxRange.value) >= maxPrice;
-            const matchPrice = (productPrice >= currentMinPrice && productPrice <= currentMaxPrice) || (isAtMaxRange && productPrice >= currentMinPrice);
+            const matchPrice = productPrice >= currentMinPrice && productPrice <= currentMaxPrice;
 
             if (matchCategory && matchStock && matchPrice) {
                 card.style.display = 'flex';
@@ -414,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // 6. HIGH-TECH MODÁLNÍ OKNO
+    // 6. MODÁLNÍ OKNO
     // ==========================================================================
     const modal = document.getElementById('product-modal');
     const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -485,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // 7. CUSTOM DROPDOWN A ŘAZENÍ
+    // 7. ŘAZENÍ
     // ==========================================================================
     const customDropdown = document.getElementById('tech-custom-dropdown');
     const dropdownToggle = customDropdown ? customDropdown.querySelector('.tech-dropdown-toggle') : null;
