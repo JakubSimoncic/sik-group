@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     let productsData = [];
-    let baseSubtitleText = "Co postavíme to i prodáme. Ready to fly.";
+    let baseSubtitleText = "";
     let filterBtnHide = "Skrýt filtry";
     let filterBtnShow = "Zobrazit filtry";
+    let currencyTextGlobal = "Kč";
 
     const productGrid = document.getElementById('product-grid');
     const categoryCheckboxes = document.querySelectorAll('.category-filter');
@@ -144,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (shopData.filterBtnHideText) filterBtnHide = shopData.filterBtnHideText;
                 if (shopData.filterBtnShowText) filterBtnShow = shopData.filterBtnShowText;
+                if (shopData.currencyText) currencyTextGlobal = shopData.currencyText;
 
                 const filterBtnTextEl = document.getElementById('eshop-filter-btn-text');
                 if (filterBtnTextEl) filterBtnTextEl.textContent = filterBtnHide;
@@ -177,6 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (shopData.captionPriceRange && document.getElementById('caption-price-range')) {
                     document.getElementById('caption-price-range').textContent = shopData.captionPriceRange;
                 }
+                if (shopData.pricePrefixFrom && document.getElementById('price-prefix-from')) {
+                    document.getElementById('price-prefix-from').textContent = shopData.pricePrefixFrom;
+                }
+                if (shopData.pricePrefixTo && document.getElementById('price-prefix-to')) {
+                    document.getElementById('price-prefix-to').textContent = shopData.pricePrefixTo;
+                }
+                if (shopData.currencyText && document.getElementById('price-currency')) {
+                    document.getElementById('price-currency').textContent = shopData.currencyText;
+                }
                 if (shopData.resetPriceText && document.getElementById('reset-price-btn')) {
                     document.getElementById('reset-price-btn').textContent = shopData.resetPriceText;
                 }
@@ -185,6 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (shopData.stockInStockText && document.getElementById('label-stock-instock')) {
                     document.getElementById('label-stock-instock').textContent = shopData.stockInStockText;
+                }
+                if (shopData.modalSpecsHeading && document.getElementById('modal-specs-heading')) {
+                    document.getElementById('modal-specs-heading').textContent = shopData.modalSpecsHeading;
                 }
                 if (shopData.modalButtonText && document.getElementById('modal-btn-text')) {
                     document.getElementById('modal-btn-text').textContent = shopData.modalButtonText;
@@ -231,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="tech-card-meta">
                     <div class="tech-card-row">
                         <span class="tech-spec-tag">${tagText}</span>
-                        <span class="tech-card-price">${formattedPrice} Kč <span class="card-price-eur">/ ${eurPrice} EUR</span></span>
+                        <span class="tech-card-price">${formattedPrice} ${currencyTextGlobal} <span class="card-price-eur">/ ${eurPrice} EUR</span></span>
                     </div>
                     <h3 class="tech-card-title">${product.title}</h3>
                 </div>
@@ -258,8 +272,8 @@ document.addEventListener('DOMContentLoaded', () => {
             minRange.min = minPrice; minRange.max = maxPrice; minRange.value = minPrice;
             maxRange.min = minPrice; maxRange.max = maxPrice; maxRange.value = maxPrice;
 
-            if (priceMinLabel) priceMinLabel.textContent = `${minPrice.toLocaleString('cs-CZ')} Kč`;
-            if (priceMaxLabel) priceMaxLabel.textContent = `${maxPrice.toLocaleString('cs-CZ')} Kč`;
+            if (priceMinLabel) priceMinLabel.textContent = `${minPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
+            if (priceMaxLabel) priceMaxLabel.textContent = `${maxPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
         }
 
         updateShop();
@@ -401,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (catBadge) catBadge.textContent = product.categoryLabel || product.category;
 
         const formattedPrice = product.price.toLocaleString('cs-CZ');
-        document.getElementById('modal-price').innerHTML = `${formattedPrice} Kč <span class="price-eur">/ ${eurPrice} EUR</span>`;
+        document.getElementById('modal-price').innerHTML = `${formattedPrice} ${currencyTextGlobal} <span class="price-eur">/ ${eurPrice} EUR</span>`;
         document.getElementById('modal-description').textContent = product.description || 'Detailní popis připravujeme.';
 
         const specsList = document.getElementById('modal-specs');
