@@ -9,7 +9,7 @@
   "resetAllFiltersText": "✕ Resetovat všechny filtry",
   "captionCategories": "Kategorie //",
   "catCinematicText": "Cinematic",
-  "catLongrangeText": "Longrange",
+  "catLongrangeText": "SPECIAL",
   "catFreestyleText": "Freestyle",
   "captionPriceRange": "Cenové rozpětí",
   "pricePrefixFrom": "Od",
@@ -26,18 +26,24 @@
       "title": "SpeedIK",
       "category": "cinematic",
       "categoryLabel": "FPV Cinematic",
-      "tag": "Cinematic Spec",
+      "tag": "Record breaking high speed drone",
       "price": 25000,
       "eurPrice": 1000,
       "stock": "skladem",
       "image": "../img/drone.png",
-      "description": "SpeedIK je náš vlastnoručně navržený a postavený speed dron, se kterým jsme dokázali překonat světový rekord v rychlosti dronu pod 250 g.\n\nChcete létat opravdu rychle? SpeedIK je postavený pro maximální rychlost a výkon.\n\nNabízíme také SpeedIK.L, naši odlehčenou a praktičtější verzi SpeedIKu. Na rozdíl od původní verze využívá konektory, díky kterým můžete jednotlivé lety opakovat bez nutnosti pájení a výrazně jednodušeji měnit komponenty.",
+      "description": "SpeedIK je náš vlastnoručně navržený a postavený speed dron, se kterým jsme dokázali překonat světový rekord v rychlosti dronu pod 250 g.\n\nChcete létat opravdu rychle? SpeedIK je postavený pro maximální rychlost a výkon.\n\nNabízíme také SpeedIK.L, naši odlehčenou a praktičtější verzi SpeedIKu. Na rozdíl od původní verze využívá konektory, díky kterým můžete jednotlivé lety opakovat bez nutnosti pájení a výrazně jednodušeji měnit komponenty.\n\nV Balení:\n1x Dron\n2x SIK LBS\n4x CCW vrtule\n4x CW vrtule",
       "specs": {
-        "Rám": "5 inch Cinematic Carbon",
-        "Video vysílač": "DJI O3 Air Unit",
-        "Motor": "2207 1800KV",
-        "Baterie": "6S 1400mAh"
-      }
+        "Rám": "SIK SPEED",
+        "Video vysílač": "TBS Unify Pro32 Nano",
+        "AIO": "NewBeeDrone Hummingbird 255 AIO 50A AM32 (modifikované)",
+        "Kamera": "BetaFPV C03 V2",
+        "Baterie": "SIK - LBS",
+        "Anténa": "Happymodel Crown LDS anténa LHCP",
+        "ELRS": "Happymodel ELRS 2.4G EP2 TCXO",
+        "GPS": "GPS Modul FLYWOO GOKU GM10 Nano V3.1"
+      },
+      "tagEn": "Cinematic Spec",
+      "descriptionEn": "SpeedIK je náš vlastnoručně navržený a postavený speed dron, se kterým jsme dokázali překonat světový rekord v rychlosti dronu pod 250 g.\n\nChcete létat opravdu rychle? SpeedIK je postavený pro maximální rychlost a výkon.\n\nNabízíme také SpeedIK.L, naši odlehčenou a praktičtější verzi SpeedIKu. Na rozdíl od původní verze využívá konektory, díky kterým můžete jednotlivé lety opakovat bez nutnosti pájení a výrazně jednodušeji měnit komponenty."
     },
     {
       "id": "2",
