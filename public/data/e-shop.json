@@ -83,20 +83,24 @@
     },
     {
       "id": "4",
-      "title": "RejSIK",
+      "title": "RejSeK",
       "category": "freestyle",
       "categoryLabel": "Freestyle",
-      "tag": "Ultra Light",
+      "tag": "Tinywhoop",
       "price": 15000,
       "eurPrice": 650,
       "stock": "skladem",
       "image": "../img/drone.png",
-      "description": "Lehký a obratný závodní dron laděný pro maximální akceleraci a ostré zatáčky.",
+      "description": "Rejsek je náš tiny whoop sestrojený aby zvládl vše od závodů až po freestyle.\n\nV balení:\n1x dron\n4x CCW vrtule\n4x CW vrtule\n!!Baterie nejsou součástí balení!!",
       "specs": {
-        "Rám": "Lightweight Race Carbon",
-        "Motory": "2207 1950KV",
-        "Baterie": "6S 1000mAh"
-      }
+        "Rám": "Frame BETAFPV Air75 II Whoop",
+        "Motory": "RCinpower GTS V3 0802 27000Kv",
+        "Baterie - doporučená": "BetaFPV Lava II 580mAh 1S 95C HV (4ks)",
+        "Kamera s Kanopkou": "BetaFPV C03 V2",
+        "AIO": "AIO FC BetaFPV Matrix 1S Brushless G4 5 IN 1 V2 (Soldered)"
+      },
+      "tagEn": "Ultra Light",
+      "descriptionEn": "Lehký a obratný závodní dron laděný pro maximální akceleraci a ostré zatáčky."
     },
     {
       "id": "5",
