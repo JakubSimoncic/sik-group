@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCommonData();
 
     // ==========================================================================
-    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S OŠETŘENÍM CACHE)
+    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON
     // ==========================================================================
     async function fetchAllShopData() {
         try {
@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (VČETNĚ EUR CENY)
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
