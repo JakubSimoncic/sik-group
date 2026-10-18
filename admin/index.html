@@ -333,39 +333,21 @@
         <div class="list-container" id="dashboard-list"></div>
     </div>
 
-    <!-- VIEW 2: PRODUKTY (E-SHOP CZ & EN) -->
+    <!-- VIEW 2: PRODUKTY & TEXTY E-SHOPU -->
     <div class="admin-view" id="view-products">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
-            <h3 style="font-size: 1.1rem; text-transform: uppercase;">E-Shop (Správa produktů)</h3>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;">E-Shop (Správa textů a produktů)</h3>
         </div>
 
-        <!-- Úprava hlavních textů e-shopu -->
+        <!-- Úprava VŠECH textů e-shopu -->
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 8px; margin-bottom: 30px;">
-            <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Hlavní nadpisy E-shopu</h4>
-            <div class="form-grid-2">
-                <div class="field-group">
-                    <label>Hlavní nadpis <span class="lang-badge">[CZ]</span></label>
-                    <input type="text" id="shop-main-title-input">
-                </div>
-                <div class="field-group">
-                    <label>Hlavní nadpis <span class="lang-badge">[EN]</span></label>
-                    <input type="text" id="shop-main-title-en-input" placeholder="Want to fly like us?">
-                </div>
-            </div>
-            <div class="form-grid-2">
-                <div class="field-group">
-                    <label>Podnadpis <span class="lang-badge">[CZ]</span></label>
-                    <input type="text" id="shop-main-subtitle-input">
-                </div>
-                <div class="field-group">
-                    <label>Podnadpis <span class="lang-badge">[EN]</span></label>
-                    <input type="text" id="shop-main-subtitle-en-input" placeholder="What we build, we sell. Ready to fly.">
-                </div>
-            </div>
-            <button type="button" class="btn-secondary" id="save-shop-texts-btn" style="margin-top: 10px;">Uložit nadpisy</button>
+            <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Nastavení a texty E-shopu</h4>
+            <div id="shop-texts-dynamic-fields" class="form-grid-2"></div>
+            <button type="button" class="btn-secondary" id="save-shop-texts-btn" style="margin-top: 15px;">Uložit texty E-Shopu</button>
         </div>
 
+        <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Seznam Dronů</h4>
         <div class="list-container" id="products-list"></div>
 
         <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
@@ -473,10 +455,7 @@
 <script>
     let currentAdminLang = 'cz';
     let productsData = [];
-    let shopMainTitle = "CHCETE LÉTAT JAKO MY?";
-    let shopMainTitleEn = "WANT TO FLY LIKE US?";
-    let shopMainSubtitle = "Co postavíme to i prodáme. Ready to fly.";
-    let shopMainSubtitleEn = "What we build, we sell. Ready to fly.";
+    let fullShopData = {};
     let pagesData = [];
     let currentLoadedPageData = {};
 
@@ -618,6 +597,10 @@
 
                 const friendlyName = getFriendlyCmsLabel(fullKey);
 
+                const labelEl = document.createElement('label');
+                labelEl.textContent = friendlyName;
+                fieldGroup.appendChild(labelEl);
+
                 let input;
                 if (typeof val === 'string' && val.length > 60) {
                     input = document.createElement('textarea');
@@ -647,25 +630,40 @@
 
         if (item.type === 'products') {
             try {
-                log(`Načítám produkty z: ${targetUrl}`);
+                log(`Načítám e-shop data z: ${targetUrl}`);
                 const prodRes = await fetch(targetUrl + '?t=' + Date.now());
                 if (!prodRes.ok) throw new Error(`HTTP chyba ${prodRes.status}`);
-                const shopData = await prodRes.json();
+                fullShopData = await prodRes.json();
                 
-                if (Array.isArray(shopData)) {
-                    productsData = shopData;
+                if (Array.isArray(fullShopData)) {
+                    productsData = fullShopData;
+                    fullShopData = { products: productsData };
                 } else {
-                    shopMainTitle = shopData.mainTitle || shopMainTitle;
-                    shopMainTitleEn = shopData.mainTitleEn || shopMainTitleEn;
-                    shopMainSubtitle = shopData.mainSubtitle || shopMainSubtitle;
-                    shopMainSubtitleEn = shopData.mainSubtitleEn || shopMainSubtitleEn;
-                    productsData = shopData.products || [];
+                    productsData = fullShopData.products || [];
                 }
-                
-                document.getElementById('shop-main-title-input').value = shopMainTitle;
-                document.getElementById('shop-main-title-en-input').value = shopMainTitleEn;
-                document.getElementById('shop-main-subtitle-input').value = shopMainSubtitle;
-                document.getElementById('shop-main-subtitle-en-input').value = shopMainSubtitleEn;
+
+                const textsContainer = document.getElementById('shop-texts-dynamic-fields');
+                textsContainer.innerHTML = '';
+
+                Object.keys(fullShopData).forEach(key => {
+                    if (key !== 'products') {
+                        const fieldGroup = document.createElement('div');
+                        fieldGroup.className = 'field-group';
+
+                        const label = document.createElement('label');
+                        label.textContent = getFriendlyCmsLabel(key);
+
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.className = 'shop-text-input';
+                        input.dataset.key = key;
+                        input.value = fullShopData[key] || '';
+
+                        fieldGroup.appendChild(label);
+                        fieldGroup.appendChild(input);
+                        textsContainer.appendChild(fieldGroup);
+                    }
+                });
 
                 renderProductsList();
                 switchView('view-products');
@@ -842,20 +840,14 @@
     }
 
     document.getElementById('save-shop-texts-btn').addEventListener('click', async () => {
-        shopMainTitle = document.getElementById('shop-main-title-input').value;
-        shopMainTitleEn = document.getElementById('shop-main-title-en-input').value;
-        shopMainSubtitle = document.getElementById('shop-main-subtitle-input').value;
-        shopMainSubtitleEn = document.getElementById('shop-main-subtitle-en-input').value;
+        document.querySelectorAll('.shop-text-input').forEach(input => {
+            const k = input.dataset.key;
+            fullShopData[k] = input.value;
+        });
 
-        const shopPayload = {
-            mainTitle: shopMainTitle,
-            mainTitleEn: shopMainTitleEn,
-            mainSubtitle: shopMainSubtitle,
-            mainSubtitleEn: shopMainSubtitleEn,
-            products: productsData
-        };
+        fullShopData.products = productsData;
 
-        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Aktualizovány CZ/EN nadpisy e-shopu`);
+        await commitFileToGithub('public/data/e-shop.json', fullShopData, `CMS: Aktualizovány texty e-shopu`);
     });
 
     document.getElementById('page-form').addEventListener('submit', async (e) => {
@@ -921,15 +913,9 @@
 
         renderProductsList();
 
-        const shopPayload = {
-            mainTitle: shopMainTitle,
-            mainTitleEn: shopMainTitleEn,
-            mainSubtitle: shopMainSubtitle,
-            mainSubtitleEn: shopMainSubtitleEn,
-            products: productsData
-        };
+        fullShopData.products = productsData;
 
-        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Uložen dron ${title}`);
+        await commitFileToGithub('public/data/e-shop.json', fullShopData, `CMS: Uložen dron ${title}`);
         resetProductForm();
     });
 
@@ -940,21 +926,37 @@
         productsData = productsData.filter(p => String(p.id) !== String(id));
         renderProductsList();
 
-        const shopPayload = {
-            mainTitle: shopMainTitle,
-            mainTitleEn: shopMainTitleEn,
-            mainSubtitle: shopMainSubtitle,
-            mainSubtitleEn: shopMainSubtitleEn,
-            products: productsData
-        };
+        fullShopData.products = productsData;
 
-        await commitFileToGithub('public/data/e-shop.json', shopPayload, `CMS: Smazán dron ${prod ? prod.title : id}`);
+        await commitFileToGithub('public/data/e-shop.json', fullShopData, `CMS: Smazán dron ${prod ? prod.title : id}`);
     }
 
     loadConfig();
     initData();
 
     const cmsFieldLabels = {
+        "mainTitle": "Hlavní nadpis e-shopu",
+        "mainSubtitle": "Podnadpis e-shopu",
+        "filterBtnHideText": "Text tlačítka pro skrytí filtrů",
+        "filterBtnShowText": "Text tlačítka pro zobrazení filtrů",
+        "sortRecommended": "Text řazení: Doporučené",
+        "sortPriceAsc": "Text řazení: Nejnižší > Nejvyšší",
+        "sortPriceDesc": "Text řazení: Nejvyšší > Nejnižší",
+        "resetAllFiltersText": "Tlačítko: Resetovat všechny filtry",
+        "captionCategories": "Nadpis sekce: Kategorie",
+        "catCinematicText": "Kategorie: FPV Cinematic",
+        "catLongrangeText": "Kategorie: Longrange",
+        "catFreestyleText": "Kategorie: Freestyle",
+        "captionPriceRange": "Nadpis sekce: Cenové rozpětí",
+        "pricePrefixFrom": "Cenová předložka: Od",
+        "pricePrefixTo": "Cenová předložka: do",
+        "currencyText": "Měna",
+        "resetPriceText": "Tlačítko: Resetovat cenu",
+        "captionStock": "Nadpis sekce: Dostupnost",
+        "stockInStockText": "Stav skladu: Komponenty skladem",
+        "modalSpecsHeading": "Detail dronu: Nadpis specifikací",
+        "modalButtonText": "Detail dronu: Text tlačítka poptávky",
+
         "heroTitle": "Úvodní stránka – Hlavní nadpis",
         "heroBtnDrony": "Úvodní stránka – Text tlačítka 'Drony'",
         "heroBtnFpv": "Úvodní stránka – Text tlačítka 'FPV'",
