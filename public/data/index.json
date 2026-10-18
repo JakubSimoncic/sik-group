@@ -1,8 +1,8 @@
 {
   "heroTitle": "Jeden tým pro celý záběr",
   "heroBtnDrony": "Drony",
-  "heroBtnFpv": "Náš Tým",
-  "divisionsTitle": "Naše specializace",
+  "heroBtnFpv": "FPV",
+  "divisionsTitle": "Co umíme",
   "divisions": [
     {
       "number": "01",
@@ -18,7 +18,7 @@
       "badge": "EVENTY & FESTIVALY",
       "title": "Velké eventy",
       "description": "Konference, festivaly, závody, koncerty nebo jiné velké akce? Dostaneme kameru tam, kde ji potřebujete. Kombinujeme FPV drony, klasické drony a kamery ze země, takže z jedné akce dokážeme vytvořit kompletní video obsah pro váš web i sociální sítě.",
-      "btnText": "Zjistit více",
+      "btnText": "Prozkoumat divizi",
       "image": "public/img/drone.png",
       "link": "public/pages/firemni_akce.html"
     },
@@ -27,7 +27,7 @@
       "badge": "SVATBY & OSLAVY",
       "title": "Osobní akce",
       "description": "Svatba, oslava, maturitní ples nebo jiný den, na který chcete mít pořádnou vzpomínku? Natočíme ho tak, abyste se k němu mohli vracet i za několik let. Od důležitých momentů až po malé detaily, které během samotné akce často ani nestihnete vnímat.",
-      "btnText": "Zjistit více",
+      "btnText": "Prozkoumat divizi",
       "image": "public/img/drone.png",
       "link": "public/pages/osobni_akce.html"
     }
