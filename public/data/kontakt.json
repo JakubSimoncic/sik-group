@@ -1,5 +1,5 @@
 {
-  "teamSectionTitle": "LIDÉ ZA KAMEROU",
+  "teamSectionTitle": "NÁŠ TÝM",
   "team": [
     {
       "name": "Honza",
@@ -38,27 +38,27 @@
       ]
     },
     {
-      "name": "Vojtech",
+      "name": "Vojtěch",
       "role": "// HLAVNÍ KAMERAMAN",
       "image": "../img/team/vojtech.png",
-      "bio": "Vojtech doplňuje kameramanský tým a zajišťuje stabilní záběry i v náročných podmínkách.",
+      "bio": "Ať už potřebujete sestříhat a ozvučit krátké video na Instagram, nebo upravit a editovat hodinový vlog, Vojta to pro vás udělá a dá si záležet, aby výsledek odpovídal vašim snům. Díky dlouholeté praxi s úpravou a střihem videa v programech jako Davinci Resolve ví, co při editu funguje, na co si dát naopak pozor a čeho se vyvarovat. Ať už je váš požadavek jakýkoliv, Vojta udělá vše pro to, aby jste byli s výslednou prací maximálně spokojeni!",
       "tags": [
-        "Kamerová práce",
         "Střih videí",
+        "Preciznost a rychlost",
         "Kompozice a světlo",
         "Důraz na detail"
       ]
     },
     {
-      "name": "Lukas",
-      "role": "// TECH SPECIALIST",
+      "name": "Lukáš",
+      "role": "// EDITOR VŠEHO DRUHU",
       "image": "../img/team/lukas.jpg",
-      "bio": "Lukas má na starosti technické zázemí a podporu při složitějších dronech.",
+      "bio": "Lukáš zvládne všechno od krátkých videí a reels přes vlogy až po komplexnější filmové projekty.\nZakládá si na kvalitním zpracování, rychlé komunikaci a především na tom, aby výsledné video odpovídalo vašim představám. Ať už potřebujete svižný střih pro sociální sítě, nebo propracované video s důrazem na příběh a atmosféru, Lukáš si s tím poradí.",
       "tags": [
-        "Technická podpora",
-        "Drony",
-        "Logistika",
-        "Servis"
+        "Důraz na detail",
+        "Vždy dostupný",
+        "Rychlá práce",
+        ""
       ]
     }
   ],
