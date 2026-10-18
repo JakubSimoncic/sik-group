@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let minPrice = 0;
     let maxPrice = 50000;
-    const priceGap = 100;
+    const priceGap = 10;
 
     function parseSafeNumber(val, fallback = 0) {
         if (val === null || val === undefined) return fallback;
@@ -271,10 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (productsData.length > 0) {
             const validPrices = productsData.map(p => parseSafeNumber(p.price, 0));
             minPrice = Math.min(...validPrices);
-            
-            // Ošetření reálné ceny bez omezení
-            const realMax = Math.max(...validPrices);
-            maxPrice = realMax;
+            maxPrice = Math.max(...validPrices);
 
             if (maxPrice <= minPrice) maxPrice = minPrice + 10000;
         }
@@ -283,12 +280,12 @@ document.addEventListener('DOMContentLoaded', () => {
             minRange.min = minPrice; 
             minRange.max = maxPrice; 
             minRange.value = minPrice;
-            minRange.step = "10";
+            minRange.step = "1";
 
             maxRange.min = minPrice; 
             maxRange.max = maxPrice; 
             maxRange.value = maxPrice;
-            maxRange.step = "10";
+            maxRange.step = "1";
 
             if (priceMinLabel) priceMinLabel.textContent = `${minPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
             if (priceMaxLabel) priceMaxLabel.textContent = `${maxPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
@@ -312,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 4. UNIVERZÁLNÍ BAZÁLNÍ LOGIKA FILTROVÁNÍ
+    // 4. BEZPEČNÁ LOGIKA FILTROVÁNÍ (NEBLOKUJE ŽÁDNÉ PRODUKTY)
     // ==========================================================================
     function updateShop() {
         if (!productGrid) return;
@@ -321,11 +318,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeCategories = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase().trim());
         const activeStock = Array.from(stockCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
 
-        const currentMinPrice = minRange ? parseSafeNumber(minRange.value, -Infinity) : -Infinity;
-        const currentMaxPrice = maxRange ? parseSafeNumber(maxRange.value, Infinity) : Infinity;
+        // Pokud je posuvník nastaven na okraje, neomezujeme min/max vůbec
+        const isDefaultMin = minRange ? (parseFloat(minRange.value) <= minPrice) : true;
+        const isDefaultMax = maxRange ? (parseFloat(maxRange.value) >= maxPrice) : true;
 
-        if (minValSpan) minValSpan.textContent = currentMinPrice.toLocaleString('cs-CZ');
-        if (maxValSpan) maxValSpan.textContent = currentMaxPrice.toLocaleString('cs-CZ');
+        const currentMinPrice = (minRange && !isDefaultMin) ? parseSafeNumber(minRange.value, -Infinity) : -Infinity;
+        const currentMaxPrice = (maxRange && !isDefaultMax) ? parseSafeNumber(maxRange.value, Infinity) : Infinity;
+
+        const displayMin = minRange ? parseFloat(minRange.value) : minPrice;
+        const displayMax = maxRange ? parseFloat(maxRange.value) : maxPrice;
+
+        if (minValSpan) minValSpan.textContent = displayMin.toLocaleString('cs-CZ');
+        if (maxValSpan) maxValSpan.textContent = displayMax.toLocaleString('cs-CZ');
 
         updateSliderTrack();
 
@@ -336,9 +340,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const productStock = card.getAttribute('data-stock');
             const productPrice = parseSafeNumber(card.getAttribute('data-price'), 0);
 
-            // Zobrazení produktu bez ohledu na kategorie, pokud není explicitně odškrtnutá aktivní kategorie
-            const matchCategory = activeCategories.length === 0 || activeCategories.includes(productCategory);
-            const matchStock = activeStock.length === 0 || activeStock.includes(productStock);
+            // 1. KATEGORIE: Pokud není zaškrtnuto NIC, projde VŠECHNO (včetně neznámých kategorií)
+            const matchCategory = (activeCategories.length === 0) || activeCategories.includes(productCategory);
+            
+            // 2. SKLAD: Pokud není zaškrtnuto NIC, projde VŠECHNO
+            const matchStock = (activeStock.length === 0) || activeStock.includes(productStock);
+            
+            // 3. CENA: Projde bezpečně všechno, co spadá do zvoleného rozsahu
             const matchPrice = productPrice >= currentMinPrice && productPrice <= currentMaxPrice;
 
             if (matchCategory && matchStock && matchPrice) {
