@@ -24,14 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let maxPrice = 50000;
     const priceGap = 500;
 
-    // ==========================================================================
-    // POMOCNÁ FUNKCE PRO BEZPEČNÉ PŘEVÁDĚNÍ CENY NA ČÍSLO
-    // ==========================================================================
     function parseSafeNumber(val, fallback = 0) {
         if (val === null || val === undefined) return fallback;
         if (typeof val === 'number') return isNaN(val) ? fallback : val;
-        
-        // Odstraní mezery a převádí text na čisté číslo
         const cleaned = String(val).replace(/\s+/g, '').replace(',', '.');
         const parsed = parseFloat(cleaned);
         return isNaN(parsed) ? fallback : parsed;
@@ -220,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (ZOBRAZÍ VŽDY VŠECHNO)
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
@@ -268,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. INICIALIZACE CENOVÉHO FILTRU S OŠETŘENÍM ULTRAVYSOKÝCH HODNOT
+    // 3. INICIALIZACE CENOVÉHO FILTRU (S OŠETŘENÍM EXTRÉMŮ)
     // ==========================================================================
     function initShop() {
         renderProducts(productsData);
@@ -277,9 +272,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const validPrices = productsData.map(p => parseSafeNumber(p.price, 0));
             
             minPrice = Math.min(...validPrices);
-            
-            // Pokud majitel napíše do CZK extrémní částku (např. > 500 000), ořízneme strop posuvníku pro lepší použitelnost UI
             const realMax = Math.max(...validPrices);
+            
+            // Pokud majitel napíše do EUR/CZK extrémní nesmysl (např. > 500 000), ořízneme strop posuvníku, aby slider fungoval
             maxPrice = realMax > 500000 ? 100000 : realMax;
 
             if (maxPrice <= minPrice) maxPrice = minPrice + 10000;
@@ -318,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 4. LOGIKA FILTROVÁNÍ PRODUKTŮ
+    // 4. LOGIKA FILTROVÁNÍ (PRODÝCHÁ VŠECHNY PRODUKTY I NEZNÁMÉ KATEGORIE)
     // ==========================================================================
     function updateShop() {
         if (!productGrid) return;
@@ -342,10 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const productStock = card.getAttribute('data-stock');
             const productPrice = parseSafeNumber(card.getAttribute('data-price'), 0);
 
-            const matchCategory = activeCategories.length === 0 || activeCategories.includes(productCategory);
-            const matchStock = activeStock.length === 0 || activeStock.includes(productStock);
+            // Pokud kategorie nesedí s filtry v UI nebo jde o novou/neznámou kategorii, necháme produkt vždy projít
+            const knownCategories = ['longrange', 'freestyle', 'cinematic', 'special'];
+            const matchCategory = activeCategories.length === 0 || activeCategories.includes(productCategory) || !knownCategories.includes(productCategory);
             
-            // Pokud je cena produktu vyšší než strop posuvníku (kvůli překlepu), zobrazí se při nastavení posuvníku na max
+            const matchStock = activeStock.length === 0 || activeStock.includes(productStock);
             const isAtMaxRange = minRange && maxRange && parseFloat(maxRange.value) >= maxPrice;
             const matchPrice = (productPrice >= currentMinPrice && productPrice <= currentMaxPrice) || (isAtMaxRange && productPrice >= currentMinPrice);
 
