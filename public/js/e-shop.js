@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let minPrice = 0;
     let maxPrice = 50000;
-    const priceGap = 10;
+    const priceGap = 1;
 
     function parseSafeNumber(val, fallback = 0) {
         if (val === null || val === undefined) return fallback;
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. INICIALIZACE CENOVÉHO FILTRU
+    // 3. INICIALIZACE CENOVÉHO FILTRU (NA KORUNU PŘESNĚ)
     // ==========================================================================
     function initShop() {
         renderProducts(productsData);
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 4. BEZPEČNÁ LOGIKA FILTROVÁNÍ (NEBLOKUJE ŽÁDNÉ PRODUKTY)
+    // 4. BEZPEČNÁ LOGIKA FILTROVÁNÍ
     // ==========================================================================
     function updateShop() {
         if (!productGrid) return;
@@ -318,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeCategories = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase().trim());
         const activeStock = Array.from(stockCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
 
-        // Pokud je posuvník nastaven na okraje, neomezujeme min/max vůbec
         const isDefaultMin = minRange ? (parseFloat(minRange.value) <= minPrice) : true;
         const isDefaultMax = maxRange ? (parseFloat(maxRange.value) >= maxPrice) : true;
 
@@ -340,13 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const productStock = card.getAttribute('data-stock');
             const productPrice = parseSafeNumber(card.getAttribute('data-price'), 0);
 
-            // 1. KATEGORIE: Pokud není zaškrtnuto NIC, projde VŠECHNO (včetně neznámých kategorií)
             const matchCategory = (activeCategories.length === 0) || activeCategories.includes(productCategory);
-            
-            // 2. SKLAD: Pokud není zaškrtnuto NIC, projde VŠECHNO
             const matchStock = (activeStock.length === 0) || activeStock.includes(productStock);
-            
-            // 3. CENA: Projde bezpečně všechno, co spadá do zvoleného rozsahu
             const matchPrice = productPrice >= currentMinPrice && productPrice <= currentMaxPrice;
 
             if (matchCategory && matchStock && matchPrice) {
