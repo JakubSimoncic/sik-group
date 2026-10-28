@@ -33,11 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 0. NAČTENÍ COMMON.JSON
+    // 0. NAČTENÍ COMMON.JSON (S PODPOROU JAZYKŮ)
     // ==========================================================================
     async function loadCommonData() {
         try {
-            const resCommon = await fetch('../data/common.json?t=' + Date.now());
+            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
+            const jsonPath = `../data/${fileName}`;
+
+            const resCommon = await fetch(jsonPath + '?t=' + Date.now());
             if (!resCommon.ok) return;
             const cData = await resCommon.json();
 
@@ -131,11 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCommonData();
 
     // ==========================================================================
-    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON
+    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S PODPOROU JAZYKŮ)
     // ==========================================================================
     async function fetchAllShopData() {
         try {
-            const res = await fetch('../data/e-shop.json?t=' + Date.now());
+            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const fileName = activeLang === 'en' ? 'e-shop_en.json' : 'e-shop.json';
+            const jsonPath = `../data/${fileName}`;
+
+            const res = await fetch(jsonPath + '?t=' + Date.now());
             if (res.ok) {
                 const shopData = await res.json();
 
