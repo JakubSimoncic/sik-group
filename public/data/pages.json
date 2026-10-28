@@ -48,6 +48,15 @@
     "lang": "cz"
   },
   {
+    "id": "common-en",
+    "title": "Global Elements (Header & Footer) [EN]",
+    "description": "Navigation links, contacts, and footer management",
+    "type": "page",
+    "dataFile": "public/data/common.json",
+    "icon": "⚙️",
+    "lang": "en"
+  },
+  {
     "id": "eshop-products-en",
     "title": "E-Shop Products [EN]",
     "description": "Active drones, specifications, and pricing management",
