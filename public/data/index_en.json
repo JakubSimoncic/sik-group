@@ -1,1 +1,45 @@
-
+{
+  "heroTitle": "One team for your whole set",
+  "heroBtnDrony": "Drones",
+  "heroBtnFpv": "Our Team",
+  "divisionsTitle": "Our specialties",
+  "divisions": [
+    {
+      "number": "01",
+      "badge": "DRONES",
+      "title": "Commercial & Brand Content",
+      "description": "Want to showcase your work from above and up close? Need B-roll for social media, a video for your website, or a complete content package to present your project? We handle everything from filming and editing to the final cut, delivering content that brings your vision to life.",
+      "btnText": "More info",
+      "image": "public/img/drone.png",
+      "link": "public/pages/propagace.html"
+    },
+    {
+      "number": "02",
+      "badge": "Events & Live Coverage",
+      "title": "Company events / Private events",
+      "description": "Conferences, festivals, races, concerts, or large-scale events? We get the camera where you need it. By combining FPV drones, conventional aerial drones, and ground-based cameras, we capture every angle and turn a single event into a complete collection of video content for your website and social media.",
+      "btnText": "More info",
+      "image": "public/img/drone.png",
+      "link": "public/pages/firemni_akce.html"
+    },
+    {
+      "number": "03",
+      "badge": "Weddings & Special Occasions",
+      "title": "Personal events / Public events",
+      "description": "A wedding, celebration, prom, or another special day worth remembering? We capture it in a way that lets you relive those moments for years to come. From the most important highlights to the small details you might miss in the moment, we make sure nothing worth remembering gets left behind.",
+      "btnText": "More info",
+      "image": "public/img/drone.png",
+      "link": "public/pages/osobni_akce.html"
+    }
+  ],
+  "trustTitle": "Clients & Partners",
+  "trustText": "We work with people, businesses, and projects that have something worth showing. Will you be next?",
+  "bookingTitle": "Book an event?",
+  "bookingHeading": "Select the event time",
+  "dateUnselectedText": "No date was selected",
+  "formPlaceholderName": "Name / Company name",
+  "formPlaceholderEmail": "Email",
+  "formPlaceholderPhone": "Phone number",
+  "formPlaceholderProject": "Event description",
+  "formSubmitBtn": "Send"
+}
