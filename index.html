@@ -21,10 +21,13 @@
                         <img src="public/img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
                     </a>
                 </div>
-                
-                <div class="menu-toggle" id="mobile-menu">
-                    <span class="bar b1"></span>
-                    <span class="bar b2"></span>
+                <div class="nav-right-controls">
+                    <div class="lang-switcher" id="dynamic-lang-switcher"></div>
+                    
+                    <div class="menu-toggle" id="mobile-menu">
+                        <span class="bar b1"></span>
+                        <span class="bar b2"></span>
+                    </div>
                 </div>
             </nav>
 
@@ -32,7 +35,6 @@
                 <div class="panel-grid">
                     <div class="panel-main">
                         <ul class="nav-list" id="dynamic-nav-list">
-                            <!-- Dynamicky naplněno z common.json -->
                         </ul>
                     </div>
                     
@@ -46,7 +48,6 @@
                         <div class="side-block">
                             <span id="label-header-socials">Sociální sítě</span>
                             <div class="side-socials" id="header-socials">
-                                <!-- Dynamicky naplněno z common.json -->
                             </div>
                         </div>
                     </div>
@@ -83,7 +84,6 @@
             </div>
 
             <div class="cinematic-showcase-list" id="divisions-container">
-                <!-- Dynamicky generováno z index.js (index.json) -->
             </div>
         </section>
 
@@ -263,7 +263,7 @@
                                     <li data-value="20:00">20:00</li>
                                     <li data-value="20:30">20:30</li>
                                     <li data-value="21:00">21:00</li>
-                                    <li data-value="21:30">21:30</li>
+                                    <td data-value="21:30">21:30</td>
                                     <li data-value="22:00">22:00</li>
                                     <li data-value="22:30">22:30</li>
                                     <li data-value="23:00">23:00</li>
@@ -285,17 +285,13 @@
     <footer class="main-footer">
         <div class="global-container">
             <div class="footer-grid" id="dynamic-footer-grid">
-                <!-- Dynamicky naplněno z common.json -->
             </div>
             <div class="footer-bottom">
                 <p id="footer-copyright">&copy; 2026 SIK-GROUP.</p>
             </div>
         </div>
     </footer>
-
-    <!-- Globální script -->
     <script src="public/js/script.js" defer></script>
-    <!-- Stránkový script pro hlavní stránku -->
     <script src="public/js/index.js" defer></script>
 </body>
 </html>
