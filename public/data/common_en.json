@@ -1,1 +1,51 @@
-
+{
+  "header": {
+    "labelEmail": "Email",
+    "email": "info@sik-group.cz",
+    "labelPhone": "Phone",
+    "phone": "732 520 715",
+    "labelSocials": "Social media",
+    "instagram": "https://www.instagram.com/group_sik/",
+    "facebook": "https://www.facebook.com/share/1CJhmpSx2o/",
+    "youtube": "https://www.youtube.com/@Group_SIK_Czech",
+    "navLinks": [
+      { "text": "Home", "url": "index.html" },
+      { "text": "Propagational videos", "url": "propagtion.html" },
+      { "text": "Personal events / Public events", "url": "Personal_events.html" },
+      { "text": "Company events / Private events", "url": "Company_events.html" },
+      { "text": "E-shop", "url": "public/pages/e-shop.html" },
+      { "text": "Our Team", "url": "public/pages/kontakt.html#tym" }
+    ]
+  },
+  "footer": {
+    "brandTitle": "sik-group.cz",
+    "tagline": "Filming without limits",
+    "columns": [
+      {
+        "title": "Specializations",
+        "links": [
+          { "text": "Open air events", "url": "firemni_akce.html" },
+          { "text": "Propagational videos", "url": "propagace.html" },
+          { "text": "Personal events / Public events", "url": "osobni_akce.html" }
+        ]
+      },
+      {
+        "title": "About us",
+        "links": [
+          { "text": "Contact info", "url": "public/pages/kontakt.html#kontakt" },
+          { "text": "Our Team", "url": "public/pages/kontakt.html#tym" },
+          { "text": "GDPR", "url": "public/pages/gdpr.html" }
+        ]
+      },
+      {
+        "title": "Social media",
+        "links": [
+          { "text": "Instagram", "url": "https://www.instagram.com/group_sik/" },
+          { "text": "Facebook", "url": "https://www.facebook.com/share/1CJhmpSx2o/" },
+          { "text": "YouTube", "url": "https://www.youtube.com/@Group_SIK_Czech" }
+        ]
+      }
+    ],
+    "copyright": "© 2026 SIK-GROUP. All rights reserved."
+  }
+}
