@@ -2,12 +2,13 @@ const makeWebhookUrl = "https://hook.eu1.make.com/kk5lv67txlhlqo1w2wsmftvuxyk62i
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+
     // ==========================================================================
     // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička) - S PODPOROU JAZYKŮ
     // ==========================================================================
     async function loadCommonData() {
         try {
-            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
             const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
 
             const isInSubfolder = window.location.pathname.includes('/public/pages/');
@@ -118,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     async function loadIndexData() {
         try {
-            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
             const fileName = activeLang === 'en' ? 'index_en.json' : 'index.json';
             const dataPath = `public/data/${fileName}`;
 
@@ -208,6 +208,20 @@ document.addEventListener('DOMContentLoaded', () => {
     loadIndexData();
 
     // ==========================================================================
+    // LOKALIZACE HLABIČKY DNŮ V KALENDÁŘI (PO-NE / MO-SU)
+    // ==========================================================================
+    const weekdayHeaderSpans = document.querySelectorAll('.calendar-weekdays span, .calendar-header-days span, .calendar-grid-header span');
+    const daysShortCZ = ["PO", "ÚT", "ST", "ČT", "PÁ", "SO", "NE"];
+    const daysShortEN = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
+    const targetDays = activeLang === 'en' ? daysShortEN : daysShortCZ;
+
+    if (weekdayHeaderSpans.length >= 7) {
+        weekdayHeaderSpans.forEach((span, idx) => {
+            if (idx < 7) span.textContent = targetDays[idx];
+        });
+    }
+
+    // ==========================================================================
     // 2. BOOKING SEKCE - KALENDÁŘ (S LOKALIZACÍ CZ / EN)
     // ==========================================================================
     const calendarGrid = document.querySelector('.calendar-grid');
@@ -226,8 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
         edgeDayCalculation.setDate(edgeDayCalculation.getDate() + 3); 
         let currentMonth = edgeDayCalculation.getMonth();
         let currentYear = edgeDayCalculation.getFullYear();
-
-        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
 
         const monthsCZ = [
             "LEDEN", "ÚNOR", "BŘEZEN", "DUBEN", "KVĚTEN", "ČERVEN", 
@@ -468,9 +480,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. CUSTOM SELECT TIME OVLÁDÁNÍ
+    // 3. CUSTOM SELECT TIME OVLÁDÁNÍ (S LOKALIZACÍ TEXTŮ)
     // ==========================================================================
     const customSelects = document.querySelectorAll('.custom-select-wrapper');
+    const labelTimeFrom = activeLang === 'en' ? 'Time from...' : 'Čas od...';
+    const labelTimeTo = activeLang === 'en' ? 'Time to...' : 'Čas do...';
     
     function validateTimeOptions() {
         const limitDate = new Date();
@@ -545,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (triggerResetNeeded && trigger) {
-                trigger.innerText = isFrom ? 'Čas od...' : 'Čas do...';
+                trigger.innerText = isFrom ? labelTimeFrom : labelTimeTo;
                 customSelect.classList.remove('selected');
             }
         });
@@ -556,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (customToWrapper) {
                 const toTrigger = customToWrapper.querySelector('.custom-select-trigger');
                 const toOptions = customToWrapper.querySelectorAll('.custom-options-list li');
-                if (toTrigger) toTrigger.innerText = 'Čas do...';
+                if (toTrigger) toTrigger.innerText = labelTimeTo;
                 customToWrapper.classList.remove('selected');
                 toOptions.forEach(opt => opt.classList.remove('selection'));
             }
@@ -576,7 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.stopPropagation();
                 
                 if (!selectedStartDate) {
-                    alert("Nejprve prosím vyberte dostupné datum v kalendáři.");
+                    alert(activeLang === 'en' ? "Please select an available date in the calendar first." : "Nejprve prosím vyberte dostupné datum v kalendáři.");
                     return;
                 }
                 
@@ -627,15 +641,15 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             
             if (!selectedStartDate) {
-                alert("Vyberte prosím datum a čas.");
+                alert(activeLang === 'en' ? "Please select a date and time." : "Vyberte prosím datum a čas.");
                 return;
             }
 
             const btn = this.querySelector('.btn-confirm');
-            const originalText = btn ? btn.textContent : 'POTVRDIT REZERVACI';
+            const originalText = btn ? btn.textContent : (activeLang === 'en' ? 'CONFIRM BOOKING' : 'POTVRDIT REZERVACI');
             
             const presenterElement = document.getElementById("selected-date-presenter");
-            const vybraneDatum = presenterElement ? presenterElement.innerText : "Nevybráno";
+            const vybraneDatum = presenterElement ? presenterElement.innerText : (activeLang === 'en' ? "Not selected" : "Nevybráno");
 
             const realFromSelect = document.getElementById("real-time-select-from");
             const realToSelect = document.getElementById("real-time-select-to");
@@ -653,7 +667,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             if (btn) {
-                btn.textContent = 'ODESÍLÁM...';
+                btn.textContent = activeLang === 'en' ? 'SENDING...' : 'ODESÍLÁM...';
                 btn.style.pointerEvents = 'none';
             }
 
@@ -667,12 +681,12 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(() => {
                 if (btn) {
-                    btn.textContent = 'POTVRZENO ✓';
+                    btn.textContent = activeLang === 'en' ? 'CONFIRMED ✓' : 'POTVRZENO ✓';
                     btn.style.background = 'var(--accent-tech)';
                     btn.style.color = '#080808'; 
                 }
 
-                alert("Rezervace úspěšně odeslána!");
+                alert(activeLang === 'en' ? "Booking successfully sent!" : "Rezervace úspěšně odeslána!");
                 
                 setTimeout(() => {
                     if (btn) {
@@ -689,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const options = customSelect.querySelectorAll('.custom-options-list li');
                         const isFrom = customSelect.id === 'custom-time-select-from';
                         
-                        if (trigger) trigger.innerText = isFrom ? 'Čas od...' : 'Čas do...';
+                        if (trigger) trigger.innerText = isFrom ? labelTimeFrom : labelTimeTo;
                         customSelect.classList.remove('selected', 'open');
                         options.forEach(opt => opt.classList.remove('selection'));
                     });
@@ -705,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error("Chyba:", error);
-                alert("Došlo k technické chybě při odesílání.");
+                alert(activeLang === 'en' ? "A technical error occurred while sending." : "Došlo k technické chybě při odesílání.");
                 if (btn) {
                     btn.textContent = originalText;
                     btn.style.pointerEvents = 'auto';
