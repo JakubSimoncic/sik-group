@@ -44,7 +44,9 @@ a {
     margin: 0 auto;
     padding: 0 6rem;
 }
-/* PŘEPÍNAČ JAZYKŮ */
+/* ==========================================================================
+   6. DYNAMICKÝ PŘEPÍNAČ JAZYKŮ (PRŮHLEDNÝ & CLEAN)
+   ========================================================================== */
 
 .nav-right-controls {
     display: flex;
@@ -59,10 +61,10 @@ a {
 }
 
 .lang-switch-btn {
-    background: rgba(15, 15, 15, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-muted);
-    padding: 6px 10px;
+    background: transparent; /* Zcela průhledné pozadí */
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Velmi jemný obrys */
+    color: var(--text-muted); /* Tlumená barva textu */
+    padding: 5px 10px;
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 700;
@@ -73,15 +75,15 @@ a {
 
 .lang-switch-btn:hover {
     color: var(--text-main);
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Aktivní stav s tyrkysovým zářením */
+/* Aktivní stav: rozsvícení do tyrkysové barvy s jemnou září */
 .lang-switch-btn.active {
-    background: rgba(0, 209, 199, 0.1);
+    background: rgba(0, 209, 199, 0.15);
     border-color: var(--accent-tech);
     color: var(--accent-tech);
-    box-shadow: 0 0 10px rgba(0, 209, 199, 0.2);
+    box-shadow: 0 0 12px rgba(0, 209, 199, 0.25);
 }
 
 /*2. FIXNÍ HEADER & ANIMOVANÝ HAMBURGER*/
