@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menuToggle.parentNode.insertBefore(langSwitcherContainer, menuToggle);
         }
 
-        // Určení cesty k JSON souboru podle jazyka a umístění stránky (kořen vs podadresář)
+        // Určení cesty k JSON souboru podle toho, kde se stránka nachází
         const isInSubfolder = window.location.pathname.includes('/public/pages/');
         const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
         const jsonPath = isInSubfolder ? `../data/${fileName}` : `public/data/${fileName}`;
