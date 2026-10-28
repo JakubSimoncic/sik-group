@@ -1,1 +1,153 @@
-
+{
+  "mainTitle": "Want to fly like us?",
+  "mainSubtitle": "Whatever we build, we also sell. Ready to fly.",
+  "filterBtnHideText": "Hide filters",
+  "filterBtnShowText": "Show filters",
+  "sortRecommended": "Recommended",
+  "sortPriceAsc": "LOWEST > HIGHEST",
+  "sortPriceDesc": "HIGHEST > LOWEST",
+  "resetAllFiltersText": "✕ Reset all filters",
+  "captionCategories": "Categories //",
+  "catCinematicText": "Cinematic",
+  "catLongrangeText": "SPECIAL",
+  "catFreestyleText": "Freestyle",
+  "captionPriceRange": "Price range",
+  "pricePrefixFrom": "From",
+  "pricePrefixTo": "to",
+  "currencyText": "CZK",
+  "resetPriceText": "✕ Reset price",
+  "captionStock": "Availability //",
+  "stockInStockText": "In stock",
+  "modalSpecsHeading": "Technical specifications //",
+  "modalButtonText": "Inquire about custom build",
+  "products": [
+    {
+      "id": "1",
+      "title": "SpeedIK",
+      "category": "longrange",
+      "categoryLabel": "Longrange",
+      "tag": "Record breaking high speed drone",
+      "price": 25000,
+      "eurPrice": 1000,
+      "stock": "in stock",
+      "image": "../img/drone.png",
+      "description": "SpeedIK is our custom-designed and built speed drone with which we managed to break the world speed record for a drone under 250 g.\n\nWant to fly really fast? SpeedIK is built for maximum speed and performance.\n\nWe also offer SpeedIK.L, our lightweight and more practical version of the SpeedIK. Unlike the original version, it uses connectors that allow you to repeat flights without the need for soldering and make component changes much easier.\n\nIn the box:\n1x Drone\n2x SIK LBS\n4x CCW propellers\n4x CW propellers",
+      "specs": {
+        "Frame": "SIK SPEED",
+        "Video Transmitter": "TBS Unify Pro32 Nano",
+        "AIO": "NewBeeDrone Hummingbird 255 AIO 50A AM32 (modified)",
+        "Camera": "BetaFPV C03 V2",
+        "Battery": "SIK - LBS",
+        "Antenna": "Happymodel Crown LDS antenna LHCP",
+        "ELRS": "Happymodel ELRS 2.4G EP2 TCXO",
+        "GPS": "GPS Module FLYWOO GOKU GM10 Nano V3.1"
+      },
+      "tagEn": "Cinematic Spec",
+      "descriptionEn": "SpeedIK is our custom-designed and built speed drone with which we managed to break the world speed record for a drone under 250 g.\n\nWant to fly really fast? SpeedIK is built for maximum speed and performance.\n\nWe also offer SpeedIK.L, our lightweight and more practical version of the SpeedIK. Unlike the original version, it uses connectors that allow you to repeat flights without the need for soldering and make component changes much easier."
+    },
+    {
+      "id": "2",
+      "title": "Paladin",
+      "category": "longrange",
+      "categoryLabel": "Longrange",
+      "tag": "Longrange Spec",
+      "price": 25000,
+      "eurPrice": 1000,
+      "stock": "in stock",
+      "image": "../img/drone.png",
+      "description": "A seven-inch long-range special designed for extreme range and flight times of up to 25 minutes. Equipped with a GPS rescue system.",
+      "specs": {
+        "Frame": "7 inch Longrange Carbon",
+        "GPS": "Matek M10",
+        "Video Transmitter": "DJI O3 Air Unit",
+        "Flight time": "up to 25 minutes"
+      }
+    },
+    {
+      "id": "3",
+      "title": "CinematIK",
+      "category": "freestyle",
+      "categoryLabel": "Freestyle",
+      "tag": "Freestyle 5\"",
+      "price": 20000,
+      "eurPrice": 850,
+      "stock": "in stock",
+      "image": "../img/drone.png",
+      "description": "An aggressive 5\" freestyle machine capable of withstanding hard crashes. Ideal for acrobatic tricks and fast passes.",
+      "specs": {
+        "Frame": "5 inch Heavy Duty",
+        "ESC": "60A 4in1",
+        "Battery": "6S 1300mAh",
+        "Weight": "420g"
+      }
+    },
+    {
+      "id": "4",
+      "title": "RejSeK",
+      "category": "freestyle",
+      "categoryLabel": "Freestyle",
+      "tag": "Tinywhoop",
+      "price": 15000,
+      "eurPrice": 650,
+      "stock": "in stock",
+      "image": "../img/drone.png",
+      "description": "Rejsek is our tiny whoop built to handle everything from racing to freestyle.\n\nIn the box:\n1x drone\n4x CCW propellers\n4x CW propellers\n!!Batteries are not included in the package!!",
+      "specs": {
+        "Frame": "Frame BETAFPV Air75 II Whoop",
+        "Motors": "RCinpower GTS V3 0802 27000Kv",
+        "Battery - recommended": "BetaFPV Lava II 580mAh 1S 95C HV (4pcs)",
+        "Camera with Canopy": "BetaFPV C03 V2",
+        "AIO": "AIO FC BetaFPV Matrix 1S Brushless G4 5 IN 1 V2 (Soldered)"
+      },
+      "tagEn": "Ultra Light",
+      "descriptionEn": "Lightweight and agile racing drone tuned for maximum acceleration and sharp turns."
+    },
+    {
+      "id": "5",
+      "title": "BIG-SIK",
+      "category": "freestyle",
+      "categoryLabel": "Freestyle",
+      "tag": "Heavy Lifter",
+      "price": 20000,
+      "eurPrice": 800,
+      "stock": "in stock",
+      "image": "../img/drone.png",
+      "description": "A massive drone designed to carry full-frame cinema cameras like the RED Komodo or Blackmagic.",
+      "specs": {
+        "Frame": "X8 Heavy Lift 10",
+        "Payload": "up to 3 kg",
+        "Battery": "2x 6S 5000mAh"
+      }
+    },
+    {
+      "id": "1792323305356",
+      "title": "Drone Repair",
+      "price": 1000,
+      "eurPrice": 10000,
+      "category": "cinematic",
+      "tag": "",
+      "tagEn": "",
+      "description": "",
+      "descriptionEn": "",
+      "specs": {},
+      "categoryLabel": "FPV Cinematic",
+      "stock": "in stock",
+      "image": "../img/drone.png"
+    },
+    {
+      "id": "1792324249934",
+      "title": "Custom Build",
+      "price": 635,
+      "eurPrice": 12415326,
+      "category": "cinematic",
+      "tag": "",
+      "tagEn": "",
+      "description": "",
+      "descriptionEn": "",
+      "specs": {},
+      "categoryLabel": "FPV Cinematic",
+      "stock": "in stock",
+      "image": "../img/drone.png"
+    }
+  ]
+}
