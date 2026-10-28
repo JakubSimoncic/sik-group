@@ -1,1 +1,49 @@
-
+{
+  "title": "Privacy Policy",
+  "sections": [
+    {
+      "heading": "1. Data Controller",
+      "text": "The data controller responsible for the processing of personal data collected through this website is:\nJan Szabo\nAddress: Spinozova 1825/5, 143 00 Prague 12, Czech Republic\nCompany ID (IČO): Not yet assigned\nEmail: info@sik-group.cz\nThe data controller processes personal data in accordance with applicable legislation, in particular Regulation (EU) 2016/679 of the European Parliament and of the Council, the General Data Protection Regulation (“GDPR”), and the relevant laws of the Czech Republic."
+    },
+    {
+      "heading": "2. What Personal Data We Process",
+      "text": "Depending on how you use this website, we may process the following personal data:\n- First and last name\n- Email address\n- Telephone number, if provided by the user\n- The content of messages or enquiries submitted through contact forms\n- Technical information about your device and browser\n- IP address\n- Information about visits to and use of this website\n- Data collected through cookies and similar technologies\nThe scope of the data processed depends on the specific purpose for which it is collected."
+    },
+    {
+      "heading": "3. Purposes of Processing Personal Data",
+      "text": "We may process personal data for the following purposes:\n- Handling enquiries and communication: If you contact us through a contact form, by email, or by other means, we use the information you provide to respond to your questions, handle your enquiry, and conduct any follow-up communication relating to the services requested.\n- Website analytics: We may use information about how visitors interact with our website to analyse traffic, track clicks, evaluate the performance of individual website sections, and improve the website's usability, functionality, and overall user experience.\n- Website security and functionality: Technical information may be processed to ensure the secure and proper operation of the website, protect against misuse, and resolve technical issues."
+    },
+    {
+      "heading": "4. Legal Basis for Processing",
+      "text": "We process personal data only where an appropriate legal basis exists. Depending on the specific purpose, this may include:\n- Performance of a contract or taking steps at the user's request before entering into a contract\n- The legitimate interests of the data controller\n- Consent of the data subject\n- Compliance with a legal obligation\nAnalytical and other non-essential cookies that require consent under applicable law are activated only after the relevant consent has been given. You may withdraw your consent at any time. Withdrawal does not affect the lawfulness of processing carried out on the basis of consent before it was withdrawn."
+    },
+    {
+      "heading": "5. Cookies",
+      "text": "This website may use cookies and similar technologies. Cookies are small files stored on a visitor's device that may be used to ensure the proper functioning of the website, remember certain settings, or analyse website traffic. We may use the following types of cookies:\n- Essential cookies: These cookies are necessary for the proper functioning of the website. Their use does not require consent where they are used exclusively for purposes that are strictly necessary for the operation of the website.\n- Analytical cookies: These cookies may be used to measure website traffic, track clicks, evaluate how visitors use the website, and help us improve its performance. They are used in accordance with the visitor's consent preferences.\nThe specific cookies used, their purposes, storage periods, and any recipients of the collected data can be viewed in the cookie settings available on this website. Where the website uses non-essential cookies, visitors may refuse their use. Refusing these cookies must not prevent visitors from using the website normally."
+    },
+    {
+      "heading": "6. Who May Receive Your Personal Data",
+      "text": "Personal data may be disclosed, to the extent necessary, to service providers who support the technical operation of our website or provide services related to its operation. These may include:\n- Web hosting providers\n- Analytics service providers\n- Email and communication service providers\n- Technical support providers and other IT service providers\nWe do not disclose personal data to other parties for their own independent use unless an appropriate legal basis exists. If the use of a particular service involves the transfer of personal data outside the European Economic Area (EEA), such transfers are carried out in accordance with the applicable GDPR requirements and appropriate safeguards."
+    },
+    {
+      "heading": "7. How Long We Retain Personal Data",
+      "text": "We retain personal data only for as long as necessary to fulfil the purpose for which it was collected, or for any period required by applicable law. Information submitted through contact forms is retained for as long as necessary to handle the enquiry and any related follow-up communication. Data processed for analytical purposes is retained for the period determined by the relevant analytics tool and its configuration. Once the applicable retention period has expired, personal data is deleted or anonymised unless further retention is necessary to comply with a legal obligation or protect the data controller's rights."
+    },
+    {
+      "heading": "8. Your Data Protection Rights",
+      "text": "Under the GDPR, you have the following rights in relation to the processing of your personal data:\n- The right to obtain information about whether and how your personal data is processed\n- The right of access to your personal data\n- The right to request the rectification of inaccurate or incomplete personal data\n- The right to request the erasure of personal data where the conditions set out in the GDPR are met\n- The right to request the restriction of processing\n- The right to object to processing based on legitimate interests\n- The right to data portability where the conditions set out in the GDPR are met\n- The right to withdraw consent at any time where processing is based on consent\nWithdrawing consent does not affect the lawfulness of processing carried out on the basis of consent before it was withdrawn."
+    },
+    {
+      "heading": "9. How to Exercise Your Rights",
+      "text": "You can exercise your rights by contacting us at:\nEmail: info@sik-group.cz\nWe will endeavour to respond to your request without undue delay and within the time limits established by the GDPR. If you have concerns about how your personal data is being processed, you also have the right to lodge a complaint with the Czech Office for Personal Data Protection (Úřad pro ochranu osobních údajů)."
+    },
+    {
+      "heading": "10. Automated Decision-Making and Profiling",
+      "text": "As part of the ordinary operation of this website, we do not use personal data for automated decision-making that produces legal effects concerning visitors or similarly significantly affects them. If this changes in the future, visitors will be informed in accordance with applicable data protection legislation."
+    },
+    {
+      "heading": "11. Updates to This Privacy Policy",
+      "text": "This Privacy Policy may be updated from time to time, particularly if we change the technologies we use, introduce new analytics tools, or modify the way personal data is processed. The latest version of this Privacy Policy will always be published on this website."
+    }
+  ]
+}
