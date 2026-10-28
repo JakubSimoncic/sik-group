@@ -22,7 +22,6 @@
                     </a>
                 </div>
                 
-                <!-- OPRAVENO: Přidán kontejner pro přepínač jazyků vedle hamburger menu -->
                 <div class="nav-right-controls">
                     <div class="lang-switcher" id="dynamic-lang-switcher"></div>
                     
@@ -132,8 +131,15 @@
                         </button>
                     </div>
 
+                    <!-- PŘIDÁNA ID PRO LOKALIZACI DNŮ V KALENDÁŘI -->
                     <div class="calendar-days">
-                        <span>PO</span><span>ÚT</span><span>ST</span><span>ČT</span><span>PÁ</span><span>SO</span><span>NE</span>
+                        <span id="wday-0">PO</span>
+                        <span id="wday-1">ÚT</span>
+                        <span id="wday-2">ST</span>
+                        <span id="wday-3">ČT</span>
+                        <span id="wday-4">PÁ</span>
+                        <span id="wday-5">SO</span>
+                        <span id="wday-6">NE</span>
                     </div>
 
                     <div class="calendar-grid"></div>
@@ -208,8 +214,9 @@
                         </select>
 
                         <div class="time-range-row">
+                            <!-- PŘIDÁNO ID PRO TRIGGER "ČAS OD" -->
                             <div class="custom-select-wrapper" id="custom-time-select-from">
-                                <div class="custom-select-trigger">Čas od...</div>
+                                <div class="custom-select-trigger" id="trigger-time-from">Čas od...</div>
                                 <ul class="custom-options-list">
                                     <li data-value="8:00">8:00</li>
                                     <li data-value="8:30">8:30</li>
@@ -239,8 +246,9 @@
                                 </ul>
                             </div>
 
+                            <!-- PŘIDÁNO ID PRO TRIGGER "ČAS DO" (OPRAVENO TAKÉ PŘEKLEP V <td> NA <li>) -->
                             <div class="custom-select-wrapper" id="custom-time-select-to">
-                                <div class="custom-select-trigger">Čas do...</div>
+                                <div class="custom-select-trigger" id="trigger-time-to">Čas do...</div>
                                 <ul class="custom-options-list">
                                     <li data-value="8:30">8:30</li>
                                     <li data-value="9:00">9:00</li>
@@ -268,7 +276,7 @@
                                     <li data-value="20:00">20:00</li>
                                     <li data-value="20:30">20:30</li>
                                     <li data-value="21:00">21:00</li>
-                                    <td data-value="21:30">21:30</td>
+                                    <li data-value="21:30">21:30</li>
                                     <li data-value="22:00">22:00</li>
                                     <li data-value="22:30">22:30</li>
                                     <li data-value="23:00">23:00</li>
