@@ -1,8 +1,7 @@
 [
   {
     "id": "common-cz",
-    "title": "Globální prvky (Hlavička & Patička)",
-    "description": "Správa odkazů v navigaci, kontaktů a patičky",
+    "title": "Globální prvky",
     "type": "page",
     "dataFile": "public/data/common.json",
     "icon": "⚙️",
@@ -10,8 +9,7 @@
   },
   {
     "id": "eshop-products-cz",
-    "title": "E-shop Produkty",
-    "description": "Správa aktivních dronů, specifikací a cen v Kč/EUR",
+    "title": "E-shop",
     "type": "products",
     "dataFile": "public/data/e-shop.json",
     "icon": "🛒",
@@ -20,7 +18,6 @@
   {
     "id": "home-cz",
     "title": "Úvodní stránka",
-    "description": "Správa obsahu hlavní stránky",
     "type": "page",
     "file": "index.html",
     "dataFile": "public/data/index.json",
@@ -29,8 +26,7 @@
   },
   {
     "id": "contact-cz",
-    "title": "Kontakt & Tým",
-    "description": "Správa kontaktů, týmu a FAQ",
+    "title": "Kontakt a Tým",
     "type": "page",
     "file": "public/pages/kontakt.html",
     "dataFile": "public/data/kontakt.json",
@@ -40,7 +36,6 @@
   {
     "id": "gdpr-cz",
     "title": "Zásady GDPR",
-    "description": "Správa právních podmínek",
     "type": "page",
     "file": "public/pages/gdpr.html",
     "dataFile": "public/data/gdpr.json",
@@ -49,8 +44,7 @@
   },
   {
     "id": "common-en",
-    "title": "Global Elements (Header & Footer) [EN]",
-    "description": "Navigation links, contacts, and footer management",
+    "title": "Globální prvky [EN]",
     "type": "page",
     "dataFile": "public/data/common.json",
     "icon": "⚙️",
@@ -58,8 +52,7 @@
   },
   {
     "id": "eshop-products-en",
-    "title": "E-Shop Products [EN]",
-    "description": "Active drones, specifications, and pricing management",
+    "title": "E-Shop [EN]",
     "type": "products",
     "dataFile": "public/data/e-shop.json",
     "icon": "🛒",
@@ -67,8 +60,7 @@
   },
   {
     "id": "home-en",
-    "title": "Home Page [EN]",
-    "description": "Main page content management",
+    "title": "Úvodní stránka [EN]",
     "type": "page",
     "file": "index.html",
     "dataFile": "public/data/index.json",
@@ -77,8 +69,7 @@
   },
   {
     "id": "contact-en",
-    "title": "Contact & Team [EN]",
-    "description": "Contacts, team members, and FAQ management",
+    "title": "Kontakt a Tým [EN]",
     "type": "page",
     "file": "public/pages/kontakt.html",
     "dataFile": "public/data/kontakt.json",
@@ -87,8 +78,7 @@
   },
   {
     "id": "gdpr-en",
-    "title": "Privacy Policy / GDPR [EN]",
-    "description": "Privacy policy and legal terms management",
+    "title": "GDPR [EN]",
     "type": "page",
     "file": "public/pages/gdpr.html",
     "dataFile": "public/data/gdpr.json",
