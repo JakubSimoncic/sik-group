@@ -3,13 +3,16 @@ const makeWebhookUrl = "https://hook.eu1.make.com/kk5lv67txlhlqo1w2wsmftvuxyk62i
 document.addEventListener('DOMContentLoaded', () => {
     
     // ==========================================================================
-    // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička)
+    // 0. NAČTENÍ COMMON.JSON (Hlavička & Patička) - S PODPOROU JAZYKŮ
     // ==========================================================================
     async function loadCommonData() {
         try {
+            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
+
             const isInSubfolder = window.location.pathname.includes('/public/pages/');
             const pathPrefix = isInSubfolder ? '../../' : '';
-            const commonJsonPath = isInSubfolder ? '../../public/data/common.json' : 'public/data/common.json';
+            const commonJsonPath = isInSubfolder ? `../../public/data/${fileName}` : `public/data/${fileName}`;
 
             const resCommon = await fetch(commonJsonPath + '?t=' + Date.now());
             if (!resCommon.ok) return;
@@ -104,18 +107,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (err) {
-            console.error('Chyba při načítání common.json:', err);
+            console.error('Chyba při načítání common dat:', err);
         }
     }
 
     loadCommonData();
 
     // ==========================================================================
-    // 1. DYNAMICKÉ NAČTENÍ Z index.json
+    // 1. DYNAMICKÉ NAČTENÍ Z index.json / index_en.json
     // ==========================================================================
     async function loadIndexData() {
         try {
-            const res = await fetch(`public/data/index.json?t=` + Date.now());
+            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const fileName = activeLang === 'en' ? 'index_en.json' : 'index.json';
+            const dataPath = `public/data/${fileName}`;
+
+            const res = await fetch(dataPath + '?t=' + Date.now());
             if (!res.ok) return;
             const data = await res.json();
 
@@ -194,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (submitBtn && data.formSubmitBtn) submitBtn.textContent = data.formSubmitBtn;
 
         } catch (err) {
-            console.error('Chyba při načítání index.json:', err);
+            console.error('Chyba při načítání index dat:', err);
         }
     }
 
@@ -241,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const monthName = monthsCZ[selectedStartDate.getMonth()].toLowerCase();
                 const year = selectedStartDate.getFullYear();
                 
-                datePresenter.textContent = `${dayName}, ${dayNum}. ${monthname = monthName} ${year}`;
+                datePresenter.textContent = `${dayName}, ${dayNum}. ${monthName} ${year}`;
                 datePresenter.className = "date-selected";
             } else {
                 const startDay = selectedStartDate.getDate();
