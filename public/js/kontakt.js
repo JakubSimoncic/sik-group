@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     async function loadKontaktData() {
         try {
+            // Zjištění aktivního jazyka z localStorage (výchozí je 'cz')
+            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const fileName = activeLang === 'en' ? 'kontakt_en.json' : 'kontakt.json';
+
             const path = window.location.pathname;
             const isInPagesFolder = path.includes('/pages/');
-            const dataPath = isInPagesFolder ? '../data/kontakt.json' : 'public/data/kontakt.json';
+            const dataPath = isInPagesFolder ? `../data/${fileName}` : `public/data/${fileName}`;
 
             const res = await fetch(`${dataPath}?t=` + Date.now());
             if (!res.ok) return;
@@ -103,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (err) {
-            console.error('Chyba při načítání kontakt.json:', err);
+            console.error('Chyba při načítání kontakt dat:', err);
         }
     }
 
