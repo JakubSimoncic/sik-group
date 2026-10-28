@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCommonData();
 
     // ==========================================================================
-    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S PODPOROU JAZYKŮ)
+    // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S PODPOROU JAZYKŮ A MĚN)
     // ==========================================================================
     async function fetchAllShopData() {
         try {
@@ -155,7 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (shopData.filterBtnHideText) filterBtnHide = shopData.filterBtnHideText;
                 if (shopData.filterBtnShowText) filterBtnShow = shopData.filterBtnShowText;
-                if (shopData.currencyText) currencyTextGlobal = shopData.currencyText;
+                
+                // Nastavení globální měny podle jazyka (CZ = Kč, EN = EUR)
+                currencyTextGlobal = activeLang === 'en' ? 'EUR' : (shopData.currencyText || 'Kč');
 
                 const filterBtnTextEl = document.getElementById('eshop-filter-btn-text');
                 if (filterBtnTextEl) filterBtnTextEl.textContent = filterBtnHide;
@@ -195,9 +197,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (shopData.pricePrefixTo && document.getElementById('price-prefix-to')) {
                     document.getElementById('price-prefix-to').textContent = shopData.pricePrefixTo;
                 }
-                if (shopData.currencyText && document.getElementById('price-currency')) {
-                    document.getElementById('price-currency').textContent = shopData.currencyText;
+                
+                // Změna textu měny v rozhraní
+                const priceCurrencyEl = document.getElementById('price-currency');
+                if (priceCurrencyEl) {
+                    priceCurrencyEl.textContent = currencyTextGlobal;
                 }
+
                 if (shopData.resetPriceText && document.getElementById('reset-price-btn')) {
                     document.getElementById('reset-price-btn').textContent = shopData.resetPriceText;
                 }
@@ -223,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (S PŘEPÍNÁNÍM MĚNY)
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
@@ -234,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+
         items.forEach(product => {
             const card = document.createElement('div');
             card.className = 'tech-card';
@@ -241,25 +249,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanPrice = parseSafeNumber(product.price, 0);
             const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
 
-            card.setAttribute('data-price', cleanPrice);
+            // Zvolíme hlavní cenu a vedlejší cenu podle aktivního jazyka
+            const mainPriceToUse = activeLang === 'en' ? cleanEurPrice : cleanPrice;
+            const secondaryPriceToUse = activeLang === 'en' ? cleanPrice : cleanEurPrice;
+            const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
+
+            card.setAttribute('data-price', mainPriceToUse);
             card.setAttribute('data-category', (product.category || '').toLowerCase().trim());
             card.setAttribute('data-stock', product.stock || 'skladem');
             card.setAttribute('data-id', product.id || Date.now());
 
-            const formattedPrice = cleanPrice.toLocaleString('cs-CZ');
-            const formattedEurPrice = cleanEurPrice.toLocaleString('cs-CZ');
+            const formattedPrice = mainPriceToUse.toLocaleString('cs-CZ');
+            const formattedSecondaryPrice = secondaryPriceToUse.toLocaleString('cs-CZ');
             const imagePath = product.image || '../img/drone.png';
             const tagText = product.tag || product.categoryLabel || 'FPV Spec';
 
             card.innerHTML = `
                 <div class="tech-img-wrapper">
                     <img src="${imagePath}" alt="${product.title || 'Dron'}" loading="lazy">
-                    <div class="tech-card-overlay"><span>Zobrazit specifikaci</span></div>
+                    <div class="tech-card-overlay"><span>${activeLang === 'en' ? 'View specification' : 'Zobrazit specifikaci'}</span></div>
                 </div>
                 <div class="tech-card-meta">
                     <div class="tech-card-row">
                         <span class="tech-spec-tag">${tagText}</span>
-                        <span class="tech-card-price">${formattedPrice} ${currencyTextGlobal} <span class="card-price-eur">/ ${formattedEurPrice} EUR</span></span>
+                        <span class="tech-card-price">${formattedPrice} ${currencyTextGlobal} <span class="card-price-eur">/ ${formattedSecondaryPrice} ${secondaryCurrency}</span></span>
                     </div>
                     <h3 class="tech-card-title">${product.title || 'Bez názvu'}</h3>
                 </div>
@@ -271,17 +284,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. INICIALIZACE CENOVÉHO FILTRU (NA KORUNU PŘESNĚ)
+    // 3. INICIALIZACE CENOVÉHO FILTRU (PODLE AKTIVNÍ MĚNY)
     // ==========================================================================
     function initShop() {
         renderProducts(productsData);
 
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+
         if (productsData.length > 0) {
-            const validPrices = productsData.map(p => parseSafeNumber(p.price, 0));
+            const validPrices = productsData.map(p => {
+                const cleanP = parseSafeNumber(p.price, 0);
+                return activeLang === 'en' ? parseSafeNumber(p.eurPrice, Math.round(cleanP / 25)) : cleanP;
+            });
             minPrice = Math.min(...validPrices);
             maxPrice = Math.max(...validPrices);
 
-            if (maxPrice <= minPrice) maxPrice = minPrice + 10000;
+            if (maxPrice <= minPrice) maxPrice = minPrice + (activeLang === 'en' ? 400 : 10000);
         }
 
         if (minRange && maxRange) {
@@ -359,10 +377,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
         let countText = '';
-        if (visibleCount === 1) countText = `(1 produkt)`;
-        else if (visibleCount > 1 && visibleCount < 5) countText = `(${visibleCount} produkty)`;
-        else countText = `(${visibleCount} produktů)`;
+        if (activeLang === 'en') {
+            if (visibleCount === 1) countText = `(1 product)`;
+            else countText = `(${visibleCount} products)`;
+        } else {
+            if (visibleCount === 1) countText = `(1 produkt)`;
+            else if (visibleCount > 1 && visibleCount < 5) countText = `(${visibleCount} produkty)`;
+            else countText = `(${visibleCount} produktů)`;
+        }
 
         if (productCountSpan) {
             productCountSpan.textContent = `${baseSubtitleText} ${countText}`;
@@ -432,8 +456,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal(product) {
         if (!modal) return;
 
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
         const cleanPrice = parseSafeNumber(product.price, 0);
         const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
+
+        const mainPriceToUse = activeLang === 'en' ? cleanEurPrice : cleanPrice;
+        const secondaryPriceToUse = activeLang === 'en' ? cleanPrice : cleanEurPrice;
+        const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
 
         document.getElementById('modal-img').src = product.image || '../img/drone.png';
         document.getElementById('modal-title').textContent = product.title || 'Detail dronu';
@@ -444,10 +473,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const catBadge = document.getElementById('modal-category-badge');
         if (catBadge) catBadge.textContent = product.categoryLabel || product.category || 'Dron';
 
-        const formattedPrice = cleanPrice.toLocaleString('cs-CZ');
-        const formattedEurPrice = cleanEurPrice.toLocaleString('cs-CZ');
-        document.getElementById('modal-price').innerHTML = `${formattedPrice} ${currencyTextGlobal} <span class="price-eur">/ ${formattedEurPrice} EUR</span>`;
-        document.getElementById('modal-description').textContent = product.description || 'Detailní popis připravujeme.';
+        const formattedPrice = mainPriceToUse.toLocaleString('cs-CZ');
+        const formattedSecondaryPrice = secondaryPriceToUse.toLocaleString('cs-CZ');
+        document.getElementById('modal-price').innerHTML = `${formattedPrice} ${currencyTextGlobal} <span class="price-eur">/ ${formattedSecondaryPrice} ${secondaryCurrency}</span>`;
+        
+        // Výběr popisu v modálu podle jazyka
+        const descriptionToUse = (activeLang === 'en' && product.descriptionEn) ? product.descriptionEn : (product.description || 'Detailní popis připravujeme.');
+        document.getElementById('modal-description').textContent = descriptionToUse;
 
         const specsList = document.getElementById('modal-specs');
         specsList.innerHTML = '';
