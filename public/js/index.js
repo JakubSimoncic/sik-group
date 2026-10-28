@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadIndexData();
 
     // ==========================================================================
-    // 2. BOOKING SEKCE - KALENDÁŘ
+    // 2. BOOKING SEKCE - KALENDÁŘ (S LOKALIZACÍ CZ / EN)
     // ==========================================================================
     const calendarGrid = document.querySelector('.calendar-grid');
     const monthYearText = document.querySelector('.current-month');
@@ -227,14 +227,25 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentMonth = edgeDayCalculation.getMonth();
         let currentYear = edgeDayCalculation.getFullYear();
 
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+
         const monthsCZ = [
             "LEDEN", "ÚNOR", "BŘEZEN", "DUBEN", "KVĚTEN", "ČERVEN", 
             "ČERVENEC", "SRPEN", "ZÁŘÍ", "ŘÍJEN", "LISTOPAD", "PROSINEC"
         ];
+        const monthsEN = [
+            "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", 
+            "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
+        ];
+        const months = activeLang === 'en' ? monthsEN : monthsCZ;
         
         const daysOfWeekCZ = [
             "Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota"
         ];
+        const daysOfWeekEN = [
+            "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+        ];
+        const daysOfWeek = activeLang === 'en' ? daysOfWeekEN : daysOfWeekCZ;
 
         function updateDatePresenter() {
             if (!datePresenter) return;
@@ -243,23 +254,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 datePresenter.textContent = "";
                 datePresenter.className = "date-unselected";
             } else if (selectedStartDate && !selectedEndDate) {
-                const dayName = daysOfWeekCZ[selectedStartDate.getDay()];
+                const dayName = daysOfWeek[selectedStartDate.getDay()];
                 const dayNum = selectedStartDate.getDate();
-                const monthName = monthsCZ[selectedStartDate.getMonth()].toLowerCase();
+                const monthName = months[selectedStartDate.getMonth()].toLowerCase();
                 const year = selectedStartDate.getFullYear();
                 
-                datePresenter.textContent = `${dayName}, ${dayNum}. ${monthName} ${year}`;
+                datePresenter.textContent = activeLang === 'en' 
+                    ? `${dayName}, ${monthName} ${dayNum}, ${year}` 
+                    : `${dayName}, ${dayNum}. ${monthName} ${year}`;
                 datePresenter.className = "date-selected";
             } else {
                 const startDay = selectedStartDate.getDate();
-                const startMonth = monthsCZ[selectedStartDate.getMonth()].toLowerCase();
+                const startMonth = months[selectedStartDate.getMonth()].toLowerCase();
                 const endDay = selectedEndDate.getDate();
-                const endMonth = monthsCZ[selectedEndDate.getMonth()].toLowerCase();
+                const endMonth = months[selectedEndDate.getMonth()].toLowerCase();
                 const year = selectedEndDate.getFullYear();
 
                 if (clearTime(selectedStartDate) === clearTime(selectedEndDate)) {
-                    const dayName = daysOfWeekCZ[selectedStartDate.getDay()];
-                    datePresenter.textContent = `${dayName}, ${startDay}. ${startMonth} ${year}`;
+                    const dayName = daysOfWeek[selectedStartDate.getDay()];
+                    datePresenter.textContent = activeLang === 'en'
+                        ? `${dayName}, ${startMonth} ${startDay}, ${year}`
+                        : `${dayName}, ${startDay}. ${startMonth} ${year}`;
                 } else {
                     datePresenter.textContent = `${startDay}. ${startMonth} — ${endDay}. ${endMonth} ${year}`;
                 }
@@ -281,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const prevLastDay = new Date(currentYear, currentMonth, 0).getDate();
             const startDayIndex = firstDay === 0 ? 6 : firstDay - 1;
 
-            monthYearText.textContent = `${monthsCZ[currentMonth]} ${currentYear}`;
+            monthYearText.textContent = `${months[currentMonth]} ${currentYear}`;
 
             let daysHtml = "";
             const edgeDay = new Date();
