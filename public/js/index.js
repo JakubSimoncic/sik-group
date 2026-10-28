@@ -208,17 +208,25 @@ document.addEventListener('DOMContentLoaded', () => {
     loadIndexData();
 
     // ==========================================================================
-    // LOKALIZACE HLABIČKY DNŮ V KALENDÁŘI (PO-NE / MO-SU)
+    // LOKALIZACE HLAVIČKY DNŮ V KALENDÁŘI A SELECTŮ
     // ==========================================================================
-    const weekdayHeaderSpans = document.querySelectorAll('.calendar-weekdays span, .calendar-header-days span, .calendar-grid-header span');
     const daysShortCZ = ["PO", "ÚT", "ST", "ČT", "PÁ", "SO", "NE"];
     const daysShortEN = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
-    const targetDays = activeLang === 'en' ? daysShortEN : daysShortCZ;
+    const currentDays = activeLang === 'en' ? daysShortEN : daysShortCZ;
 
-    if (weekdayHeaderSpans.length >= 7) {
-        weekdayHeaderSpans.forEach((span, idx) => {
-            if (idx < 7) span.textContent = targetDays[idx];
-        });
+    currentDays.forEach((dayText, idx) => {
+        const dayEl = document.getElementById(`wday-${idx}`);
+        if (dayEl) dayEl.textContent = dayText;
+    });
+
+    const triggerFrom = document.getElementById('trigger-time-from');
+    const triggerTo = document.getElementById('trigger-time-to');
+
+    if (triggerFrom && !triggerFrom.classList.contains('selected')) {
+        triggerFrom.textContent = activeLang === 'en' ? 'Time from...' : 'Čas od...';
+    }
+    if (triggerTo && !triggerTo.classList.contains('selected')) {
+        triggerTo.textContent = activeLang === 'en' ? 'Time to...' : 'Čas do...';
     }
 
     // ==========================================================================
