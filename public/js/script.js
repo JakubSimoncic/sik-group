@@ -167,4 +167,7 @@ function switchWebsiteLang(lang) {
     }
 
     console.log("Přepnuto na jazyk:", lang.toUpperCase());
+
+    // Okamžitá obnova stránky pro načtení správné mutace JSONu
+    location.reload();
 }
