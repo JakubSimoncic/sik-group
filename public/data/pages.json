@@ -46,5 +46,44 @@
     "dataFile": "public/data/gdpr.json",
     "icon": "🔒",
     "lang": "cz"
+  },
+  {
+    "id": "eshop-products-en",
+    "title": "E-Shop Products [EN]",
+    "description": "Active drones, specifications, and pricing management",
+    "type": "products",
+    "dataFile": "public/data/e-shop.json",
+    "icon": "🛒",
+    "lang": "en"
+  },
+  {
+    "id": "home-en",
+    "title": "Home Page [EN]",
+    "description": "Main page content management",
+    "type": "page",
+    "file": "index.html",
+    "dataFile": "public/data/index.json",
+    "icon": "📄",
+    "lang": "en"
+  },
+  {
+    "id": "contact-en",
+    "title": "Contact & Team [EN]",
+    "description": "Contacts, team members, and FAQ management",
+    "type": "page",
+    "file": "public/pages/kontakt.html",
+    "dataFile": "public/data/kontakt.json",
+    "icon": "📞",
+    "lang": "en"
+  },
+  {
+    "id": "gdpr-en",
+    "title": "Privacy Policy / GDPR [EN]",
+    "description": "Privacy policy and legal terms management",
+    "type": "page",
+    "file": "public/pages/gdpr.html",
+    "dataFile": "public/data/gdpr.json",
+    "icon": "🔒",
+    "lang": "en"
   }
 ]
