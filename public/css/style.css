@@ -44,7 +44,45 @@ a {
     margin: 0 auto;
     padding: 0 6rem;
 }
+/* PŘEPÍNAČ JAZYKŮ */
 
+.nav-right-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.lang-switcher {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.lang-switch-btn {
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-global);
+    cursor: pointer;
+    transition: all 0.3s var(--transition-premium);
+}
+
+.lang-switch-btn:hover {
+    color: var(--text-main);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Aktivní stav s tyrkysovým zářením */
+.lang-switch-btn.active {
+    background: rgba(0, 209, 199, 0.1);
+    border-color: var(--accent-tech);
+    color: var(--accent-tech);
+    box-shadow: 0 0 10px rgba(0, 209, 199, 0.2);
+}
 
 /*2. FIXNÍ HEADER & ANIMOVANÝ HAMBURGER*/
 
