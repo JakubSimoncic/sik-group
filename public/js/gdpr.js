@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     async function loadGdprData() {
         try {
+            // Zjištění aktivního jazyka z localStorage (výchozí je 'cz')
+            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const fileName = activeLang === 'en' ? 'gdpr_en.json' : 'gdpr.json';
+
             const path = window.location.pathname;
             const isInPagesFolder = path.includes('/pages/');
-            const dataPath = isInPagesFolder ? '../data/gdpr.json' : 'public/data/gdpr.json';
+            const dataPath = isInPagesFolder ? `../data/${fileName}` : `public/data/${fileName}`;
 
             const res = await fetch(`${dataPath}?t=` + Date.now());
             if (!res.ok) return;
@@ -24,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } catch (err) {
-            console.error('Chyba při načítání gdpr.json:', err);
+            console.error('Chyba při načítání GDPR dat:', err);
         }
     }
 
