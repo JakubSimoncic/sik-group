@@ -107,4 +107,59 @@ document.addEventListener('DOMContentLoaded', () => {
             lastScrollTop = scrollTop;
         }
     }
+
+    // ==========================================================================
+    // 3. DYNAMICKÉ NAČÍTÁNÍ COMMON.JSON A PŘEPÍNAČE JAZYKŮ
+    // ==========================================================================
+    async function initGlobalElements() {
+        const langSwitcherContainer = document.getElementById('dynamic-lang-switcher');
+        
+        // Zjistíme aktivní jazyk z localStorage (výchozí je 'cz')
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+
+        // Určení cesty k JSON souboru podle toho, kde se stránka nachází (kořen vs public/pages/)
+        const isInSubfolder = window.location.pathname.includes('/public/pages/');
+        const jsonPath = isInSubfolder ? '../data/common.json' : 'public/data/common.json';
+
+        try {
+            const response = await fetch(jsonPath + '?t=' + Date.now());
+            if (!response.ok) throw new Error('Chyba při načítání common.json');
+            
+            const data = await response.json();
+            
+            if (data.header) {
+                // Vykreslení dynamického přepínače jazyků hned vedle hamburger menu
+                if (langSwitcherContainer) {
+                    const czText = data.header.langCzText || 'CZ';
+                    const enText = data.header.langEnText || 'EN';
+
+                    langSwitcherContainer.innerHTML = `
+                        <button type="button" id="lang-cz-btn" class="lang-switch-btn ${activeLang === 'cz' ? 'active' : ''}" onclick="switchWebsiteLang('cz')">${czText}</button>
+                        <button type="button" id="lang-en-btn" class="lang-switch-btn ${activeLang === 'en' ? 'active' : ''}" onclick="switchWebsiteLang('en')">${enText}</button>
+                    `;
+                }
+
+                // Zde můžeš případně doplnit i dynamické vykreslení navigačních odkazů (navLinks), pokud chceš
+            }
+        } catch (err) {
+            console.error('Nelze načíst globální prvky:', err);
+        }
+    }
+
+    initGlobalElements();
 });
+
+// Globální funkce pro přepnutí jazyka
+function switchWebsiteLang(lang) {
+    localStorage.setItem('sik_web_lang', lang);
+    
+    const czBtn = document.getElementById('lang-cz-btn');
+    const enBtn = document.getElementById('lang-en-btn');
+
+    if (czBtn && enBtn) {
+        czBtn.classList.toggle('active', lang === 'cz');
+        enBtn.classList.toggle('active', lang === 'en');
+    }
+
+    console.log("Přepnuto na jazyk:", lang.toUpperCase());
+}
