@@ -35,7 +35,7 @@
   },
   {
     "id": "gdpr-cz",
-    "title": "Zásady GDPR",
+    "title": "GDPR",
     "type": "page",
     "file": "public/pages/gdpr.html",
     "dataFile": "public/data/gdpr.json",
