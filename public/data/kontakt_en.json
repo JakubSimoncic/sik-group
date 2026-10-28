@@ -1,1 +1,84 @@
-
+{
+  "contactPage": {
+    "teamSectionTitle": "OUR TEAM",
+    "faqSectionTitle": "OFTEN ASKED QUESTIONS",
+    "contactSectionTitle": "CONTACT INFORMATION",
+    "businessTitle": "Company info.",
+    "billingTitle": "Bank account",
+    "labels": {
+      "email": "E-mail",
+      "phone": "Phone",
+      "address": "HQ",
+      "ico": "IČO",
+      "dic": "DIČ",
+      "bank": "Bank account"
+    }
+  },
+  "contact": {
+    "email": "info@sik-group.cz",
+    "phone": "732 520 715",
+    "address": "Tvoje fakturační adresa 456, 150 00 Praha",
+    "ico": "12345678",
+    "dic": "CZ12345678",
+    "bank": "2000123456/2010"
+  },
+  "team": [
+    {
+      "name": "Honza",
+      "role": "// Drone engineer and project manager",
+      "image": "../img/team/honza.jpg",
+      "bio": "Honza combines technical expertise with hands-on filming experience. He flies both DJI and FPV drones, which he builds and tunes himself to meet the specific requirements of each project. This allows him to select or build the ideal setup for every shoot, whether it's capturing dynamic action sequences or smooth, cinematic fly-throughs. In addition to piloting, he also oversees project management.",
+      "tags": ["DJI & FPV", "Areal footage", "Coordination"]
+    },
+    {
+      "name": "Áďa",
+      "role": "VIDEO EDITOR & EVENT PHOTOGRAPHER",
+      "image": "../img/team/ada.jpg",
+      "bio": "Áďa specializes in capturing the atmosphere of events, allowing people to relive the experience long after it's over. She has extensive hands-on experience in photography, filming, and post-production for events, concerts, and social gatherings. With a keen eye for the right moment and meticulous editing, she creates photos and videos that authentically capture the energy and atmosphere of every occasion.",
+      "tags": ["Photography", "Videography", "Professional Photo Editing", "Event Video Editing"]
+    },
+    {
+      "name": "Filip",
+      "role": "// LEAD VIDEOGRAPHER",
+      "image": "../img/team/filip.jpg",
+      "bio": "Filip is our lead videographer and feels right at home behind the camera. With experience in both marketing campaigns and film productions, he knows how to capture compelling footage that engages the audience while supporting the story being told. But his work doesn't stop at filming. He also specializes in video editing, allowing him to take a project from the very first shot to the final cut, with a strong focus on quality, smooth transitions, and every last detail.",
+      "tags": ["Camera Operation", "Video Editing", "Composition & Lighting", "Attention to Detail"]
+    },
+    {
+      "name": "Vojtěch",
+      "role": "// EDITOR",
+      "image": "../img/team/vojtech.png",
+      "bio": "Whether you need a short Instagram video edited and sound-designed or a full-length, hour-long vlog polished from start to finish, Vojta will bring your vision to life. With years of experience in video editing using software such as DaVinci Resolve, he knows what makes an edit work, which pitfalls to avoid, and how to turn raw footage into a polished final product. Whatever your project demands, Vojta is committed to delivering results that meet your expectations and leave you completely satisfied.",
+      "tags": ["Video Editing", "Precision & Efficiency", "Composition & Lighting", "Attention to Detail"]
+    },
+    {
+      "name": "Lukáš",
+      "role": "// ALL-ROUND VIDEO EDITOR",
+      "image": "../img/team/lukas.jpg",
+      "bio": "Lukáš can handle everything from short videos and reels to vlogs and more complex film projects. He focuses on high-quality results, fast communication, and above all, making sure the final video matches your vision. Whether you need a fast-paced edit for social media or a carefully crafted video that emphasizes storytelling and atmosphere, Lukáš has you covered.",
+      "tags": ["Attention to Detail", "Always Available", "Fast Turnaround"]
+    }
+  ],
+  "faq": [
+    {
+      "question": "How Long Does It Take to Produce a Video?",
+      "answer": "Filming takes place during your event or according to a pre-agreed shooting plan. Once filming is complete, we move on to editing. We keep you involved throughout the process, discussing the direction of the video and giving you the opportunity to provide feedback before the final version is delivered."
+    },
+    {
+      "question": "Do You Have the Necessary Drone Certifications?",
+      "answer": "Our pilots hold the necessary qualifications and certifications for drone operations. Depending on the location, type of production, and flight conditions, we select the appropriate equipment and operating procedures for each project."
+    },
+    {
+      "question": "Can You Fly Drones in Bad Weather?",
+      "answer": "We adapt our filming approach to suit the conditions. Our equipment is selected to handle challenging environments, and depending on the specific setup, we can film in conditions such as light rain or wind, provided it is safe and permitted."
+    },
+    {
+      "question": "How Do You Handle Music and Copyright?",
+      "answer": "We can deliver the final video in multiple versions to suit your needs. Alongside the version with music, we can also provide a clean version without music, giving you greater flexibility for future use."
+    },
+    {
+      "question": "Where Do You Film?",
+      "answer": "Almost anywhere it makes sense and conditions allow. We film indoors and outdoors, from high above to just inches off the ground, adapting our approach to the location and your project's needs."
+    }
+  ]
+}
