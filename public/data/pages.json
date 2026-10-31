@@ -46,7 +46,7 @@
     "id": "common-en",
     "title": "Globální prvky [EN]",
     "type": "page",
-    "dataFile": "public/data/common.json",
+    "dataFile": "public/data/common_en.json",
     "icon": "⚙️",
     "lang": "en"
   },
@@ -54,7 +54,7 @@
     "id": "eshop-products-en",
     "title": "E-Shop [EN]",
     "type": "products",
-    "dataFile": "public/data/e-shop.json",
+    "dataFile": "public/data/e-shop_en.json",
     "icon": "🛒",
     "lang": "en"
   },
@@ -63,7 +63,7 @@
     "title": "Úvodní stránka [EN]",
     "type": "page",
     "file": "index.html",
-    "dataFile": "public/data/index.json",
+    "dataFile": "public/data/index_en.json",
     "icon": "📄",
     "lang": "en"
   },
@@ -72,7 +72,7 @@
     "title": "Kontakt a Tým [EN]",
     "type": "page",
     "file": "public/pages/kontakt.html",
-    "dataFile": "public/data/kontakt.json",
+    "dataFile": "public/data/kontakt_en.json",
     "icon": "📞",
     "lang": "en"
   },
@@ -81,7 +81,7 @@
     "title": "GDPR [EN]",
     "type": "page",
     "file": "public/pages/gdpr.html",
-    "dataFile": "public/data/gdpr.json",
+    "dataFile": "public/data/gdpr_en.json",
     "icon": "🔒",
     "lang": "en"
   }
