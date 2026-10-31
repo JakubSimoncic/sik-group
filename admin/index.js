@@ -3,6 +3,7 @@ let productsData = [];
 let fullShopData = {};
 let pagesData = [];
 let currentLoadedPageData = {};
+let currentActiveItem = null; // Uchovává aktuálně spravovanou položku
 
 const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
 const configPanel = document.getElementById('config-panel');
@@ -17,7 +18,6 @@ function setAdminLanguage(lang) {
     log(`Přepnuto CMS na jazyk: ${lang.toUpperCase()}`, 'success');
     renderDashboard();
     
-    // Pokud jsme v sekci produktů, přizpůsobíme viditelnost [CZ]/[EN] políček
     adjustProductFormLanguage();
 }
 
@@ -57,12 +57,20 @@ function showDashboard() {
     switchView('view-dashboard');
 }
 
-function sanitizePath(dataFile, type, id) {
-    if (type === 'products' || id === 'e-shop' || id === 'eshop-products' || id === 'eshop-products-cz' || id === 'eshop-products-en') {
-        return dataFile ? (dataFile.startsWith('public/') ? dataFile : 'public/' + dataFile) : 'public/data/e-shop.json';
-    }
-    
+function sanitizePath(dataFile, type, id, lang = 'cz') {
+    // Inteligentní doplnění _en.json podle jazyka CMS, pokud cesta nekončí správně
     let path = dataFile || '';
+    
+    if (type === 'products' || id.includes('eshop')) {
+        path = lang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+    } else {
+        if (lang === 'en' && !path.includes('_en.json')) {
+            path = path.replace('.json', '_en.json');
+        } else if (lang === 'cz' && path.includes('_en.json')) {
+            path = path.replace('_en.json', '.json');
+        }
+    }
+
     if (path.startsWith('data/')) path = 'public/' + path;
     if (!path.startsWith('public/')) path = 'public/data/' + path;
     return path;
@@ -77,10 +85,7 @@ async function initData() {
         
         const loadedPages = await pagesRes.json();
         if (Array.isArray(loadedPages) && loadedPages.length > 0) {
-            pagesData = loadedPages.map(p => {
-                p.dataFile = sanitizePath(p.dataFile, p.type, p.id);
-                return p;
-            });
+            pagesData = loadedPages;
             renderDashboard();
             log('Rozcestník úspěšně načten z pages.json.', 'success');
         } else {
@@ -90,9 +95,11 @@ async function initData() {
         log('Chyba při načítání pages.json: ' + e.message, 'error');
         pagesData = [
             { "id": "eshop-products-cz", "title": "E-shop Produkty [CZ]", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
-            { "id": "eshop-products-en", "title": "E-shop Products [EN]", "description": "Active drones and pricing management", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "en" },
+            { "id": "eshop-products-en", "title": "E-shop Products [EN]", "description": "Active drones and pricing management", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop_en.json", "lang": "en" },
             { "id": "home-cz", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json", "lang": "cz" },
-            { "id": "contact-cz", "title": "Kontakt & Tým", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json", "lang": "cz" }
+            { "id": "home-en", "title": "Home Page [EN]", "description": "Main page content management", "icon": "📄", "type": "page", "dataFile": "public/data/index_en.json", "lang": "en" },
+            { "id": "contact-cz", "title": "Kontakt & Tým", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json", "lang": "cz" },
+            { "id": "contact-en", "title": "Contact & Team [EN]", "description": "Contacts and support management", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt_en.json", "lang": "en" }
         ];
         renderDashboard();
         log('Použita záložní struktura rozcestníku.', 'success');
@@ -104,8 +111,8 @@ function renderDashboard() {
     container.innerHTML = '';
 
     const filteredPages = pagesData.filter(item => {
-        if (!item.lang) return true;
-        return item.lang.toLowerCase() === currentAdminLang;
+        const itemLang = item.lang || (item.id.endsWith('-en') ? 'en' : 'cz');
+        return itemLang.toLowerCase() === currentAdminLang;
     });
 
     filteredPages.forEach(item => {
@@ -174,7 +181,9 @@ async function openSection(id) {
     const item = pagesData.find(p => p.id === id);
     if (!item) return;
 
-    const dataFile = sanitizePath(item.dataFile, item.type, item.id);
+    currentActiveItem = item;
+    const itemLang = item.lang || (item.id.endsWith('-en') ? 'en' : 'cz');
+    const dataFile = sanitizePath(item.dataFile, item.type, item.id, itemLang);
     const targetUrl = `../${dataFile}`;
 
     if (item.type === 'products') {
@@ -247,7 +256,6 @@ async function openSection(id) {
     }
 }
 
-// Funkce pro skrytí/zobrazení políček podle zvoleného jazyka v CMS hlavičce
 function adjustProductFormLanguage() {
     const enFields = document.querySelectorAll('.en-only-field');
     const czFields = document.querySelectorAll('.cz-only-field');
@@ -411,7 +419,10 @@ document.getElementById('save-shop-texts-btn').addEventListener('click', async (
 
     fullShopData.products = productsData;
 
-    await commitFileToGithub('public/data/e-shop.json', fullShopData, `CMS: Aktualizovány texty e-shopu`);
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+
+    await commitFileToGithub(filePath, fullShopData, `CMS: Aktualizovány texty e-shopu (${itemLang.toUpperCase()})`);
 });
 
 document.getElementById('page-form').addEventListener('submit', async (e) => {
@@ -479,7 +490,10 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
 
     fullShopData.products = productsData;
 
-    await commitFileToGithub('public/data/e-shop.json', fullShopData, `CMS: Uložen dron ${title}`);
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+
+    await commitFileToGithub(filePath, fullShopData, `CMS: Uložen dron ${title} (${itemLang.toUpperCase()})`);
     resetProductForm();
 });
 
@@ -492,7 +506,10 @@ async function deleteProduct(id) {
 
     fullShopData.products = productsData;
 
-    await commitFileToGithub('public/data/e-shop.json', fullShopData, `CMS: Smazán dron ${prod ? prod.title : id}`);
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+
+    await commitFileToGithub(filePath, fullShopData, `CMS: Smazán dron ${prod ? prod.title : id} (${itemLang.toUpperCase()})`);
 }
 
 loadConfig();
