@@ -280,7 +280,11 @@ function renderProductsList() {
         const card = document.createElement('div');
         card.className = 'item-card';
 
-        const imgPath = p.image ? '../public/' + p.image.replace(/^\.\//, '').replace(/^public\//, '') : '../public/img/drone.png';
+        // Opraveno: Správné složení cesty pro náhled v administraci
+        let rawImg = p.image || 'img/drone.png';
+        rawImg = rawImg.replace(/^\.\//, '').replace(/^public\//, '');
+        const imgPath = '../public/' + rawImg;
+
         const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
         const eurPrice = p.eurPrice ? p.eurPrice.toLocaleString('cs-CZ') : Math.round((p.price || 0) / 25);
 
@@ -329,7 +333,7 @@ function editProduct(id) {
     document.getElementById('prod-desc').value = prod.description || '';
     document.getElementById('prod-desc-en').value = prod.descriptionEn || prod.description || '';
 
-    document.getElementById('prod-image-path').value = prod.image || 'public/img/drone.png';
+    document.getElementById('prod-image-path').value = prod.image || 'img/drone.png';
     const imgFileInput = document.getElementById('prod-image-file');
     if (imgFileInput) imgFileInput.value = '';
 
@@ -515,7 +519,7 @@ document.getElementById('page-form').addEventListener('submit', async (e) => {
 
             log(`Nahrávám soubor ${file.name}...`);
             await uploadBinaryFileToGithub(targetFilePath, base64Data, `CMS: Nahrán soubor ${file.name}`);
-            setNestedValue(updatedData, keyPath, targetFilePath);
+            setNestedValue(updatedData, keyPath, 'img/' + file.name);
         }
     }
 
@@ -538,16 +542,20 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     const descEn = document.getElementById('prod-desc-en').value;
     
     const editProductObj = productsData.find(p => String(p.id) === String(editId));
-    let imagePath = editProductObj ? (editProductObj.image || 'public/img/drone.png') : 'public/img/drone.png';
+    let imagePath = editProductObj ? (editProductObj.image || 'img/drone.png') : 'img/drone.png';
     
     const imgFile = document.getElementById('prod-image-file');
     if (imgFile && imgFile.files && imgFile.files[0]) {
         const file = imgFile.files[0];
         let folder = 'public/img/';
+        let subFolder = 'img/';
         if (file.type.startsWith('video/') || file.name.endsWith('.mp4')) {
             folder = 'public/video/';
+            subFolder = 'video/';
         }
-        imagePath = folder + file.name;
+        
+        const fullUploadPath = folder + file.name;
+        imagePath = subFolder + file.name;
 
         const base64Data = await new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -557,7 +565,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
         });
 
         log(`Nahrávám nový soubor produktu ${file.name}...`);
-        await uploadBinaryFileToGithub(imagePath, base64Data, `CMS: Nahrán soubor produktu ${file.name}`);
+        await uploadBinaryFileToGithub(fullUploadPath, base64Data, `CMS: Nahrán soubor produktu ${file.name}`);
     }
 
     const specs = {};
