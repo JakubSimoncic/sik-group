@@ -170,7 +170,6 @@ function renderFlatFields(obj, prefix = '', container) {
 
             fieldGroup.appendChild(input);
 
-            // Pokud je to pole pro obrázek nebo video, přidáme i možnost nahrát soubor
             if (isMediaField) {
                 const fileHint = document.createElement('div');
                 fileHint.style.fontSize = '12px';
@@ -331,17 +330,23 @@ function editProduct(id) {
     document.getElementById('prod-desc').value = prod.description || '';
     document.getElementById('prod-desc-en').value = prod.descriptionEn || prod.description || '';
 
-    // Pokud nemáme v HTML formuláři pro produkt pole pro obrázek, vytvoříme ho dynamicky nebo ho doplníme
-    let imgInput = document.getElementById('prod-image-path');
-    if (!imgInput) {
+    let imgGroup = document.getElementById('prod-image-group');
+    if (!imgGroup) {
         const prodForm = document.getElementById('product-form');
-        const div = document.createElement('div');
-        div.className = 'field-group';
-        div.innerHTML = `<input type="text" id="prod-image-path" class="text-input" placeholder="Cesta k obrázku (např. public/img/drone.png)"><input type="file" id="prod-image-file" accept="image/*" style="margin-top: 4px; color: inherit;">`;
-        prodForm.insertBefore(div, prodForm.querySelector('.form-actions') || prodForm.lastElementChild);
-        imgInput = document.getElementById('prod-image-path');
+        imgGroup = document.createElement('div');
+        imgGroup.className = 'field-group';
+        imgGroup.id = 'prod-image-group';
+        imgGroup.innerHTML = `
+            <input type="text" id="prod-image-path" class="page-field-input" placeholder="public/img/drone.png">
+            <input type="file" id="prod-image-file" accept="image/*" style="margin-top: 6px; color: inherit;">
+        `;
+        const actionsDiv = prodForm.querySelector('.form-actions') || prodForm.lastElementChild;
+        prodForm.insertBefore(imgGroup, actionsDiv);
     }
-    imgInput.value = prod.image || 'public/img/drone.png';
+    
+    document.getElementById('prod-image-path').value = prod.image || 'public/img/drone.png';
+    const imgFileInput = document.getElementById('prod-image-file');
+    if (imgFileInput) imgFileInput.value = '';
 
     specsContainer.innerHTML = '';
     if (prod.specs) {
@@ -500,13 +505,11 @@ document.getElementById('page-form').addEventListener('submit', async (e) => {
 
     let updatedData = JSON.parse(JSON.stringify(currentLoadedPageData));
 
-    // Zpracování běžných textových polí
     document.querySelectorAll('.page-field-input').forEach(input => {
         const keyPath = input.dataset.keyPath;
         setNestedValue(updatedData, keyPath, input.value);
     });
 
-    // Zpracování nahraných souborů (fotky / videa)
     for (const fileInput of document.querySelectorAll('.page-file-input')) {
         if (fileInput.files && fileInput.files[0]) {
             const file = fileInput.files[0];
@@ -551,6 +554,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     
     let imagePath = document.getElementById('prod-image-path')?.value || 'public/img/drone.png';
     const imgFile = document.getElementById('prod-image-file');
+    
     if (imgFile && imgFile.files && imgFile.files[0]) {
         const file = imgFile.files[0];
         imagePath = 'public/img/' + file.name;
