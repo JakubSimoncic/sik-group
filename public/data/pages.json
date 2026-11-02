@@ -52,7 +52,7 @@
   },
   {
     "id": "eshop-products-en",
-    "title": "E-Shop [EN]",
+    "title": "E-shop [EN]",
     "type": "products",
     "dataFile": "public/data/e-shop_en.json",
     "icon": "🛒",
