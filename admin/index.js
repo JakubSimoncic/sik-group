@@ -58,7 +58,6 @@ function showDashboard() {
 }
 
 function sanitizePath(dataFile, type, id, lang = 'cz') {
-    // Inteligentní doplnění _en.json podle jazyka CMS, pokud cesta nekončí správně
     let path = dataFile || '';
     
     if (type === 'products' || id.includes('eshop')) {
@@ -152,10 +151,6 @@ function renderFlatFields(obj, prefix = '', container) {
             fieldGroup.className = 'field-group';
 
             const friendlyName = getFriendlyCmsLabel(fullKey);
-
-            const labelEl = document.createElement('label');
-            labelEl.textContent = friendlyName;
-            fieldGroup.appendChild(labelEl);
 
             let input;
             if (typeof val === 'string' && val.length > 60) {
