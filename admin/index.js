@@ -151,9 +151,11 @@ function renderFlatFields(obj, prefix = '', container) {
             fieldGroup.className = 'field-group';
 
             const friendlyName = getFriendlyCmsLabel(fullKey);
+            const lowerKey = fullKey.toLowerCase();
+            const isMediaField = lowerKey.includes('image') || lowerKey.includes('video') || lowerKey.endsWith('img');
 
             let input;
-            if (typeof val === 'string' && val.length > 60) {
+            if (typeof val === 'string' && val.length > 60 && !isMediaField) {
                 input = document.createElement('textarea');
                 input.rows = 4;
             } else {
@@ -167,6 +169,17 @@ function renderFlatFields(obj, prefix = '', container) {
             input.placeholder = friendlyName;
 
             fieldGroup.appendChild(input);
+
+            // Pokud je to pole pro obrázek nebo video, přidáme i možnost nahrát soubor
+            if (isMediaField) {
+                const fileHint = document.createElement('div');
+                fileHint.style.fontSize = '12px';
+                fileHint.style.color = 'var(--text-muted, #aaa)';
+                fileHint.style.marginTop = '4px';
+                fileHint.innerHTML = `Nebo nahrát nový soubor: <input type="file" class="page-file-input" data-key-path="${fullKey}" accept="image/*,video/*" style="margin-top: 4px; color: inherit;">`;
+                fieldGroup.appendChild(fileHint);
+            }
+
             container.appendChild(fieldGroup);
         }
     });
@@ -203,16 +216,13 @@ async function openSection(id) {
                     const fieldGroup = document.createElement('div');
                     fieldGroup.className = 'field-group';
 
-                    const label = document.createElement('label');
-                    label.textContent = getFriendlyCmsLabel(key);
-
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.className = 'shop-text-input';
                     input.dataset.key = key;
                     input.value = fullShopData[key] || '';
+                    input.placeholder = getFriendlyCmsLabel(key);
 
-                    fieldGroup.appendChild(label);
                     fieldGroup.appendChild(input);
                     textsContainer.appendChild(fieldGroup);
                 }
@@ -272,7 +282,7 @@ function renderProductsList() {
         const card = document.createElement('div');
         card.className = 'item-card';
 
-        const imgPath = p.image ? '../public/' + p.image.replace(/^\.\//, '') : '../public/img/drone.png';
+        const imgPath = p.image ? '../public/' + p.image.replace(/^\.\//, '').replace(/^public\//, '') : '../public/img/drone.png';
         const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
         const eurPrice = p.eurPrice ? p.eurPrice.toLocaleString('cs-CZ') : Math.round((p.price || 0) / 25);
 
@@ -321,6 +331,18 @@ function editProduct(id) {
     document.getElementById('prod-desc').value = prod.description || '';
     document.getElementById('prod-desc-en').value = prod.descriptionEn || prod.description || '';
 
+    // Pokud nemáme v HTML formuláři pro produkt pole pro obrázek, vytvoříme ho dynamicky nebo ho doplníme
+    let imgInput = document.getElementById('prod-image-path');
+    if (!imgInput) {
+        const prodForm = document.getElementById('product-form');
+        const div = document.createElement('div');
+        div.className = 'field-group';
+        div.innerHTML = `<input type="text" id="prod-image-path" class="text-input" placeholder="Cesta k obrázku (např. public/img/drone.png)"><input type="file" id="prod-image-file" accept="image/*" style="margin-top: 4px; color: inherit;">`;
+        prodForm.insertBefore(div, prodForm.querySelector('.form-actions') || prodForm.lastElementChild);
+        imgInput = document.getElementById('prod-image-path');
+    }
+    imgInput.value = prod.image || 'public/img/drone.png';
+
     specsContainer.innerHTML = '';
     if (prod.specs) {
         Object.entries(prod.specs).forEach(([k, v]) => addSpecRow(k, v));
@@ -339,6 +361,10 @@ function resetProductForm() {
     document.getElementById('edit-prod-id').value = '';
     document.getElementById('product-form-title').textContent = 'Přidat nový dron';
     document.getElementById('cancel-edit-btn').style.display = 'none';
+    const imgInput = document.getElementById('prod-image-path');
+    if (imgInput) imgInput.value = '';
+    const imgFile = document.getElementById('prod-image-file');
+    if (imgFile) imgFile.value = '';
     specsContainer.innerHTML = '';
 }
 
@@ -392,6 +418,51 @@ async function commitFileToGithub(filePath, contentObject, commitMessage) {
     }
 }
 
+async function uploadBinaryFileToGithub(filePath, base64Data, commitMessage) {
+    const owner = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
+    const repo = localStorage.getItem('sik_gh_repo') || 'sik-group';
+    const branch = localStorage.getItem('sik_gh_branch') || 'main';
+    const token = localStorage.getItem('sik_gh_token');
+
+    if (!token || !owner || !repo) {
+        log('Upozornění: Není vyplněn GitHub token.', 'error');
+        return;
+    }
+
+    try {
+        log(`Získávám SHA pro binární soubor ${filePath}...`);
+        const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        let sha = '';
+        if (getRes.ok) {
+            const fileData = await getRes.json();
+            sha = fileData.sha;
+        }
+
+        log(`Nahrávám soubor ${filePath} na GitHub...`);
+        const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: commitMessage,
+                content: base64Data,
+                sha: sha || undefined,
+                branch: branch
+            })
+        });
+
+        if (!putRes.ok) throw new Error('Chyba při nahrávání souboru.');
+        log(`✓ Soubor ${filePath} úspěšně nahrán na GitHub!`, 'success');
+    } catch (err) {
+        log(`Chyba při nahrávání souboru: ${err.message}`, 'error');
+    }
+}
+
 function setNestedValue(obj, path, value) {
     const parts = path.split('.');
     let curr = obj;
@@ -429,10 +500,36 @@ document.getElementById('page-form').addEventListener('submit', async (e) => {
 
     let updatedData = JSON.parse(JSON.stringify(currentLoadedPageData));
 
+    // Zpracování běžných textových polí
     document.querySelectorAll('.page-field-input').forEach(input => {
         const keyPath = input.dataset.keyPath;
         setNestedValue(updatedData, keyPath, input.value);
     });
+
+    // Zpracování nahraných souborů (fotky / videa)
+    for (const fileInput of document.querySelectorAll('.page-file-input')) {
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const keyPath = fileInput.dataset.keyPath;
+
+            let folder = 'public/img/';
+            if (file.type.startsWith('video/') || file.name.endsWith('.mp4')) {
+                folder = 'public/video/';
+            }
+            const targetFilePath = folder + file.name;
+
+            const base64Data = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+                reader.readAsDataURL(file);
+            });
+
+            log(`Nahrávám soubor ${file.name}...`);
+            await uploadBinaryFileToGithub(targetFilePath, base64Data, `CMS: Nahrán soubor ${file.name}`);
+            setNestedValue(updatedData, keyPath, targetFilePath);
+        }
+    }
 
     const pageTitle = document.getElementById('page-title').value;
     await commitFileToGithub(dataFile, updatedData, `CMS: Aktualizován obsah ${dataFile} (${pageTitle})`);
@@ -451,6 +548,21 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     const tagEn = document.getElementById('prod-tag-en').value;
     const desc = document.getElementById('prod-desc').value;
     const descEn = document.getElementById('prod-desc-en').value;
+    
+    let imagePath = document.getElementById('prod-image-path')?.value || 'public/img/drone.png';
+    const imgFile = document.getElementById('prod-image-file');
+    if (imgFile && imgFile.files && imgFile.files[0]) {
+        const file = imgFile.files[0];
+        imagePath = 'public/img/' + file.name;
+        const base64Data = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+        log(`Nahrávám obrázek produktu ${file.name}...`);
+        await uploadBinaryFileToGithub(imagePath, base64Data, `CMS: Nahrán obrázek produktu ${file.name}`);
+    }
 
     const specs = {};
     document.querySelectorAll('.spec-item-row').forEach(row => {
@@ -467,7 +579,8 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
             productsData[idx] = {
                 ...productsData[idx],
                 title, price, eurPrice, category, tag, tagEn, description: desc, descriptionEn: descEn, specs,
-                categoryLabel: catLabels[category]
+                categoryLabel: catLabels[category],
+                image: imagePath
             };
         }
     } else {
@@ -476,7 +589,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
             title, price, eurPrice, category, tag, tagEn, description: desc, descriptionEn: descEn, specs,
             categoryLabel: catLabels[category],
             stock: "skladem",
-            image: "../img/drone.png"
+            image: imagePath
         };
         productsData.push(newProd);
     }
