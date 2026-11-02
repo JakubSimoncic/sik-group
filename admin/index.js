@@ -3,7 +3,7 @@ let productsData = [];
 let fullShopData = {};
 let pagesData = [];
 let currentLoadedPageData = {};
-let currentActiveItem = null; // Uchovává aktuálně spravovanou položku
+let currentActiveItem = null;
 
 const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
 const configPanel = document.getElementById('config-panel');
@@ -337,8 +337,11 @@ function editProduct(id) {
         imgGroup.className = 'field-group';
         imgGroup.id = 'prod-image-group';
         imgGroup.innerHTML = `
-            <input type="text" id="prod-image-path" class="page-field-input" placeholder="public/img/drone.png">
-            <input type="file" id="prod-image-file" accept="image/*" style="margin-top: 6px; color: inherit;">
+            <label>Obrázek produktu</label>
+            <input type="text" id="prod-image-path" class="page-field-input" placeholder="public/img/drone.png" readonly style="opacity: 0.7;">
+            <div style="font-size: 12px; color: var(--text-muted, #aaa); margin-top: 4px;">
+                Nebo nahrát nový soubor: <input type="file" id="prod-image-file" accept="image/*,video/*" style="margin-top: 4px; color: inherit;">
+            </div>
         `;
         const actionsDiv = prodForm.querySelector('.form-actions') || prodForm.lastElementChild;
         prodForm.insertBefore(imgGroup, actionsDiv);
@@ -552,20 +555,29 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     const desc = document.getElementById('prod-desc').value;
     const descEn = document.getElementById('prod-desc-en').value;
     
-    let imagePath = document.getElementById('prod-image-path')?.value || 'public/img/drone.png';
-    const imgFile = document.getElementById('prod-image-file');
+    // BLBUVZDORNÉ ŘEŠENÍ: Zjistíme, co bylo původně nastaveno
+    const editProductObj = productsData.find(p => String(p.id) === String(editId));
+    let imagePath = editProductObj ? (editProductObj.image || 'public/img/drone.png') : 'public/img/drone.png';
     
+    const imgFile = document.getElementById('prod-image-file');
     if (imgFile && imgFile.files && imgFile.files[0]) {
         const file = imgFile.files[0];
-        imagePath = 'public/img/' + file.name;
+        // Uložíme do správné složky podle typu souboru
+        let folder = 'public/img/';
+        if (file.type.startsWith('video/') || file.name.endsWith('.mp4')) {
+            folder = 'public/video/';
+        }
+        imagePath = folder + file.name;
+
         const base64Data = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = error => reject(error);
             reader.readAsDataURL(file);
         });
-        log(`Nahrávám obrázek produktu ${file.name}...`);
-        await uploadBinaryFileToGithub(imagePath, base64Data, `CMS: Nahrán obrázek produktu ${file.name}`);
+
+        log(`Nahrávám nový soubor produktu ${file.name}...`);
+        await uploadBinaryFileToGithub(imagePath, base64Data, `CMS: Nahrán soubor produktu ${file.name}`);
     }
 
     const specs = {};
