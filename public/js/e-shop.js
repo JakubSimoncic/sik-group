@@ -156,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (shopData.filterBtnHideText) filterBtnHide = shopData.filterBtnHideText;
                 if (shopData.filterBtnShowText) filterBtnShow = shopData.filterBtnShowText;
                 
-                // Nastavení globální měny podle jazyka (CZ = Kč, EN = EUR)
                 currencyTextGlobal = activeLang === 'en' ? 'EUR' : (shopData.currencyText || 'Kč');
 
                 const filterBtnTextEl = document.getElementById('eshop-filter-btn-text');
@@ -198,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('price-prefix-to').textContent = shopData.pricePrefixTo;
                 }
                 
-                // Změna textu měny v rozhraní
                 const priceCurrencyEl = document.getElementById('price-currency');
                 if (priceCurrencyEl) {
                     priceCurrencyEl.textContent = currencyTextGlobal;
@@ -229,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (S PŘEPÍNÁNÍM MĚNY)
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (S PŘEPÍNÁNÍM MĚNY A OPRAVENOU CESTOU K OBRÁZKU)
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
@@ -249,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanPrice = parseSafeNumber(product.price, 0);
             const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
 
-            // Zvolíme hlavní cenu a vedlejší cenu podle aktivního jazyka
             const mainPriceToUse = activeLang === 'en' ? cleanEurPrice : cleanPrice;
             const secondaryPriceToUse = activeLang === 'en' ? cleanPrice : cleanEurPrice;
             const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
@@ -261,7 +258,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const formattedPrice = mainPriceToUse.toLocaleString('cs-CZ');
             const formattedSecondaryPrice = secondaryPriceToUse.toLocaleString('cs-CZ');
-            const imagePath = product.image || '../img/drone.png';
+            
+            // OPRAVA: Robustní vyčištění a sestavení cesty k obrázku pro e-shop
+            let rawImg = product.image || 'img/drone.png';
+            rawImg = rawImg.replace(/^\.\//, '').replace(/^public\//, '');
+            if (!rawImg.startsWith('img/') && !rawImg.startsWith('video/')) {
+                rawImg = 'img/' + rawImg;
+            }
+            const imagePath = '../' + rawImg;
+
             const tagText = product.tag || product.categoryLabel || 'FPV Spec';
 
             card.innerHTML = `
@@ -278,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            card.addEventListener('click', () => openModal(product));
+            card.addEventListener('click', () => openModal(product, imagePath));
             productGrid.appendChild(card);
         });
     }
@@ -453,7 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.innerWidth - document.documentElement.clientWidth;
     }
 
-    function openModal(product) {
+    function openModal(product, resolvedImagePath) {
         if (!modal) return;
 
         const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
@@ -464,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const secondaryPriceToUse = activeLang === 'en' ? cleanPrice : cleanEurPrice;
         const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
 
-        document.getElementById('modal-img').src = product.image || '../img/drone.png';
+        document.getElementById('modal-img').src = resolvedImagePath || product.image || '../img/drone.png';
         document.getElementById('modal-title').textContent = product.title || 'Detail dronu';
         
         const catLabel = (product.categoryLabel || product.category || '').toUpperCase();
@@ -477,7 +482,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const formattedSecondaryPrice = secondaryPriceToUse.toLocaleString('cs-CZ');
         document.getElementById('modal-price').innerHTML = `${formattedPrice} ${currencyTextGlobal} <span class="price-eur">/ ${formattedSecondaryPrice} ${secondaryCurrency}</span>`;
         
-        // Výběr popisu v modálu podle jazyka
         const descriptionToUse = (activeLang === 'en' && product.descriptionEn) ? product.descriptionEn : (product.description || 'Detailní popis připravujeme.');
         document.getElementById('modal-description').textContent = descriptionToUse;
 
