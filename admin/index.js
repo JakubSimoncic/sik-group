@@ -17,7 +17,6 @@ function setAdminLanguage(lang) {
     document.getElementById('lang-en-btn').classList.toggle('active', lang === 'en');
     log(`Přepnuto CMS na jazyk: ${lang.toUpperCase()}`, 'success');
     renderDashboard();
-    
     adjustProductFormLanguage();
 }
 
@@ -330,23 +329,6 @@ function editProduct(id) {
     document.getElementById('prod-desc').value = prod.description || '';
     document.getElementById('prod-desc-en').value = prod.descriptionEn || prod.description || '';
 
-    let imgGroup = document.getElementById('prod-image-group');
-    if (!imgGroup) {
-        const prodForm = document.getElementById('product-form');
-        imgGroup = document.createElement('div');
-        imgGroup.className = 'field-group';
-        imgGroup.id = 'prod-image-group';
-        imgGroup.innerHTML = `
-            <label>Obrázek produktu</label>
-            <input type="text" id="prod-image-path" class="page-field-input" placeholder="public/img/drone.png" readonly style="opacity: 0.7;">
-            <div style="font-size: 12px; color: var(--text-muted, #aaa); margin-top: 4px;">
-                Nebo nahrát nový soubor: <input type="file" id="prod-image-file" accept="image/*,video/*" style="margin-top: 4px; color: inherit;">
-            </div>
-        `;
-        const actionsDiv = prodForm.querySelector('.form-actions') || prodForm.lastElementChild;
-        prodForm.insertBefore(imgGroup, actionsDiv);
-    }
-    
     document.getElementById('prod-image-path').value = prod.image || 'public/img/drone.png';
     const imgFileInput = document.getElementById('prod-image-file');
     if (imgFileInput) imgFileInput.value = '';
@@ -555,14 +537,12 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     const desc = document.getElementById('prod-desc').value;
     const descEn = document.getElementById('prod-desc-en').value;
     
-    // BLBUVZDORNÉ ŘEŠENÍ: Zjistíme, co bylo původně nastaveno
     const editProductObj = productsData.find(p => String(p.id) === String(editId));
     let imagePath = editProductObj ? (editProductObj.image || 'public/img/drone.png') : 'public/img/drone.png';
     
     const imgFile = document.getElementById('prod-image-file');
     if (imgFile && imgFile.files && imgFile.files[0]) {
         const file = imgFile.files[0];
-        // Uložíme do správné složky podle typu souboru
         let folder = 'public/img/';
         if (file.type.startsWith('video/') || file.name.endsWith('.mp4')) {
             folder = 'public/video/';
