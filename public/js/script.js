@@ -1,3 +1,24 @@
+// ==========================================================================
+// 0. AUTOMATICKÁ DETEKCE JAZYKA (CZ / SK -> CZ, OSTATNÍ ZEMĚ -> EN)
+// ==========================================================================
+(function initAutoLanguage() {
+    let savedLang = localStorage.getItem('sik_web_lang');
+
+    if (!savedLang) {
+        const browserLangs = navigator.languages && navigator.languages.length
+            ? navigator.languages
+            : [navigator.language || navigator.userLanguage || ''];
+
+        const primaryLang = (browserLangs[0] || '').toLowerCase();
+        savedLang = (primaryLang.startsWith('cs') || primaryLang.startsWith('sk')) ? 'cz' : 'en';
+        localStorage.setItem('sik_web_lang', savedLang);
+    }
+
+    // Nastavení jazyka dokumentu a zákaz automatického strojového překladu prohlížečem
+    document.documentElement.lang = savedLang === 'en' ? 'en' : 'cs';
+    document.documentElement.setAttribute('translate', 'no');
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // 1. NAVIGACE & OVLÁDÁNÍ MOBILNÍHO MENU
@@ -112,20 +133,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. DYNAMICKÉ NAČÍTÁNÍ COMMON.JSON A PŘEPÍNAČE JAZYKŮ
     // ==========================================================================
     async function initGlobalElements() {
-        // Zjistíme aktivní jazyk z localStorage (výchozí je 'cz')
         const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
 
-        // Vyhledáme kontejner, nebo ho automaticky vytvoříme, pokud v HTML chybí
         let langSwitcherContainer = document.getElementById('dynamic-lang-switcher');
         if (!langSwitcherContainer && menuToggle && menuToggle.parentNode) {
             langSwitcherContainer = document.createElement('div');
             langSwitcherContainer.id = 'dynamic-lang-switcher';
             langSwitcherContainer.className = 'lang-switcher';
-            // Vložíme ho automaticky před hamburger menu
             menuToggle.parentNode.insertBefore(langSwitcherContainer, menuToggle);
         }
 
-        // Určení cesty k JSON souboru podle toho, kde se stránka nachází
         const isInSubfolder = window.location.pathname.includes('/public/pages/');
         const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
         const jsonPath = isInSubfolder ? `../data/${fileName}` : `public/data/${fileName}`;
@@ -140,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const czText = data.header.langCzText || 'CZ';
                 const enText = data.header.langEnText || 'EN';
 
-                // Vykreslení tlačítek přepínače
                 langSwitcherContainer.innerHTML = `
                     <button type="button" id="lang-cz-btn" class="lang-switch-btn ${activeLang === 'cz' ? 'active' : ''}" onclick="switchWebsiteLang('cz')">${czText}</button>
                     <button type="button" id="lang-en-btn" class="lang-switch-btn ${activeLang === 'en' ? 'active' : ''}" onclick="switchWebsiteLang('en')">${enText}</button>
@@ -168,6 +184,5 @@ function switchWebsiteLang(lang) {
 
     console.log("Přepnuto na jazyk:", lang.toUpperCase());
 
-    // Okamžitá obnova stránky pro načtení správné mutace JSONu
     location.reload();
 }
