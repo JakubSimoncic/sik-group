@@ -131,7 +131,6 @@
                         </button>
                     </div>
 
-                    <!-- PŘIDÁNA ID PRO LOKALIZACI DNŮ V KALENDÁŘI -->
                     <div class="calendar-days">
                         <span id="wday-0">PO</span>
                         <span id="wday-1">ÚT</span>
@@ -149,7 +148,7 @@
                     <h3 id="booking-heading">Načítá se...</h3>
                     <div id="selected-date-presenter" class="date-unselected">Žádné datum nebylo vybráno</div>
                     
-                    <form class="booking-form" id="rezervacni-formular">                        
+                    <form class="booking-form" id="rezervacni-formular" novalidate>                        
                         <select name="booking-time-from" id="real-time-select-from" style="display:none;">
                             <option value="" disabled selected>Čas od...</option>
                             <option value="8:00">8:00</option>
@@ -214,7 +213,6 @@
                         </select>
 
                         <div class="time-range-row">
-                            <!-- PŘIDÁNO ID PRO TRIGGER "ČAS OD" -->
                             <div class="custom-select-wrapper" id="custom-time-select-from">
                                 <div class="custom-select-trigger" id="trigger-time-from">Čas od...</div>
                                 <ul class="custom-options-list">
@@ -246,7 +244,6 @@
                                 </ul>
                             </div>
 
-                            <!-- PŘIDÁNO ID PRO TRIGGER "ČAS DO" (OPRAVENO TAKÉ PŘEKLEP V <td> NA <li>) -->
                             <div class="custom-select-wrapper" id="custom-time-select-to">
                                 <div class="custom-select-trigger" id="trigger-time-to">Čas do...</div>
                                 <ul class="custom-options-list">
@@ -305,6 +302,17 @@
             </div>
         </div>
     </footer>
+
+    <!-- Vlastní modální okno pro potvrzení / chybu rezervace -->
+    <div id="sik-booking-modal" class="sik-modal-overlay" aria-hidden="true">
+        <div class="sik-modal-box">
+            <div class="sik-modal-icon" id="sik-modal-icon">✓</div>
+            <h3 class="sik-modal-title" id="sik-modal-title">Rezervace odeslána</h3>
+            <p class="sik-modal-text" id="sik-modal-text"></p>
+            <div class="sik-modal-summary" id="sik-modal-summary"></div>
+            <button type="button" class="sik-modal-close-btn" id="sik-modal-close">ZAVŘÍT</button>
+        </div>
+    </div>
 
     <!-- Globální script -->
     <script src="public/js/script.js" defer></script>
