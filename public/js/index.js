@@ -640,8 +640,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         isError: true,
                         title: activeLang === 'en' ? 'Select a Date First' : 'Nejprve vyberte datum',
                         text: activeLang === 'en'
-                            ? 'Please choose an available date in the calendar on the left before selecting a time.'
-                            : 'Před výběrem času prosím nejprve klikněte na dostupný den v kalendáři vlevo.'
+                            ? 'Please select an available date in the calendar first.'
+                            : 'Nejprve prosím vyberte dostupné datum v kalendáři.'
                     });
                     return;
                 }
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
     validateTimeOptions();
 
     // ==========================================================================
-    // 4. VALIDACE & REÁLNÉ ODESLÁNÍ REZERVACE NA MAKE WEBHOOK
+    // 4. POTVRZENÍ FORMULÁŘE & ODESLÁNÍ NA WEBHOOK
     // ==========================================================================
     const bookingForm = document.getElementById("rezervacni-formular");
     if (bookingForm) {
@@ -693,8 +693,17 @@ document.addEventListener('DOMContentLoaded', () => {
             field.addEventListener('input', () => field.classList.remove('field-error'));
         });
 
-        bookingForm.addEventListener('submit', async function(e) {
+        bookingForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            if (!selectedStartDate) {
+                showBookingModal({
+                    isError: true,
+                    title: activeLang === 'en' ? 'Missing Date' : 'Chybí datum rezervace',
+                    text: activeLang === 'en' ? 'Please select a date and time.' : 'Vyberte prosím datum a čas.'
+                });
+                return;
+            }
 
             const jmenoInput = document.getElementById("form-jmeno");
             const emailInput = document.getElementById("form-email");
@@ -712,62 +721,43 @@ document.addEventListener('DOMContentLoaded', () => {
             const casFrom = realFromSelect ? realFromSelect.value : "";
             const casTo = realToSelect ? realToSelect.value : "";
 
-            // 1. Kontrola vybraného data
-            if (!selectedStartDate) {
-                showBookingModal({
-                    isError: true,
-                    title: activeLang === 'en' ? 'Missing Date' : 'Chybí datum rezervace',
-                    text: activeLang === 'en'
-                        ? 'Please select an available date in the calendar.'
-                        : 'Vyberte prosím v kalendáři den, o který máte zájem.'
-                });
-                return;
-            }
-
-            // 2. Kontrola vybraného času od a do
             if (!casFrom || !casTo) {
                 if (!casFrom && customFrom) customFrom.classList.add('field-error');
                 if (!casTo && customTo) customTo.classList.add('field-error');
                 showBookingModal({
                     isError: true,
-                    title: activeLang === 'en' ? 'Missing Time Range' : 'Vyberte čas rezervace',
-                    text: activeLang === 'en'
-                        ? 'Please choose both start time and end time.'
-                        : 'Vyberte prosím čas od i čas do.'
+                    title: activeLang === 'en' ? 'Missing Time' : 'Vyberte čas',
+                    text: activeLang === 'en' ? 'Please select both start and end time.' : 'Vyberte prosím čas od i čas do.'
                 });
                 return;
             }
 
-            // 3. Kontrola jména a platného e-mailu
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
             if (jmeno.length < 2) {
                 if (jmenoInput) jmenoInput.classList.add('field-error');
                 showBookingModal({
                     isError: true,
-                    title: activeLang === 'en' ? 'Invalid Name' : 'Zadejte jméno',
-                    text: activeLang === 'en'
-                        ? 'Please enter your name or company name (at least 2 characters).'
-                        : 'Vyplňte prosím své jméno nebo název společnosti.'
+                    title: activeLang === 'en' ? 'Missing Name' : 'Zadejte jméno',
+                    text: activeLang === 'en' ? 'Please enter your name or company name.' : 'Vyplňte prosím jméno nebo název společnosti.'
                 });
                 return;
             }
 
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
             if (!emailRegex.test(email)) {
                 if (emailInput) emailInput.classList.add('field-error');
                 showBookingModal({
                     isError: true,
                     title: activeLang === 'en' ? 'Invalid E-mail' : 'Neplatný e-mail',
-                    text: activeLang === 'en'
-                        ? 'Please enter a valid e-mail address so we can send you a confirmation.'
-                        : 'Zadejte prosím platnou e-mailovou adresu (např. jan@domena.cz), abychom vám mohli odpovědět.'
+                    text: activeLang === 'en' ? 'Please enter a valid e-mail address.' : 'Zadejte prosím platnou e-mailovou adresu (např. jan@domena.cz).'
                 });
                 return;
             }
 
             const btn = this.querySelector('.btn-confirm');
-            const originalText = btn ? btn.textContent : (activeLang === 'en' ? 'CONFIRM BOOKING' : 'POTVRDIT TERMÍN');
+            const originalText = btn ? btn.textContent : (activeLang === 'en' ? 'CONFIRM BOOKING' : 'POTVRDIT REZERVACI');
+            
             const presenterElement = document.getElementById("selected-date-presenter");
-            const vybraneDatum = presenterElement ? presenterElement.innerText : "";
+            const vybraneDatum = presenterElement ? presenterElement.innerText : (activeLang === 'en' ? "Not selected" : "Nevybráno");
             const kompletniTermin = `${vybraneDatum} (${casFrom} - ${casTo})`;
 
             if (btn) {
@@ -783,17 +773,16 @@ document.addEventListener('DOMContentLoaded', () => {
             formPayload.append("projekt", projekt);
             formPayload.append("jazyk", activeLang.toUpperCase());
 
-            try {
-                await fetch(makeWebhookUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    body: formPayload
-                });
-
+            fetch(makeWebhookUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: formPayload
+            })
+            .then(() => {
                 if (btn) {
                     btn.textContent = activeLang === 'en' ? 'CONFIRMED ✓' : 'POTVRZENO ✓';
                     btn.style.background = 'var(--accent-tech)';
-                    btn.style.color = '#080808';
+                    btn.style.color = '#080808'; 
                 }
 
                 const summaryHtml = activeLang === 'en'
@@ -802,52 +791,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 showBookingModal({
                     isError: false,
-                    title: activeLang === 'en' ? 'Booking Request Sent' : 'Poptávka termínu odeslána',
+                    title: activeLang === 'en' ? 'Booking Successfully Sent' : 'Rezervace úspěšně odeslána',
                     text: activeLang === 'en'
-                        ? 'Thank you! We have received your booking request and will confirm it shortly via e-mail.'
-                        : 'Děkujeme! Vaši poptávku jsme v pořádku přijali. Ozveme se vám co nejdříve s potvrzením.',
+                        ? 'Thank you! We have received your booking request and will confirm it shortly.'
+                        : 'Děkujeme! Vaši poptávku termínu jsme v pořádku přijali. Ozveme se vám co nejdříve.',
                     summaryHtml
                 });
-
-                bookingForm.reset();
-                customSelects.forEach(customSelect => {
-                    const trigger = customSelect.querySelector('.custom-select-trigger');
-                    const options = customSelect.querySelectorAll('.custom-options-list li');
-                    const isFrom = customSelect.id === 'custom-time-select-from';
-                    if (trigger) trigger.innerText = isFrom ? labelTimeFrom : labelTimeTo;
-                    customSelect.classList.remove('selected', 'open', 'field-error');
-                    options.forEach(opt => opt.classList.remove('selection'));
-                });
-
-                selectedStartDate = null;
-                selectedEndDate = null;
-                renderCalendar();
-                updateDatePresenter();
-                validateTimeOptions();
-
+                
                 setTimeout(() => {
                     if (btn) {
                         btn.textContent = originalText;
-                        btn.style.background = '';
-                        btn.style.color = '';
+                        btn.style.background = 'transparent';
+                        btn.style.color = 'var(--accent-tech)';
                         btn.style.pointerEvents = 'auto';
                     }
-                }, 2500);
+                    
+                    bookingForm.reset(); 
+                    
+                    customSelects.forEach(customSelect => {
+                        const trigger = customSelect.querySelector('.custom-select-trigger');
+                        const options = customSelect.querySelectorAll('.custom-options-list li');
+                        const isFrom = customSelect.id === 'custom-time-select-from';
+                        
+                        if (trigger) trigger.innerText = isFrom ? labelTimeFrom : labelTimeTo;
+                        customSelect.classList.remove('selected', 'open', 'field-error');
+                        options.forEach(opt => opt.classList.remove('selection'));
+                    });
 
-            } catch (error) {
-                console.error("Chyba při odesílání rezervace:", error);
+                    selectedStartDate = null;
+                    selectedEndDate = null;
+                    
+                    renderCalendar();
+                    updateDatePresenter();
+                    validateTimeOptions();
+
+                }, 3000);
+            })
+            .catch(error => {
+                console.error("Chyba:", error);
                 showBookingModal({
                     isError: true,
-                    title: activeLang === 'en' ? 'Connection Error' : 'Chyba odesílání',
-                    text: activeLang === 'en'
-                        ? 'Please check your internet connection and try again.'
-                        : 'Nepodařilo se spojit se serverem. Zkontrolujte prosím připojení k internetu a zkuste to znovu.'
+                    title: activeLang === 'en' ? 'Technical Error' : 'Technická chyba',
+                    text: activeLang === 'en' ? 'A technical error occurred while sending.' : 'Došlo k technické chybě při odesílání.'
                 });
                 if (btn) {
                     btn.textContent = originalText;
                     btn.style.pointerEvents = 'auto';
                 }
-            }
+            });
         });
     }
 
