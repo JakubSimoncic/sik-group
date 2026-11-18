@@ -13,8 +13,8 @@
     "navLinks": [
       { "text": "Home", "url": "index.html" },
       { "text": "Propagational videos", "url": "propagtion.html" },
-      { "text": "Personal events / Public events", "url": "Personal_events.html" },
-      { "text": "Company events / Private events", "url": "Company_events.html" },
+      { "text": "Personal events", "url": "Personal_events.html" },
+      { "text": "Company events", "url": "Company_events.html" },
       { "text": "E-shop", "url": "public/pages/e-shop.html" },
       { "text": "Our Team", "url": "public/pages/kontakt.html#tym" }
     ]
