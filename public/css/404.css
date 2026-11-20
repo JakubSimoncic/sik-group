@@ -1,7 +1,6 @@
 :root {
     --accent-tech: #00D1C7;
     --text-pure: #ffffff;
-    --text-muted: rgba(255, 255, 255, 0.55);
 }
 
 * {
@@ -19,79 +18,47 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 32px 24px;
+    padding: 24px;
     -webkit-font-smoothing: antialiased;
 }
 
 .error-page {
     max-width: 480px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-.error-logo {
-    margin-bottom: 56px;
-    opacity: 0.85;
-    transition: opacity 0.2s ease;
-}
-
-.error-logo:hover {
-    opacity: 1;
-}
-
-.error-code {
-    font-size: clamp(5.5rem, 18vw, 9rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--text-pure);
-    margin-bottom: 16px;
-    position: relative;
-}
-
-.error-code::after {
-    content: "";
+.error-label {
     display: block;
-    width: 40px;
-    height: 2px;
-    background-color: var(--accent-tech);
-    margin: 24px auto 0 auto;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--accent-tech);
+    margin-bottom: 16px;
 }
 
 .error-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 24px;
-    margin-bottom: 12px;
-}
-
-.error-desc {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 40px;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 36px;
 }
 
 .btn-home {
     display: inline-block;
-    padding: 16px 38px;
-    background-color: #ffffff;
-    color: #000000;
+    padding: 14px 32px;
+    color: var(--text-pure);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     text-decoration: none;
-    border: 1px solid #ffffff;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-home:hover {
-    background-color: transparent;
-    color: #ffffff;
-    transform: translateY(-2px);
+    border-color: #ffffff;
+    background-color: #ffffff;
+    color: #000000;
 }
