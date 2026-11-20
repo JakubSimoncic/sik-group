@@ -4,11 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (activeLang === 'en') {
         document.documentElement.lang = 'en';
         const titleEl = document.getElementById('err-title');
-        const descEl = document.getElementById('err-desc');
         const btnHomeEl = document.getElementById('err-btn-home');
 
-        if (titleEl) titleEl.textContent = 'Page Not Found';
-        if (descEl) descEl.textContent = 'The requested page does not exist or has been moved.';
-        if (btnHomeEl) btnHomeEl.textContent = 'Back to Home';
+        if (titleEl) titleEl.textContent = "We don't shoot here.";
+        if (btnHomeEl) btnHomeEl.textContent = 'Back to home';
     }
 });
