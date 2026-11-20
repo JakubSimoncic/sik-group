@@ -23,7 +23,7 @@ body {
 }
 
 .error-page {
-    max-width: 480px;
+    max-width: 720px;
     width: 100%;
 }
 
@@ -37,11 +37,12 @@ body {
 }
 
 .error-title {
-    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-size: clamp(1.45rem, 5vw, 3.2rem);
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1.15;
     margin-bottom: 36px;
+    white-space: nowrap;
 }
 
 .btn-home {
