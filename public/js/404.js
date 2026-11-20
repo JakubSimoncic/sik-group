@@ -7,6 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnHomeEl = document.getElementById('err-btn-home');
 
         if (titleEl) titleEl.textContent = "We don't shoot here.";
-        if (btnHomeEl) btnHomeEl.textContent = 'Back to home';
+        if (btnHomeEl) btnHomeEl.textContent = 'Back home';
     }
 });
