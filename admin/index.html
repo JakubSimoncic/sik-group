@@ -12,39 +12,116 @@
 </head>
 <body>
 
-<div class="admin-wrapper">
+<!-- OBRAZOVKA 1: PRVNÍ NASTAVENÍ MAJITELE (ZOBRAZÍ SE JEN KDYŽ NENÍ NASTAVEN OWNER) -->
+<div class="login-screen" id="setup-screen" style="display: none;">
+    <div class="login-card" style="max-width: 480px;">
+        <div class="brand-title" style="margin-bottom: 8px;">SIK-GROUP <span>// SETUP</span></div>
+        <p class="login-subtitle">První nastavení přístupu pro majitele (<strong>admin</strong>)</p>
+
+        <form id="cms-setup-form">
+            <div class="field-group">
+                <label>Přihlašovací jméno majitele</label>
+                <input type="text" id="setup-username" value="admin" readonly style="opacity: 0.7;">
+            </div>
+
+            <div class="field-group">
+                <label for="setup-password">Zvolte si své běžné heslo</label>
+                <input type="password" id="setup-password" required minlength="6" placeholder="Minimálně 6 znaků">
+            </div>
+
+            <div class="field-group">
+                <label for="setup-password-confirm">Potvrzení hesla</label>
+                <input type="password" id="setup-password-confirm" required minlength="6" placeholder="Zopakujte heslo">
+            </div>
+
+            <div class="field-group">
+                <label for="setup-token">GitHub API klíč (uloží se zašifrovaně)</label>
+                <input type="password" id="setup-token" required placeholder="github_pat_... nebo ghp_...">
+            </div>
+
+            <div class="login-error" id="setup-error"></div>
+
+            <button type="submit" class="btn-primary" id="setup-submit-btn" style="width: 100%;">
+                Uložit a aktivovat CMS
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- OBRAZOVKA 2: BĚŽNÉ PŘIHLÁŠENÍ + RESET HESLA -->
+<div class="login-screen" id="login-screen" style="display: none;">
+    <div class="login-card">
+        <div class="brand-title" style="margin-bottom: 8px;">SIK-GROUP <span>// CMS</span></div>
+        <p class="login-subtitle" id="auth-card-subtitle">Přihlášení do správy obsahu</p>
+
+        <!-- FORMULÁŘ: BĚŽNÉ PŘIHLÁŠENÍ -->
+        <form id="cms-login-form">
+            <div class="field-group">
+                <label for="login-username">Přihlašovací jméno</label>
+                <input type="text" id="login-username" required autocomplete="username" placeholder="Např. admin nebo jmeno">
+            </div>
+
+            <div class="field-group">
+                <label for="login-password">Heslo</label>
+                <input type="password" id="login-password" required autocomplete="current-password" placeholder="Zadejte své heslo">
+            </div>
+
+            <div class="login-error" id="login-error"></div>
+
+            <button type="submit" class="btn-primary" id="login-submit-btn" style="width: 100%; margin-top: 4px;">
+                Přihlásit se
+            </button>
+
+            <div style="margin-top: 18px; text-align: center;">
+                <button type="button" class="link-btn" id="open-reset-mode-btn">
+                    První přihlášení / Zapomenuté heslo
+                </button>
+            </div>
+        </form>
+
+        <!-- FORMULÁŘ: NASTAVENÍ NOVÉHO HESLA POMOCÍ RESETOVACÍHO PINU -->
+        <form id="cms-reset-form" style="display: none;">
+            <div class="field-group">
+                <label for="reset-username">Přihlašovací jméno</label>
+                <input type="text" id="reset-username" required placeholder="Např. jan nebo admin">
+            </div>
+
+            <div class="field-group">
+                <label for="reset-pin">Resetovací PIN / Recovery kód</label>
+                <input type="text" id="reset-pin" required placeholder="Např. 482-915">
+            </div>
+
+            <div class="field-group">
+                <label for="reset-new-password">Nové vlastní heslo</label>
+                <input type="password" id="reset-new-password" required minlength="6" placeholder="Minimálně 6 znaků">
+            </div>
+
+            <div class="login-error" id="reset-error"></div>
+
+            <button type="submit" class="btn-primary" id="reset-submit-btn" style="width: 100%; margin-top: 4px;">
+                Nastavit nové heslo a přihlásit
+            </button>
+
+            <div style="margin-top: 18px; text-align: center;">
+                <button type="button" class="link-btn" id="back-to-login-btn">
+                    ← Zpět na přihlášení
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- HLAVNÍ CMS ROZHRANÍ -->
+<div class="admin-wrapper" id="admin-wrapper" style="display: none;">
     
     <div class="header-bar">
         <div class="brand-title">SIK-GROUP <span>// CMS</span></div>
         <div class="header-right">
+            <span class="logged-user-badge" id="logged-user-badge"></span>
             <button class="lang-switch-btn active" id="lang-cz-btn" type="button" onclick="setAdminLanguage('cz')">CZ</button>
             <button class="lang-switch-btn" id="lang-en-btn" type="button" onclick="setAdminLanguage('en')">EN</button>
-            <button class="settings-toggle-btn" id="toggle-settings-btn" type="button">⚙ NASTAVENÍ</button>
+            <button class="settings-toggle-btn" id="logout-btn" type="button">Odhlásit</button>
         </div>
-    </div>
-
-    <!-- PANEL NASTAVENÍ GITHUBU -->
-    <div class="config-panel" id="config-panel">
-        <h3 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--accent-cyan);">Konfigurace GitHub Repozitáře</h3>
-        <div class="form-grid-3">
-            <div class="field-group">
-                <label>Vlastník (Owner)</label>
-                <input type="text" id="gh-owner" value="JakubSimoncic">
-            </div>
-            <div class="field-group">
-                <label>Repozitář (Repo)</label>
-                <input type="text" id="gh-repo" value="sik-group">
-            </div>
-            <div class="field-group">
-                <label>Větev (Branch)</label>
-                <input type="text" id="gh-branch" value="main">
-            </div>
-        </div>
-        <div class="field-group">
-            <label>Personal Access Token (PAT)</label>
-            <input type="password" id="gh-token" placeholder="github_pat_...">
-        </div>
-        <button class="btn-secondary" id="save-config-btn" type="button">Uložit</button>
     </div>
 
     <!-- VIEW 1: ROZCESTNÍK -->
@@ -57,6 +134,23 @@
         </div>
         
         <div class="list-container" id="dashboard-list"></div>
+
+        <!-- KARTA PRO MAJITELSKOU SPRÁVU PŘÍSTUPŮ (ZOBRAZÍ SE JEN MAJITELI) -->
+        <div id="owner-access-card-container" style="display: none; margin-top: 20px;">
+            <hr style="border: 0; border-top: 1px solid var(--card-border); margin-bottom: 25px;">
+            <div class="item-card" style="border-color: rgba(0, 209, 199, 0.35);">
+                <div class="item-info">
+                    <div class="item-thumb">🔐</div>
+                    <div class="item-details">
+                        <h4>Správa přístupů &amp; Resetovací kódy</h4>
+                        <p>Přidávání zaměstnanců, zobrazení a generování PIN kódů pro reset hesel</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-primary" onclick="openUsersManager()" type="button">Spravovat přístupy</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- VIEW 2: PRODUKTY & TEXTY E-SHOPU -->
@@ -66,7 +160,6 @@
             <h3 style="font-size: 1.1rem; text-transform: uppercase;">E-Shop (Správa textů a produktů)</h3>
         </div>
 
-        <!-- Úprava VŠECH textů e-shopu -->
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 8px; margin-bottom: 30px;">
             <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Nastavení a texty E-shopu</h4>
             <div id="shop-texts-dynamic-fields" class="form-grid-2"></div>
@@ -109,7 +202,6 @@
                     </div>
                 </div>
 
-                <!-- OBRÁZEK / SOUBOR PRODUKTU -->
                 <div class="form-grid-2">
                     <div class="field-group">
                         <label>Nahrát nový obrázek / video</label>
@@ -121,7 +213,6 @@
                     </div>
                 </div>
 
-                <!-- Specifikace / Tag (CZ / EN rozlišené) -->
                 <div class="form-grid-2">
                     <div class="field-group cz-only-field">
                         <label>Specifikace / Tag <span class="lang-badge">[CZ]</span></label>
@@ -133,7 +224,6 @@
                     </div>
                 </div>
 
-                <!-- Popis dronu (CZ / EN rozlišené) -->
                 <div class="form-grid-2">
                     <div class="field-group cz-only-field">
                         <label>Popis dronu <span class="lang-badge">[CZ]</span></label>
@@ -183,6 +273,47 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <!-- VIEW 4: SPRÁVA PŘÍSTUPŮ & RESETOVACÍCH KÓDŮ (POUZE PRO MAJITELE) -->
+    <div class="admin-view" id="view-users">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;">Správa přístupů &amp; Resetovací kódy</h3>
+        </div>
+
+        <!-- NOUZOVÝ RECOVERY KLÍČ PRO ÚČET ADMIN -->
+        <div id="owner-recovery-box" style="background: rgba(0, 209, 199, 0.06); border: 1px solid rgba(0, 209, 199, 0.35); padding: 18px 24px; border-radius: 8px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; gap: 15px;">
+            <div>
+                <h4 style="font-size: 0.85rem; color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 4px;">Nouzový Recovery PIN pro účet admin</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Ulož si tento kód bokem – pokud zapomeneš heslo k účtu <strong>admin</strong>, obnovíš ho tímto kódem.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="pin-badge" id="owner-recovery-pin-display">—</span>
+                <button type="button" class="btn-secondary" onclick="regenerateOwnerRecoveryPin()">Nový PIN</button>
+            </div>
+        </div>
+
+        <!-- PŘIDÁNÍ NOVÉHO ZAMĚSTNANCE -->
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 8px; margin-bottom: 30px;">
+            <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Přidat nový přístup pro zaměstnance</h4>
+            <form id="add-user-form">
+                <div class="form-grid-2">
+                    <div class="field-group">
+                        <label for="new-user-label">Jméno zaměstnance (zobrazí se v seznamu)</label>
+                        <input type="text" id="new-user-label" required placeholder="Např. Jan Novák">
+                    </div>
+                    <div class="field-group">
+                        <label for="new-user-login">Přihlašovací jméno (login)</label>
+                        <input type="text" id="new-user-login" required placeholder="Např. jan">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" id="add-user-submit-btn">Vytvořit účet a vygenerovat PIN</button>
+            </form>
+        </div>
+
+        <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Aktivní účty zaměstnanců a jejich resetovací PINy</h4>
+        <div class="list-container" id="users-list"></div>
     </div>
 
     <!-- TERMINÁL PROCESU -->
