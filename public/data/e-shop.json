@@ -8,9 +8,21 @@
   "sortPriceDesc": "NEJVYŠŠÍ > NEJNIŽŠÍ",
   "resetAllFiltersText": "✕ Resetovat všechny filtry",
   "captionCategories": "Kategorie //",
-  "catCinematicText": "Cinematic",
-  "catLongrangeText": "SPECIAL",
-  "catFreestyleText": "Freestyle",
+  "catAllText": "Všechny",
+  "categories": [
+    {
+      "id": "cinematic",
+      "label": "Cinematic"
+    },
+    {
+      "id": "longrange",
+      "label": "SPECIAL"
+    },
+    {
+      "id": "freestyle",
+      "label": "Freestyle"
+    }
+  ],
   "captionPriceRange": "Cenové rozpětí",
   "pricePrefixFrom": "Od",
   "pricePrefixTo": "do",
