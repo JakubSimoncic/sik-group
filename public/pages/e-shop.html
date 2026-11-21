@@ -22,7 +22,6 @@
                     </a>
                 </div>
                 
-                <!-- PŘIDÁNO: Kontejner pro přepínač jazyků a hamburger menu vpravo -->
                 <div class="nav-right-controls">
                     <div class="lang-switcher" id="dynamic-lang-switcher"></div>
                     
@@ -95,26 +94,7 @@
 
                 <div class="tech-filter-group">
                     <h4 class="tech-filter-caption" id="caption-categories"></h4>
-                    <ul class="tech-filter-list">
-                        <li>
-                            <label class="tech-checkbox-label">
-                                <input type="checkbox" class="category-filter" value="cinematic">
-                                <span class="custom-box"></span> <span id="label-cat-cinematic"></span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="tech-checkbox-label">
-                                <input type="checkbox" class="category-filter" value="longrange">
-                                <span class="custom-box"></span> <span id="label-cat-longrange"></span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="tech-checkbox-label">
-                                <input type="checkbox" class="category-filter" value="freestyle">
-                                <span class="custom-box"></span> <span id="label-cat-freestyle"></span>
-                            </label>
-                        </li>
-                    </ul>
+                    <ul class="tech-filter-list" id="category-filter-list"></ul>
                 </div>
 
                 <div class="tech-filter-group">
@@ -161,7 +141,7 @@
         <button type="button" class="tech-modal-close" id="modal-close-btn" aria-label="Zavřít detail">✕</button>
         <div class="tech-modal-grid">
             <div class="tech-modal-media">
-                <img id="modal-img" src="../img/drone.png" alt="Detail dronu" loading="lazy">
+                <img id="modal-img" src="../img/drone.png" alt="Detail produktu" loading="lazy">
                 <div class="tech-modal-img-badge" id="modal-category-badge"></div>
             </div>
             <div class="tech-modal-content">
