@@ -153,41 +153,54 @@
         </div>
     </div>
 
-    <!-- VIEW 2: PRODUKTY & TEXTY E-SHOPU -->
+    <!-- VIEW 2: PRODUKTY, KATEGORIE & TEXTY E-SHOPU -->
     <div class="admin-view" id="view-products">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <button class="btn-secondary" onclick="showDashboard()" type="button">← Zpět</button>
-            <h3 style="font-size: 1.1rem; text-transform: uppercase;">E-Shop (Správa textů a produktů)</h3>
+            <h3 style="font-size: 1.1rem; text-transform: uppercase;">E-Shop (Správa kategorií, textů a produktů)</h3>
         </div>
 
+        <!-- SPRÁVA KATEGORIÍ E-SHOPU -->
+        <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 8px; margin-bottom: 30px;">
+            <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 8px; text-transform: uppercase;">Správa kategorií E-shopu</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 18px;">Kategorie se automaticky propíší do filtru na e-shopu (včetně položky „Všechny“ / „All“).</p>
+
+            <div class="list-container" id="categories-list" style="margin-bottom: 20px;"></div>
+
+            <form id="add-category-form" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+                <div class="field-group" style="flex: 1; min-width: 220px; margin-bottom: 0;">
+                    <label for="new-category-name">Název nové kategorie (např. Baterie)</label>
+                    <input type="text" id="new-category-name" required placeholder="Např. Baterie">
+                </div>
+                <button type="submit" class="btn-primary" id="add-category-btn">+ Přidat kategorii</button>
+            </form>
+        </div>
+
+        <!-- TEXTY E-SHOPU -->
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 24px; border-radius: 8px; margin-bottom: 30px;">
             <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Nastavení a texty E-shopu</h4>
             <div id="shop-texts-dynamic-fields" class="form-grid-2"></div>
             <button type="button" class="btn-secondary" id="save-shop-texts-btn" style="margin-top: 15px;">Uložit texty E-Shopu</button>
         </div>
 
-        <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Seznam Dronů</h4>
+        <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 15px; text-transform: uppercase;">Seznam produktů</h4>
         <div class="list-container" id="products-list"></div>
 
         <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
         <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 8px;" id="product-form-container">
-            <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="product-form-title">Přidat nový dron</h3>
+            <h3 style="margin-bottom: 24px; font-size: 1.1rem; color: var(--accent-cyan); text-transform: uppercase;" id="product-form-title">Přidat nový produkt</h3>
             <form id="product-form">
                 <input type="hidden" id="edit-prod-id">
                 
                 <div class="form-grid-2">
                     <div class="field-group">
-                        <label>Název dronu</label>
-                        <input type="text" id="prod-title" required placeholder="SpeedIK v2">
+                        <label>Název produktu</label>
+                        <input type="text" id="prod-title" required placeholder="SpeedIK v2 nebo SIK LBS Baterie">
                     </div>
                     <div class="field-group">
                         <label>Kategorie</label>
-                        <select id="prod-category">
-                            <option value="cinematic">FPV Cinematic</option>
-                            <option value="longrange">Longrange</option>
-                            <option value="freestyle">Freestyle</option>
-                        </select>
+                        <select id="prod-category"></select>
                     </div>
                 </div>
 
@@ -226,12 +239,12 @@
 
                 <div class="form-grid-2">
                     <div class="field-group cz-only-field">
-                        <label>Popis dronu <span class="lang-badge">[CZ]</span></label>
-                        <textarea id="prod-desc" rows="4" placeholder="Český popis dronu..."></textarea>
+                        <label>Popis produktu <span class="lang-badge">[CZ]</span></label>
+                        <textarea id="prod-desc" rows="4" placeholder="Český popis produktu..."></textarea>
                     </div>
                     <div class="field-group en-only-field" style="display:none;">
-                        <label>Popis dronu <span class="lang-badge">[EN]</span></label>
-                        <textarea id="prod-desc-en" rows="4" placeholder="English description of the drone..."></textarea>
+                        <label>Popis produktu <span class="lang-badge">[EN]</span></label>
+                        <textarea id="prod-desc-en" rows="4" placeholder="English description of the product..."></textarea>
                     </div>
                 </div>
 
@@ -242,7 +255,7 @@
                 </div>
 
                 <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit dron</button>
+                    <button type="submit" class="btn-primary" id="save-prod-btn">Uložit produkt</button>
                     <button type="button" class="btn-secondary" id="cancel-edit-btn" style="display: none;">Zrušit úpravy</button>
                 </div>
             </form>
