@@ -1,9 +1,4 @@
 {
-  "owner": {
-    "loginHash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-    "encryptedTokenByPassword": "hMGkDx9hD0Et3ZBC00DM3Sd4XiRmBad1vdWIbSH+me+ox73LJVg339d/WO79xv7dTXTewCaPo6TcGvswAXf6vn3LD9Hrbkmi4GTQEYZ5C2Qgjomr",
-    "encryptedTokenByRecovery": "aHMhumvArlmgJLebHUui3EvbBNKtFaxlMZCbqaigfMpG/x9/o55NdIMmLDGLhjwvgf4EbqwnMa/9L0tHQNKUtYNDwxi2JfZfexWY4PNb1fhSVSPO",
-    "encryptedRecoveryPin": "7Jc4IPTTDWNFfuwiL3XmZtO23LBvkVrsve1OCGp4sPUIvFdEBnQ5g035aYJH9tfWBbT/"
-  },
+  "owner": null,
   "users": []
 }
