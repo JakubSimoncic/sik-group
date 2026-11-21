@@ -12,6 +12,7 @@ const USERS_DATA_FILE = 'public/data/cms-users.json';
 
 let currentAdminLang = 'cz';
 let productsData = [];
+let categoriesData = [];
 let fullShopData = {};
 let pagesData = [];
 let currentLoadedPageData = {};
@@ -163,7 +164,6 @@ function unlockCms(displayName, isOwner, token) {
     log(`Přihlášen uživatel: ${displayName}${isOwner ? ' (Majitel)' : ''}`, 'success');
 }
 
-// Přepínání mezi Loginem a Resetem hesla
 document.getElementById('open-reset-mode-btn').addEventListener('click', () => {
     document.getElementById('cms-login-form').style.display = 'none';
     document.getElementById('cms-reset-form').style.display = 'block';
@@ -236,7 +236,7 @@ document.getElementById('cms-setup-form').addEventListener('submit', async (e) =
     unlockCms('admin', true, token);
 });
 
-// 2. BĚŽNÉ PŘIHLÁŠENÍ (JMÉNO + HESLO -> AUTOMATICKÉ DEŠIFROVÁNÍ API KLÍČE)
+// 2. BĚŽNÉ PŘIHLÁŠENÍ
 document.getElementById('cms-login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const errorEl = document.getElementById('login-error');
@@ -252,7 +252,6 @@ document.getElementById('cms-login-form').addEventListener('submit', async (e) =
     cmsAccessStore = await fetchAccessStore();
     const loginHash = await sha256Hex(loginInput);
 
-    // A) Přihlášení majitele ("admin")
     if (loginHash === OWNER_LOGIN_HASH && cmsAccessStore.owner) {
         const decryptedToken = await decryptSecret(cmsAccessStore.owner.encryptedTokenByPassword, passwordInput);
         if (decryptedToken && await verifyGithubToken(decryptedToken)) {
@@ -268,7 +267,6 @@ document.getElementById('cms-login-form').addEventListener('submit', async (e) =
         return;
     }
 
-    // B) Přihlášení zaměstnance
     const userRecord = cmsAccessStore.users.find(u => u.loginHash === loginHash);
     if (!userRecord) {
         errorEl.textContent = 'Uživatel s tímto přihlašovacím jménem neexistuje.';
@@ -316,7 +314,6 @@ document.getElementById('cms-reset-form').addEventListener('submit', async (e) =
     cmsAccessStore = await fetchAccessStore();
     const loginHash = await sha256Hex(loginInput);
 
-    // A) Reset hesla majitele ("admin") přes Recovery PIN
     if (loginHash === OWNER_LOGIN_HASH && cmsAccessStore.owner) {
         const decryptedToken = await decryptSecret(cmsAccessStore.owner.encryptedTokenByRecovery, pinInput);
         if (!decryptedToken || !(await verifyGithubToken(decryptedToken))) {
@@ -347,7 +344,6 @@ document.getElementById('cms-reset-form').addEventListener('submit', async (e) =
         return;
     }
 
-    // B) Reset hesla zaměstnance přes PIN od majitele
     const userIdx = cmsAccessStore.users.findIndex(u => u.loginHash === loginHash);
     if (userIdx === -1) {
         errorEl.textContent = 'Uživatel nenalezen.';
@@ -365,7 +361,6 @@ document.getElementById('cms-reset-form').addEventListener('submit', async (e) =
         return;
     }
 
-    // Zašifrujeme API klíč novým heslem zaměstnance (PIN zůstává uložený pro příští reset nebo ho majitel může obnovit)
     cmsAccessStore.users[userIdx].encryptedTokenByPassword = await encryptSecret(decryptedToken, newPassword);
 
     const displayName = (await decryptSecret(userRecord.encryptedLabel, decryptedToken)) || loginInput;
@@ -384,7 +379,6 @@ document.getElementById('cms-reset-form').addEventListener('submit', async (e) =
     unlockCms(displayName, false, decryptedToken);
 });
 
-// Kontrola stávající relace při načtení stránky
 async function bootCmsAuth() {
     localStorage.removeItem('sik_gh_token');
     cmsAccessStore = await fetchAccessStore();
@@ -435,7 +429,6 @@ async function loadAndRenderUsers() {
     cmsAccessStore = await fetchAccessStore();
     const token = sessionStorage.getItem('sik_cms_token');
 
-    // Zobrazení nouzového Recovery PINu pro samotného majitele
     const ownerPinDisplay = document.getElementById('owner-recovery-pin-display');
     if (ownerPinDisplay && cmsAccessStore.owner && cmsAccessStore.owner.encryptedRecoveryPin && token) {
         const decryptedOwnerPin = await decryptSecret(cmsAccessStore.owner.encryptedRecoveryPin, token);
@@ -489,7 +482,6 @@ function copyResetPin(pin) {
     log(`Resetovací PIN (${pin}) zkopírován do schránky.`, 'success');
 }
 
-// Přidání nového zaměstnance
 document.getElementById('add-user-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!isCurrentUserOwner) return;
@@ -534,7 +526,6 @@ document.getElementById('add-user-form').addEventListener('submit', async (e) =>
     await loadAndRenderUsers();
 });
 
-// Vygenerování nového resetovacího PINu pro existujícího zaměstnance (bez smazání účtu)
 async function regenerateUserResetPin(userId) {
     if (!isCurrentUserOwner) return;
     const token = sessionStorage.getItem('sik_cms_token');
@@ -554,7 +545,6 @@ async function regenerateUserResetPin(userId) {
     await loadAndRenderUsers();
 }
 
-// Vygenerování nového nouzového Recovery PINu pro majitele
 async function regenerateOwnerRecoveryPin() {
     if (!isCurrentUserOwner) return;
     const token = sessionStorage.getItem('sik_cms_token');
@@ -657,8 +647,8 @@ async function initData() {
     } catch (e) {
         log('Chyba při načítání pages.json: ' + e.message, 'error');
         pagesData = [
-            { "id": "eshop-products-cz", "title": "E-shop Produkty [CZ]", "description": "Správa aktivních dronů a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
-            { "id": "eshop-products-en", "title": "E-shop Products [EN]", "description": "Active drones and pricing management", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop_en.json", "lang": "en" },
+            { "id": "eshop-products-cz", "title": "E-shop Produkty [CZ]", "description": "Správa aktivních produktů, kategorií a cen", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop.json", "lang": "cz" },
+            { "id": "eshop-products-en", "title": "E-shop Products [EN]", "description": "Active products, categories and pricing management", "icon": "🛒", "type": "products", "dataFile": "public/data/e-shop_en.json", "lang": "en" },
             { "id": "home-cz", "title": "Úvodní stránka", "description": "Správa obsahu hlavní stránky", "icon": "📄", "type": "page", "dataFile": "public/data/index.json", "lang": "cz" },
             { "id": "home-en", "title": "Home Page [EN]", "description": "Main page content management", "icon": "📄", "type": "page", "dataFile": "public/data/index_en.json", "lang": "en" },
             { "id": "contact-cz", "title": "Kontakt & Tým", "description": "Správa kontaktů a podpory", "icon": "📞", "type": "page", "dataFile": "public/data/kontakt.json", "lang": "cz" },
@@ -748,6 +738,192 @@ function renderFlatFields(obj, prefix = '', container) {
     });
 }
 
+// ==========================================================================
+// SPRÁVA KATEGORIÍ E-SHOPU (DYNAMICKÉ KATEGORIE + SYNCHRONIZACE)
+// ==========================================================================
+function slugifyCategory(name) {
+    return String(name)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || ('cat-' + Date.now());
+}
+
+function getNormalizedCategories(shopJson) {
+    if (Array.isArray(shopJson.categories) && shopJson.categories.length > 0) {
+        return shopJson.categories;
+    }
+    return [
+        { id: 'cinematic', label: shopJson.catCinematicText || 'Cinematic' },
+        { id: 'longrange', label: shopJson.catLongrangeText || 'SPECIAL' },
+        { id: 'freestyle', label: shopJson.catFreestyleText || 'Freestyle' }
+    ];
+}
+
+function renderCategoriesManager() {
+    const container = document.getElementById('categories-list');
+    const selectEl = document.getElementById('prod-category');
+
+    if (selectEl) {
+        const previousVal = selectEl.value;
+        selectEl.innerHTML = '';
+        categoriesData.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.id;
+            opt.textContent = cat.label;
+            selectEl.appendChild(opt);
+        });
+        if (previousVal && categoriesData.some(c => c.id === previousVal)) {
+            selectEl.value = previousVal;
+        }
+    }
+
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (categoriesData.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted);">Zatím nejsou nastaveny žádné kategorie.</p>';
+        return;
+    }
+
+    categoriesData.forEach(cat => {
+        const usedCount = productsData.filter(p => String(p.category).toLowerCase() === String(cat.id).toLowerCase()).length;
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.style.padding = '12px 16px';
+        card.innerHTML = `
+            <div class="item-info">
+                <div class="item-thumb" style="width: 38px; height: 38px; font-size: 1rem;">🏷️</div>
+                <div class="item-details">
+                    <h4>${escapeHtml(cat.label)}</h4>
+                    <p>ID: ${escapeHtml(cat.id)} // Počet produktů: ${usedCount}</p>
+                </div>
+            </div>
+            <div class="item-actions">
+                <button class="btn-secondary" onclick="renameCategory('${escapeHtml(cat.id)}')" type="button">Přejmenovat</button>
+                <button class="btn-delete" onclick="deleteCategory('${escapeHtml(cat.id)}')" type="button">Smazat</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+document.getElementById('add-category-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('new-category-name');
+    const label = input.value.trim();
+    if (!label) return;
+
+    let id = slugifyCategory(label);
+    if (categoriesData.some(c => c.id === id)) {
+        id = `${id}-${Date.now().toString().slice(-4)}`;
+    }
+
+    const btn = document.getElementById('add-category-btn');
+    btn.disabled = true;
+    btn.textContent = 'Ukládám...';
+
+    const newCat = { id, label };
+    categoriesData.push(newCat);
+    fullShopData.categories = categoriesData;
+    fullShopData.products = productsData;
+
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const primaryFile = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+    const secondaryFile = itemLang === 'en' ? 'public/data/e-shop.json' : 'public/data/e-shop_en.json';
+
+    await commitFileToGithub(primaryFile, fullShopData, `CMS: Přidána kategorie "${label}" (${itemLang.toUpperCase()})`);
+
+    // Automatická synchronizace nové kategorie i do druhého jazykového souboru e-shopu
+    try {
+        const secRes = await fetch(`../${secondaryFile}?t=${Date.now()}`);
+        if (secRes.ok) {
+            const secData = await secRes.json();
+            const secCats = getNormalizedCategories(secData);
+            if (!secCats.some(c => c.id === id)) {
+                secCats.push({ id, label });
+                secData.categories = secCats;
+                await commitFileToGithub(secondaryFile, secData, `CMS: Synchronizována kategorie "${label}"`);
+            }
+        }
+    } catch {
+        // Ignorujeme pokud druhý soubor neexistuje
+    }
+
+    input.value = '';
+    btn.disabled = false;
+    btn.textContent = '+ Přidat kategorii';
+    renderCategoriesManager();
+});
+
+async function renameCategory(catId) {
+    const cat = categoriesData.find(c => c.id === catId);
+    if (!cat) return;
+
+    const newLabel = prompt('Zadejte nový název kategorie:', cat.label);
+    if (!newLabel || !newLabel.trim() || newLabel.trim() === cat.label) return;
+
+    cat.label = newLabel.trim();
+
+    // Aktualizace popisku u existujících produktů v této kategorii
+    productsData.forEach(p => {
+        if (String(p.category).toLowerCase() === String(catId).toLowerCase()) {
+            p.categoryLabel = cat.label;
+        }
+    });
+
+    fullShopData.categories = categoriesData;
+    fullShopData.products = productsData;
+
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+
+    await commitFileToGithub(filePath, fullShopData, `CMS: Přejmenována kategorie na "${cat.label}" (${itemLang.toUpperCase()})`);
+    renderCategoriesManager();
+    renderProductsList();
+}
+
+async function deleteCategory(catId) {
+    const cat = categoriesData.find(c => c.id === catId);
+    if (!cat) return;
+
+    if (categoriesData.length <= 1) {
+        log('Chyba: V e-shopu musí zůstat alespoň jedna kategorie.', 'error');
+        return;
+    }
+
+    if (!confirm(`Opravdu chcete smazat kategorii "${cat.label}"?`)) return;
+
+    categoriesData = categoriesData.filter(c => c.id !== catId);
+    fullShopData.categories = categoriesData;
+    fullShopData.products = productsData;
+
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const primaryFile = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+    const secondaryFile = itemLang === 'en' ? 'public/data/e-shop.json' : 'public/data/e-shop_en.json';
+
+    await commitFileToGithub(primaryFile, fullShopData, `CMS: Smazána kategorie "${cat.label}" (${itemLang.toUpperCase()})`);
+
+    try {
+        const secRes = await fetch(`../${secondaryFile}?t=${Date.now()}`);
+        if (secRes.ok) {
+            const secData = await secRes.json();
+            const secCats = getNormalizedCategories(secData).filter(c => c.id !== catId);
+            secData.categories = secCats;
+            await commitFileToGithub(secondaryFile, secData, `CMS: Odstraněna kategorie "${cat.label}"`);
+        }
+    } catch {
+        // Ignorujeme pokud druhý soubor neexistuje
+    }
+
+    renderCategoriesManager();
+}
+
+// ==========================================================================
+// OTEVŘENÍ SEKCE V CMS
+// ==========================================================================
 async function openSection(id) {
     const item = pagesData.find(p => p.id === id);
     if (!item) return;
@@ -771,11 +947,14 @@ async function openSection(id) {
                 productsData = fullShopData.products || [];
             }
 
+            categoriesData = getNormalizedCategories(fullShopData);
+            fullShopData.categories = categoriesData;
+
             const textsContainer = document.getElementById('shop-texts-dynamic-fields');
             textsContainer.innerHTML = '';
 
             Object.keys(fullShopData).forEach(key => {
-                if (key !== 'products') {
+                if (key !== 'products' && key !== 'categories' && typeof fullShopData[key] !== 'object') {
                     const fieldGroup = document.createElement('div');
                     fieldGroup.className = 'field-group';
 
@@ -791,6 +970,7 @@ async function openSection(id) {
                 }
             });
 
+            renderCategoriesManager();
             adjustProductFormLanguage();
             renderProductsList();
             switchView('view-products');
@@ -852,12 +1032,15 @@ function renderProductsList() {
         const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
         const eurPrice = p.eurPrice ? p.eurPrice.toLocaleString('cs-CZ') : Math.round((p.price || 0) / 25);
 
+        const matchedCat = categoriesData.find(c => c.id === p.category);
+        const catDisplay = matchedCat ? matchedCat.label : (p.categoryLabel || p.category);
+
         card.innerHTML = `
             <div class="item-info">
                 <img src="${imgPath}" alt="${p.title}" class="item-thumb" style="object-fit: cover;">
                 <div class="item-details">
                     <h4>${p.title}</h4>
-                    <p>${p.categoryLabel || p.category} // ${formattedPrice} Kč / ${eurPrice} EUR</p>
+                    <p>${escapeHtml(catDisplay)} // ${formattedPrice} Kč / ${eurPrice} EUR</p>
                 </div>
             </div>
             <div class="item-actions">
@@ -891,7 +1074,18 @@ function editProduct(id) {
     document.getElementById('prod-title').value = prod.title;
     document.getElementById('prod-price').value = prod.price;
     document.getElementById('prod-eur-price').value = prod.eurPrice || Math.round(prod.price / 25);
-    document.getElementById('prod-category').value = prod.category;
+
+    const catSelect = document.getElementById('prod-category');
+    if (catSelect) {
+        if (!categoriesData.some(c => c.id === prod.category) && prod.category) {
+            const opt = document.createElement('option');
+            opt.value = prod.category;
+            opt.textContent = prod.categoryLabel || prod.category;
+            catSelect.appendChild(opt);
+        }
+        catSelect.value = prod.category;
+    }
+
     document.getElementById('prod-tag').value = prod.tag || '';
     document.getElementById('prod-tag-en').value = prod.tagEn || prod.tag || '';
     document.getElementById('prod-desc').value = prod.description || '';
@@ -906,18 +1100,18 @@ function editProduct(id) {
         Object.entries(prod.specs).forEach(([k, v]) => addSpecRow(k, v));
     }
 
-    document.getElementById('product-form-title').textContent = `Upravit dron: ${prod.title}`;
+    document.getElementById('product-form-title').textContent = `Upravit produkt: ${prod.title}`;
     document.getElementById('cancel-edit-btn').style.display = 'inline-block';
 
     const formContainer = document.getElementById('product-form-container');
     formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    log(`Načten k úpravě dron: ${prod.title}`, 'success');
+    log(`Načten k úpravě produkt: ${prod.title}`, 'success');
 }
 
 function resetProductForm() {
     document.getElementById('product-form').reset();
     document.getElementById('edit-prod-id').value = '';
-    document.getElementById('product-form-title').textContent = 'Přidat nový dron';
+    document.getElementById('product-form-title').textContent = 'Přidat nový produkt';
     document.getElementById('cancel-edit-btn').style.display = 'none';
     const imgInput = document.getElementById('prod-image-path');
     if (imgInput) imgInput.value = '';
@@ -1041,6 +1235,7 @@ document.getElementById('save-shop-texts-btn').addEventListener('click', async (
         fullShopData[k] = input.value;
     });
 
+    fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
     const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
@@ -1139,7 +1334,8 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
         if (k && v) specs[k] = v;
     });
 
-    const catLabels = { cinematic: 'FPV Cinematic', longrange: 'Longrange', freestyle: 'Freestyle' };
+    const selectedCat = categoriesData.find(c => c.id === category);
+    const categoryLabel = selectedCat ? selectedCat.label : category;
 
     if (editId) {
         const idx = productsData.findIndex(p => String(p.id) === String(editId));
@@ -1147,7 +1343,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
             productsData[idx] = {
                 ...productsData[idx],
                 title, price, eurPrice, category, tag, tagEn, description: desc, descriptionEn: descEn, specs,
-                categoryLabel: catLabels[category],
+                categoryLabel,
                 image: imagePath
             };
         }
@@ -1155,7 +1351,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
         const newProd = {
             id: String(Date.now()),
             title, price, eurPrice, category, tag, tagEn, description: desc, descriptionEn: descEn, specs,
-            categoryLabel: catLabels[category],
+            categoryLabel,
             stock: "skladem",
             image: imagePath
         };
@@ -1164,31 +1360,32 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
 
     renderProductsList();
 
+    fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
     const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
     const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
 
-    await commitFileToGithub(filePath, fullShopData, `CMS: Uložen dron ${title} (${itemLang.toUpperCase()})`);
+    await commitFileToGithub(filePath, fullShopData, `CMS: Uložen produkt ${title} (${itemLang.toUpperCase()})`);
     resetProductForm();
 });
 
 async function deleteProduct(id) {
     const prod = productsData.find(p => String(p.id) === String(id));
-    if (!confirm(`Opravdu chcete smazat dron "${prod ? prod.title : id}"?`)) return;
+    if (!confirm(`Opravdu chcete smazat produkt "${prod ? prod.title : id}"?`)) return;
 
     productsData = productsData.filter(p => String(p.id) !== String(id));
     renderProductsList();
 
+    fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
     const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
     const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
 
-    await commitFileToGithub(filePath, fullShopData, `CMS: Smazán dron ${prod ? prod.title : id} (${itemLang.toUpperCase()})`);
+    await commitFileToGithub(filePath, fullShopData, `CMS: Smazán produkt ${prod ? prod.title : id} (${itemLang.toUpperCase()})`);
 }
 
-// Spuštění autentizace při otevření stránky
 bootCmsAuth();
 
 const cmsFieldLabels = {
@@ -1201,6 +1398,7 @@ const cmsFieldLabels = {
     "sortPriceDesc": "Text řazení: Nejvyšší > Nejvyšší",
     "resetAllFiltersText": "Tlačítko: Resetovat všechny filtry",
     "captionCategories": "Nadpis sekce: Kategorie",
+    "catAllText": "Kategorie: Všechny",
     "catCinematicText": "Kategorie: FPV Cinematic",
     "catLongrangeText": "Kategorie: Longrange",
     "catFreestyleText": "Kategorie: Freestyle",
@@ -1211,8 +1409,8 @@ const cmsFieldLabels = {
     "resetPriceText": "Tlačítko: Resetovat cenu",
     "captionStock": "Nadpis sekce: Dostupnost",
     "stockInStockText": "Stav skladu: Komponenty skladem",
-    "modalSpecsHeading": "Detail dronu: Nadpis specifikací",
-    "modalButtonText": "Detail dronu: Text tlačítka poptávky",
+    "modalSpecsHeading": "Detail produktu: Nadpis specifikací",
+    "modalButtonText": "Detail produktu: Text tlačítka poptávky",
 
     "heroTitle": "Úvodní stránka – Hlavní nadpis",
     "heroBtnDrony": "Úvodní stránka – Text tlačítka 'Drony'",
