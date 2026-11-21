@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currencyTextGlobal = "Kč";
 
     const productGrid = document.getElementById('product-grid');
-    const categoryCheckboxes = document.querySelectorAll('.category-filter');
+    const categoryFilterList = document.getElementById('category-filter-list');
     const stockCheckboxes = document.querySelectorAll('.stock-filter');
 
     const minRange = document.getElementById('price-min-range');
@@ -135,6 +135,77 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCommonData();
 
     // ==========================================================================
+    // DYNAMICKÉ VYKRESLENÍ KATEGORIÍ DO FILTRU (VČETNĚ VOLBY "VŠECHNY")
+    // ==========================================================================
+    function renderCategoryFilters(shopData, activeLang) {
+        if (!categoryFilterList) return;
+
+        let categories = [];
+        if (Array.isArray(shopData.categories) && shopData.categories.length > 0) {
+            categories = shopData.categories;
+        } else {
+            categories = [
+                { id: 'cinematic', label: shopData.catCinematicText || 'Cinematic' },
+                { id: 'longrange', label: shopData.catLongrangeText || 'SPECIAL' },
+                { id: 'freestyle', label: shopData.catFreestyleText || 'Freestyle' }
+            ];
+        }
+
+        const allLabel = shopData.catAllText || (activeLang === 'en' ? 'All' : 'Všechny');
+
+        categoryFilterList.innerHTML = '';
+
+        // 1. Položka "Všechny" / "All" (ve výchozím stavu aktivní)
+        const allLi = document.createElement('li');
+        allLi.innerHTML = `
+            <label class="tech-checkbox-label">
+                <input type="checkbox" class="category-filter-all" value="all" checked>
+                <span class="custom-box"></span> <span>${allLabel}</span>
+            </label>
+        `;
+        categoryFilterList.appendChild(allLi);
+
+        // 2. Všechny dynamické kategorie z JSONu
+        categories.forEach(cat => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <label class="tech-checkbox-label">
+                    <input type="checkbox" class="category-filter" value="${String(cat.id).toLowerCase().trim()}">
+                    <span class="custom-box"></span> <span>${cat.label}</span>
+                </label>
+            `;
+            categoryFilterList.appendChild(li);
+        });
+
+        const allCheckbox = categoryFilterList.querySelector('.category-filter-all');
+        const specificCheckboxes = categoryFilterList.querySelectorAll('.category-filter');
+
+        if (allCheckbox) {
+            allCheckbox.addEventListener('change', () => {
+                if (allCheckbox.checked) {
+                    specificCheckboxes.forEach(cb => { cb.checked = false; });
+                } else {
+                    const anyChecked = Array.from(specificCheckboxes).some(cb => cb.checked);
+                    if (!anyChecked) {
+                        allCheckbox.checked = true;
+                    }
+                }
+                updateShop();
+            });
+        }
+
+        specificCheckboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const anyChecked = Array.from(specificCheckboxes).some(item => item.checked);
+                if (allCheckbox) {
+                    allCheckbox.checked = !anyChecked;
+                }
+                updateShop();
+            });
+        });
+    }
+
+    // ==========================================================================
     // 1. DYNAMICKÉ NAČTENÍ Z E-SHOP.JSON (S PODPOROU JAZYKŮ A MĚN)
     // ==========================================================================
     async function fetchAllShopData() {
@@ -178,15 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (shopData.captionCategories && document.getElementById('caption-categories')) {
                     document.getElementById('caption-categories').textContent = shopData.captionCategories;
                 }
-                if (shopData.catCinematicText && document.getElementById('label-cat-cinematic')) {
-                    document.getElementById('label-cat-cinematic').textContent = shopData.catCinematicText;
-                }
-                if (shopData.catLongrangeText && document.getElementById('label-cat-longrange')) {
-                    document.getElementById('label-cat-longrange').textContent = shopData.catLongrangeText;
-                }
-                if (shopData.catFreestyleText && document.getElementById('label-cat-freestyle')) {
-                    document.getElementById('label-cat-freestyle').textContent = shopData.catFreestyleText;
-                }
+
+                renderCategoryFilters(shopData, activeLang);
+
                 if (shopData.captionPriceRange && document.getElementById('caption-price-range')) {
                     document.getElementById('caption-price-range').textContent = shopData.captionPriceRange;
                 }
@@ -227,18 +292,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU (S PŘEPÍNÁNÍM MĚNY A OPRAVENOU CESTOU K OBRÁZKU)
+    // 2. GENERÁTOR KARET PRODUKTŮ DO GRIDU
     // ==========================================================================
     function renderProducts(items) {
         if (!productGrid) return;
         productGrid.innerHTML = '';
 
+        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+
         if (!items || items.length === 0) {
-            productGrid.innerHTML = '<p style="color: #666; padding: 40px 0;">Žádné drony neodpovídají zvoleným filtrům.</p>';
+            productGrid.innerHTML = `<p style="color: #666; padding: 40px 0;">${activeLang === 'en' ? 'No products match the selected filters.' : 'Žádné produkty neodpovídají zvoleným filtrům.'}</p>`;
             return;
         }
-
-        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
 
         items.forEach(product => {
             const card = document.createElement('div');
@@ -259,7 +324,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedPrice = mainPriceToUse.toLocaleString('cs-CZ');
             const formattedSecondaryPrice = secondaryPriceToUse.toLocaleString('cs-CZ');
             
-            // OPRAVA: Robustní vyčištění a sestavení cesty k obrázku pro e-shop
             let rawImg = product.image || 'img/drone.png';
             rawImg = rawImg.replace(/^\.\//, '').replace(/^public\//, '');
             if (!rawImg.startsWith('img/') && !rawImg.startsWith('video/')) {
@@ -271,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.innerHTML = `
                 <div class="tech-img-wrapper">
-                    <img src="${imagePath}" alt="${product.title || 'Dron'}" loading="lazy">
+                    <img src="${imagePath}" alt="${product.title || 'Produkt'}" loading="lazy">
                     <div class="tech-card-overlay"><span>${activeLang === 'en' ? 'View specification' : 'Zobrazit specifikaci'}</span></div>
                 </div>
                 <div class="tech-card-meta">
@@ -346,7 +410,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!productGrid) return;
         const cards = productGrid.querySelectorAll('.tech-card');
 
-        const activeCategories = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value.toLowerCase().trim());
+        const currentCategoryCheckboxes = document.querySelectorAll('.category-filter');
+        const activeCategories = Array.from(currentCategoryCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value.toLowerCase().trim());
+
         const activeStock = Array.from(stockCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
 
         const isDefaultMin = minRange ? (parseFloat(minRange.value) <= minPrice) : true;
@@ -439,7 +507,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('reset-all-filters-btn')?.addEventListener('click', () => {
-        categoryCheckboxes.forEach(cb => cb.checked = false);
+        const allCheckbox = document.querySelector('.category-filter-all');
+        if (allCheckbox) allCheckbox.checked = true;
+        document.querySelectorAll('.category-filter').forEach(cb => cb.checked = false);
         stockCheckboxes.forEach(cb => cb.checked = false);
         if (minRange && maxRange) {
             minRange.value = minPrice;
@@ -470,13 +540,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
 
         document.getElementById('modal-img').src = resolvedImagePath || product.image || '../img/drone.png';
-        document.getElementById('modal-title').textContent = product.title || 'Detail dronu';
+        document.getElementById('modal-title').textContent = product.title || 'Detail produktu';
         
         const catLabel = (product.categoryLabel || product.category || '').toUpperCase();
         document.getElementById('modal-category').textContent = `${catLabel} //`;
         
         const catBadge = document.getElementById('modal-category-badge');
-        if (catBadge) catBadge.textContent = product.categoryLabel || product.category || 'Dron';
+        if (catBadge) catBadge.textContent = product.categoryLabel || product.category || 'Produkt';
 
         const formattedPrice = mainPriceToUse.toLocaleString('cs-CZ');
         const formattedSecondaryPrice = secondaryPriceToUse.toLocaleString('cs-CZ');
@@ -574,7 +644,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(card => productGrid.appendChild(card));
     }
 
-    categoryCheckboxes.forEach(cb => cb.addEventListener('change', updateShop));
     stockCheckboxes.forEach(cb => cb.addEventListener('change', updateShop));
 
     fetchAllShopData();
