@@ -8,9 +8,21 @@
   "sortPriceDesc": "HIGHEST > LOWEST",
   "resetAllFiltersText": "✕ Reset all filters",
   "captionCategories": "Categories //",
-  "catCinematicText": "Cinematic",
-  "catLongrangeText": "SPECIAL",
-  "catFreestyleText": "Freestyle",
+  "catAllText": "All",
+  "categories": [
+    {
+      "id": "cinematic",
+      "label": "Cinematic"
+    },
+    {
+      "id": "longrange",
+      "label": "SPECIAL"
+    },
+    {
+      "id": "freestyle",
+      "label": "Freestyle"
+    }
+  ],
   "captionPriceRange": "Price range",
   "pricePrefixFrom": "From",
   "pricePrefixTo": "to",
