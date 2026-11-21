@@ -20,6 +20,81 @@ body {
     min-height: 100vh;
 }
 
+/* ==========================================================================
+   PŘIHLAŠOVACÍ OBRAZOVKA (LOGIN & SETUP GATE)
+   ========================================================================== */
+
+.login-screen {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-top: 2px solid var(--accent-cyan);
+    border-radius: 8px;
+    padding: 36px 32px;
+}
+
+.login-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+}
+
+.login-error {
+    color: var(--danger-red);
+    font-size: 0.8rem;
+    margin-bottom: 14px;
+    min-height: 18px;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+.link-btn:hover {
+    color: var(--accent-cyan);
+}
+
+.logged-user-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-right: 4px;
+}
+
+.pin-badge {
+    display: inline-block;
+    background: rgba(0, 209, 199, 0.12);
+    border: 1px solid rgba(0, 209, 199, 0.4);
+    color: var(--accent-cyan);
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 4px;
+    letter-spacing: 1.5px;
+}
+
+/* ==========================================================================
+   HLAVNÍ CMS LAYOUT
+   ========================================================================== */
+
 .admin-wrapper {
     max-width: 1100px;
     margin: 0 auto;
@@ -81,20 +156,9 @@ body {
 }
 
 .settings-toggle-btn:hover {
-    border-color: var(--accent-cyan);
-    color: var(--accent-cyan);
+    border-color: var(--danger-red);
+    color: var(--danger-red);
 }
-
-.config-panel {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 30px;
-    display: none;
-}
-
-.config-panel.open { display: block; }
 
 .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
@@ -159,6 +223,11 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .btn-secondary {
     background: transparent;
     border: 1px solid var(--input-border);
@@ -213,6 +282,7 @@ input:focus, select:focus, textarea:focus {
     padding: 16px 20px;
     border-radius: 6px;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .item-info {
@@ -248,7 +318,12 @@ input:focus, select:focus, textarea:focus {
     font-family: monospace;
 }
 
-.item-actions { display: flex; gap: 10px; }
+.item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
 .spec-item-row {
     display: flex;
