@@ -1,4 +1,9 @@
 {
-  "owner": null,
+  "owner": {
+    "loginHash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+    "encryptedTokenByPassword": "6dnPDHy4P2Leot8zgg0o66rnorCfVXT++7MPY/1n1Aw5Txde2VgJsEWu89/5i4Y+Fe+ahRuSy4ig9F3MWvHM4OVlzfkBtw9BbcXlFz2aEJu/ccdbzRc7aDYiCZBobt+s86mLp9iQOBNLUIJjawWCu7yLhSr58oOd0L0xmc5w3Ty0ixQibktOSLQ=",
+    "encryptedTokenByRecovery": "fWmS4VnTZrjJ4q2jvIBubm2TcrdrBbwwlWswOUKfk8S6vmmlBfyJrHQsU92cJ1wfEJOVQiQolQDbj+AxczuYoK2sPo+JxGGZE8AmYNDZJVGkzPR5itie+h4LdF98qZSShGelG84uZG3BQWjWEGD5eY6KronvxOahEHEyiCBFUBKVDr4fSPVv5/8=",
+    "encryptedRecoveryPin": "s2D30GzybjMRCzdDZT4GvxgCCq9RJLQxZwWYUHpqzptPgf0vinulAK22uwddWIwzQjqw"
+  },
   "users": []
 }
