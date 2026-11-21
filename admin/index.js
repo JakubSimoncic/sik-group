@@ -1,16 +1,596 @@
+// ==========================================================================
+// KONFIGURACE GITHUBU & SPRÁVA PŘÍSTUPŮ (AES-GCM + PBKDF2)
+// ==========================================================================
+const GITHUB_CONFIG = {
+    owner: 'JakubSimoncic',
+    repo: 'sik-group',
+    branch: 'main'
+};
+
+const OWNER_LOGIN_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // "admin"
+const USERS_DATA_FILE = 'public/data/cms-users.json';
+
 let currentAdminLang = 'cz';
 let productsData = [];
 let fullShopData = {};
 let pagesData = [];
 let currentLoadedPageData = {};
 let currentActiveItem = null;
+let cmsAccessStore = { owner: null, users: [] };
+let isCurrentUserOwner = false;
+let cmsInitialized = false;
 
-const toggleSettingsBtn = document.getElementById('toggle-settings-btn');
-const configPanel = document.getElementById('config-panel');
-const saveConfigBtn = document.getElementById('save-config-btn');
+// ==========================================================================
+// KRYPTOGRAFIE (PBKDF2 + AES-GCM PRO ŠIFROVÁNÍ TOKENU A RESETOVACÍCH PINŮ)
+// ==========================================================================
+async function sha256Hex(text) {
+    const data = new TextEncoder().encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-toggleSettingsBtn.addEventListener('click', () => configPanel.classList.toggle('open'));
+async function deriveAesKey(secret, saltBytes) {
+    const baseKey = await crypto.subtle.importKey(
+        'raw',
+        new TextEncoder().encode(secret),
+        { name: 'PBKDF2' },
+        false,
+        ['deriveKey']
+    );
+    return crypto.subtle.deriveKey(
+        {
+            name: 'PBKDF2',
+            salt: saltBytes,
+            iterations: 100000,
+            hash: 'SHA-256'
+        },
+        baseKey,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    );
+}
 
+async function encryptSecret(plainText, secret) {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveAesKey(secret, salt);
+    const cipherBuffer = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        new TextEncoder().encode(plainText)
+    );
+    const combined = new Uint8Array(salt.length + iv.length + cipherBuffer.byteLength);
+    combined.set(salt, 0);
+    combined.set(iv, salt.length);
+    combined.set(new Uint8Array(cipherBuffer), salt.length + iv.length);
+    return btoa(String.fromCharCode(...combined));
+}
+
+async function decryptSecret(base64Payload, secret) {
+    if (!base64Payload) return null;
+    try {
+        const binary = atob(base64Payload);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        const salt = bytes.slice(0, 16);
+        const iv = bytes.slice(16, 28);
+        const data = bytes.slice(28);
+        const key = await deriveAesKey(secret, salt);
+        const decryptedBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+        return new TextDecoder().decode(decryptedBuffer);
+    } catch {
+        return null;
+    }
+}
+
+function generateResetPin() {
+    const array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    const num = String(array[0] % 1000000).padStart(6, '0');
+    return `${num.slice(0, 3)}-${num.slice(3)}`;
+}
+
+// ==========================================================================
+// NAČTENÍ ÚLOŽIŠTĚ PŘÍSTUPŮ Z REPOZITÁŘE
+// ==========================================================================
+async function fetchAccessStore() {
+    try {
+        const res = await fetch(`../${USERS_DATA_FILE}?t=${Date.now()}`);
+        if (!res.ok) return { owner: null, users: [] };
+        const data = await res.json();
+        return {
+            owner: data.owner || null,
+            users: Array.isArray(data.users) ? data.users : []
+        };
+    } catch {
+        return { owner: null, users: [] };
+    }
+}
+
+async function verifyGithubToken(token) {
+    if (!token) return false;
+    try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github+json'
+            }
+        });
+        if (!res.ok) return false;
+        const repoInfo = await res.json();
+        return Boolean(repoInfo.permissions && repoInfo.permissions.push);
+    } catch {
+        return false;
+    }
+}
+
+// ==========================================================================
+// OBRAZOVKY: SETUP / LOGIN / RESET HESLA
+// ==========================================================================
+const setupScreen = document.getElementById('setup-screen');
+const loginScreen = document.getElementById('login-screen');
+const adminWrapper = document.getElementById('admin-wrapper');
+
+function showScreen(screenName) {
+    setupScreen.style.display = screenName === 'setup' ? 'flex' : 'none';
+    loginScreen.style.display = screenName === 'login' ? 'flex' : 'none';
+    adminWrapper.style.display = screenName === 'cms' ? 'block' : 'none';
+}
+
+function unlockCms(displayName, isOwner, token) {
+    isCurrentUserOwner = isOwner;
+    sessionStorage.setItem('sik_cms_token', token);
+    sessionStorage.setItem('sik_cms_display', displayName);
+    sessionStorage.setItem('sik_cms_is_owner', isOwner ? '1' : '0');
+
+    const badge = document.getElementById('logged-user-badge');
+    if (badge) {
+        badge.textContent = isOwner ? `● ${displayName} [MAJITEL]` : `● ${displayName}`;
+    }
+
+    const ownerCard = document.getElementById('owner-access-card-container');
+    if (ownerCard) {
+        ownerCard.style.display = isOwner ? 'block' : 'none';
+    }
+
+    showScreen('cms');
+
+    if (!cmsInitialized) {
+        cmsInitialized = true;
+        initData();
+    }
+    log(`Přihlášen uživatel: ${displayName}${isOwner ? ' (Majitel)' : ''}`, 'success');
+}
+
+// Přepínání mezi Loginem a Resetem hesla
+document.getElementById('open-reset-mode-btn').addEventListener('click', () => {
+    document.getElementById('cms-login-form').style.display = 'none';
+    document.getElementById('cms-reset-form').style.display = 'block';
+    document.getElementById('auth-card-subtitle').textContent = 'Nastavení nového hesla pomocí PINu';
+    document.getElementById('login-error').textContent = '';
+    document.getElementById('reset-error').textContent = '';
+});
+
+document.getElementById('back-to-login-btn').addEventListener('click', () => {
+    document.getElementById('cms-reset-form').style.display = 'none';
+    document.getElementById('cms-login-form').style.display = 'block';
+    document.getElementById('auth-card-subtitle').textContent = 'Přihlášení do správy obsahu';
+    document.getElementById('login-error').textContent = '';
+    document.getElementById('reset-error').textContent = '';
+});
+
+// 1. PRVNÍ NASTAVENÍ MAJITELE ("admin")
+document.getElementById('cms-setup-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('setup-error');
+    const btn = document.getElementById('setup-submit-btn');
+    errorEl.textContent = '';
+
+    const pass = document.getElementById('setup-password').value;
+    const passConfirm = document.getElementById('setup-password-confirm').value;
+    const token = document.getElementById('setup-token').value.trim();
+
+    if (pass !== passConfirm) {
+        errorEl.textContent = 'Hesla se neshodují.';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Ověřuji klíč a šifruji...';
+
+    const validToken = await verifyGithubToken(token);
+    if (!validToken) {
+        errorEl.textContent = 'Neplatný GitHub API klíč nebo chybí právo zápisu do repozitáře.';
+        btn.disabled = false;
+        btn.textContent = 'Uložit a aktivovat CMS';
+        return;
+    }
+
+    const recoveryPin = generateResetPin();
+    const encryptedTokenByPassword = await encryptSecret(token, pass);
+    const encryptedTokenByRecovery = await encryptSecret(token, recoveryPin);
+    const encryptedRecoveryPinForOwner = await encryptSecret(recoveryPin, token);
+
+    cmsAccessStore = {
+        owner: {
+            loginHash: OWNER_LOGIN_HASH,
+            encryptedTokenByPassword,
+            encryptedTokenByRecovery,
+            encryptedRecoveryPin: encryptedRecoveryPinForOwner
+        },
+        users: []
+    };
+
+    sessionStorage.setItem('sik_cms_token', token);
+    sessionStorage.setItem('sik_cms_display', 'admin');
+
+    await commitFileToGithub(
+        USERS_DATA_FILE,
+        cmsAccessStore,
+        'CMS: Inicializace účtu majitele (admin)'
+    );
+
+    btn.disabled = false;
+    btn.textContent = 'Uložit a aktivovat CMS';
+    unlockCms('admin', true, token);
+});
+
+// 2. BĚŽNÉ PŘIHLÁŠENÍ (JMÉNO + HESLO -> AUTOMATICKÉ DEŠIFROVÁNÍ API KLÍČE)
+document.getElementById('cms-login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('login-error');
+    const btn = document.getElementById('login-submit-btn');
+    errorEl.textContent = '';
+
+    const loginInput = document.getElementById('login-username').value.trim().toLowerCase();
+    const passwordInput = document.getElementById('login-password').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Ověřuji...';
+
+    cmsAccessStore = await fetchAccessStore();
+    const loginHash = await sha256Hex(loginInput);
+
+    // A) Přihlášení majitele ("admin")
+    if (loginHash === OWNER_LOGIN_HASH && cmsAccessStore.owner) {
+        const decryptedToken = await decryptSecret(cmsAccessStore.owner.encryptedTokenByPassword, passwordInput);
+        if (decryptedToken && await verifyGithubToken(decryptedToken)) {
+            btn.disabled = false;
+            btn.textContent = 'Přihlásit se';
+            document.getElementById('cms-login-form').reset();
+            unlockCms('admin', true, decryptedToken);
+            return;
+        }
+        errorEl.textContent = 'Nesprávné heslo pro účet admin.';
+        btn.disabled = false;
+        btn.textContent = 'Přihlásit se';
+        return;
+    }
+
+    // B) Přihlášení zaměstnance
+    const userRecord = cmsAccessStore.users.find(u => u.loginHash === loginHash);
+    if (!userRecord) {
+        errorEl.textContent = 'Uživatel s tímto přihlašovacím jménem neexistuje.';
+        btn.disabled = false;
+        btn.textContent = 'Přihlásit se';
+        return;
+    }
+
+    if (!userRecord.encryptedTokenByPassword) {
+        errorEl.textContent = 'Účet ještě nemá nastavené heslo. Klikněte níže na „První přihlášení / Zapomenuté heslo“ a zadejte PIN od majitele.';
+        btn.disabled = false;
+        btn.textContent = 'Přihlásit se';
+        return;
+    }
+
+    const decryptedToken = await decryptSecret(userRecord.encryptedTokenByPassword, passwordInput);
+    if (!decryptedToken || !(await verifyGithubToken(decryptedToken))) {
+        errorEl.textContent = 'Nesprávné heslo.';
+        btn.disabled = false;
+        btn.textContent = 'Přihlásit se';
+        return;
+    }
+
+    const displayName = (await decryptSecret(userRecord.encryptedLabel, decryptedToken)) || loginInput;
+    btn.disabled = false;
+    btn.textContent = 'Přihlásit se';
+    document.getElementById('cms-login-form').reset();
+    unlockCms(displayName, false, decryptedToken);
+});
+
+// 3. NASTAVENÍ / RESET HESLA POMOCÍ RESETOVACÍHO PINU
+document.getElementById('cms-reset-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('reset-error');
+    const btn = document.getElementById('reset-submit-btn');
+    errorEl.textContent = '';
+
+    const loginInput = document.getElementById('reset-username').value.trim().toLowerCase();
+    const pinInput = document.getElementById('reset-pin').value.trim();
+    const newPassword = document.getElementById('reset-new-password').value;
+
+    btn.disabled = true;
+    btn.textContent = 'Nastavuji nové heslo...';
+
+    cmsAccessStore = await fetchAccessStore();
+    const loginHash = await sha256Hex(loginInput);
+
+    // A) Reset hesla majitele ("admin") přes Recovery PIN
+    if (loginHash === OWNER_LOGIN_HASH && cmsAccessStore.owner) {
+        const decryptedToken = await decryptSecret(cmsAccessStore.owner.encryptedTokenByRecovery, pinInput);
+        if (!decryptedToken || !(await verifyGithubToken(decryptedToken))) {
+            errorEl.textContent = 'Neplatný Recovery PIN pro účet admin.';
+            btn.disabled = false;
+            btn.textContent = 'Nastavit nové heslo a přihlásit';
+            return;
+        }
+
+        const newRecoveryPin = generateResetPin();
+        cmsAccessStore.owner.encryptedTokenByPassword = await encryptSecret(decryptedToken, newPassword);
+        cmsAccessStore.owner.encryptedTokenByRecovery = await encryptSecret(decryptedToken, newRecoveryPin);
+        cmsAccessStore.owner.encryptedRecoveryPin = await encryptSecret(newRecoveryPin, decryptedToken);
+
+        sessionStorage.setItem('sik_cms_token', decryptedToken);
+        sessionStorage.setItem('sik_cms_display', 'admin');
+
+        await commitFileToGithub(
+            USERS_DATA_FILE,
+            cmsAccessStore,
+            'CMS: Obnoveno heslo majitele (admin)'
+        );
+
+        btn.disabled = false;
+        btn.textContent = 'Nastavit nové heslo a přihlásit';
+        document.getElementById('cms-reset-form').reset();
+        unlockCms('admin', true, decryptedToken);
+        return;
+    }
+
+    // B) Reset hesla zaměstnance přes PIN od majitele
+    const userIdx = cmsAccessStore.users.findIndex(u => u.loginHash === loginHash);
+    if (userIdx === -1) {
+        errorEl.textContent = 'Uživatel nenalezen.';
+        btn.disabled = false;
+        btn.textContent = 'Nastavit nové heslo a přihlásit';
+        return;
+    }
+
+    const userRecord = cmsAccessStore.users[userIdx];
+    const decryptedToken = await decryptSecret(userRecord.encryptedTokenByResetPin, pinInput);
+    if (!decryptedToken || !(await verifyGithubToken(decryptedToken))) {
+        errorEl.textContent = 'Neplatný resetovací PIN.';
+        btn.disabled = false;
+        btn.textContent = 'Nastavit nové heslo a přihlásit';
+        return;
+    }
+
+    // Zašifrujeme API klíč novým heslem zaměstnance (PIN zůstává uložený pro příští reset nebo ho majitel může obnovit)
+    cmsAccessStore.users[userIdx].encryptedTokenByPassword = await encryptSecret(decryptedToken, newPassword);
+
+    const displayName = (await decryptSecret(userRecord.encryptedLabel, decryptedToken)) || loginInput;
+    sessionStorage.setItem('sik_cms_token', decryptedToken);
+    sessionStorage.setItem('sik_cms_display', displayName);
+
+    await commitFileToGithub(
+        USERS_DATA_FILE,
+        cmsAccessStore,
+        `CMS: Uživatel (${displayName}) si nastavil nové heslo`
+    );
+
+    btn.disabled = false;
+    btn.textContent = 'Nastavit nové heslo a přihlásit';
+    document.getElementById('cms-reset-form').reset();
+    unlockCms(displayName, false, decryptedToken);
+});
+
+// Kontrola stávající relace při načtení stránky
+async function bootCmsAuth() {
+    localStorage.removeItem('sik_gh_token');
+    cmsAccessStore = await fetchAccessStore();
+
+    if (!cmsAccessStore.owner) {
+        showScreen('setup');
+        return;
+    }
+
+    const savedToken = sessionStorage.getItem('sik_cms_token');
+    const savedDisplay = sessionStorage.getItem('sik_cms_display');
+    const savedIsOwner = sessionStorage.getItem('sik_cms_is_owner') === '1';
+
+    if (savedToken && savedDisplay && (await verifyGithubToken(savedToken))) {
+        unlockCms(savedDisplay, savedIsOwner, savedToken);
+    } else {
+        sessionStorage.removeItem('sik_cms_token');
+        sessionStorage.removeItem('sik_cms_display');
+        sessionStorage.removeItem('sik_cms_is_owner');
+        showScreen('login');
+    }
+}
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+    sessionStorage.removeItem('sik_cms_token');
+    sessionStorage.removeItem('sik_cms_display');
+    sessionStorage.removeItem('sik_cms_is_owner');
+    isCurrentUserOwner = false;
+    document.getElementById('cms-reset-form').style.display = 'none';
+    document.getElementById('cms-login-form').style.display = 'block';
+    document.getElementById('auth-card-subtitle').textContent = 'Přihlášení do správy obsahu';
+    showScreen('login');
+});
+
+// ==========================================================================
+// SPRÁVA PŘÍSTUPŮ & RESETOVACÍCH KÓDŮ (POUZE PRO MAJITELE)
+// ==========================================================================
+async function openUsersManager() {
+    if (!isCurrentUserOwner) return;
+    switchView('view-users');
+    await loadAndRenderUsers();
+}
+
+async function loadAndRenderUsers() {
+    const container = document.getElementById('users-list');
+    container.innerHTML = '<p style="color: var(--text-muted);">Načítám přístupy a resetovací PINy...</p>';
+
+    cmsAccessStore = await fetchAccessStore();
+    const token = sessionStorage.getItem('sik_cms_token');
+
+    // Zobrazení nouzového Recovery PINu pro samotného majitele
+    const ownerPinDisplay = document.getElementById('owner-recovery-pin-display');
+    if (ownerPinDisplay && cmsAccessStore.owner && cmsAccessStore.owner.encryptedRecoveryPin && token) {
+        const decryptedOwnerPin = await decryptSecret(cmsAccessStore.owner.encryptedRecoveryPin, token);
+        ownerPinDisplay.textContent = decryptedOwnerPin || '—';
+    }
+
+    container.innerHTML = '';
+    if (cmsAccessStore.users.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted);">Zatím nejsou vytvořeny žádné účty pro zaměstnance.</p>';
+        return;
+    }
+
+    for (const user of cmsAccessStore.users) {
+        const label = (await decryptSecret(user.encryptedLabel, token)) || 'Zaměstnanec';
+        const loginName = (await decryptSecret(user.encryptedLoginName, token)) || '—';
+        const resetPin = (await decryptSecret(user.encryptedResetPin, token)) || '—';
+        const hasPasswordSet = Boolean(user.encryptedTokenByPassword);
+
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = `
+            <div class="item-info">
+                <div class="item-thumb">👤</div>
+                <div class="item-details">
+                    <h4>${escapeHtml(label)} <span style="color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">(login: ${escapeHtml(loginName)})</span></h4>
+                    <p>${hasPasswordSet ? '✓ Vlastní heslo nastaveno' : '⏳ Čeká na první nastavení hesla pomocí PINu'}</p>
+                </div>
+            </div>
+            <div class="item-actions">
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Reset PIN:</span>
+                <span class="pin-badge">${escapeHtml(resetPin)}</span>
+                <button class="btn-secondary" onclick="copyResetPin('${escapeHtml(resetPin)}')" type="button">Kopírovat</button>
+                <button class="btn-secondary" onclick="regenerateUserResetPin('${user.id}')" type="button">Nový PIN</button>
+                <button class="btn-delete" onclick="removeCmsUser('${user.id}')" type="button">Smazat účet</button>
+            </div>
+        `;
+        container.appendChild(card);
+    }
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function copyResetPin(pin) {
+    navigator.clipboard.writeText(pin);
+    log(`Resetovací PIN (${pin}) zkopírován do schránky.`, 'success');
+}
+
+// Přidání nového zaměstnance
+document.getElementById('add-user-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!isCurrentUserOwner) return;
+
+    const labelInput = document.getElementById('new-user-label').value.trim();
+    const loginInput = document.getElementById('new-user-login').value.trim().toLowerCase();
+    const token = sessionStorage.getItem('sik_cms_token');
+
+    if (!labelInput || !loginInput || !token) return;
+
+    const loginHash = await sha256Hex(loginInput);
+    if (loginHash === OWNER_LOGIN_HASH || cmsAccessStore.users.some(u => u.loginHash === loginHash)) {
+        log('Chyba: Toto přihlašovací jméno již existuje.', 'error');
+        return;
+    }
+
+    const addBtn = document.getElementById('add-user-submit-btn');
+    addBtn.disabled = true;
+    addBtn.textContent = 'Vytvářím účet...';
+
+    const resetPin = generateResetPin();
+
+    cmsAccessStore.users.push({
+        id: String(Date.now()),
+        loginHash,
+        encryptedLabel: await encryptSecret(labelInput, token),
+        encryptedLoginName: await encryptSecret(loginInput, token),
+        encryptedResetPin: await encryptSecret(resetPin, token),
+        encryptedTokenByResetPin: await encryptSecret(token, resetPin),
+        encryptedTokenByPassword: null
+    });
+
+    await commitFileToGithub(
+        USERS_DATA_FILE,
+        cmsAccessStore,
+        `CMS: Vytvořen přístup pro ${labelInput}`
+    );
+
+    document.getElementById('add-user-form').reset();
+    addBtn.disabled = false;
+    addBtn.textContent = 'Vytvořit účet a vygenerovat PIN';
+    await loadAndRenderUsers();
+});
+
+// Vygenerování nového resetovacího PINu pro existujícího zaměstnance (bez smazání účtu)
+async function regenerateUserResetPin(userId) {
+    if (!isCurrentUserOwner) return;
+    const token = sessionStorage.getItem('sik_cms_token');
+    const idx = cmsAccessStore.users.findIndex(u => String(u.id) === String(userId));
+    if (idx === -1 || !token) return;
+
+    const newPin = generateResetPin();
+    cmsAccessStore.users[idx].encryptedResetPin = await encryptSecret(newPin, token);
+    cmsAccessStore.users[idx].encryptedTokenByResetPin = await encryptSecret(token, newPin);
+
+    await commitFileToGithub(
+        USERS_DATA_FILE,
+        cmsAccessStore,
+        'CMS: Vygenerován nový resetovací PIN pro zaměstnance'
+    );
+
+    await loadAndRenderUsers();
+}
+
+// Vygenerování nového nouzového Recovery PINu pro majitele
+async function regenerateOwnerRecoveryPin() {
+    if (!isCurrentUserOwner) return;
+    const token = sessionStorage.getItem('sik_cms_token');
+    if (!cmsAccessStore.owner || !token) return;
+
+    const newPin = generateResetPin();
+    cmsAccessStore.owner.encryptedTokenByRecovery = await encryptSecret(token, newPin);
+    cmsAccessStore.owner.encryptedRecoveryPin = await encryptSecret(newPin, token);
+
+    await commitFileToGithub(
+        USERS_DATA_FILE,
+        cmsAccessStore,
+        'CMS: Obnoven Recovery PIN majitele'
+    );
+
+    await loadAndRenderUsers();
+}
+
+async function removeCmsUser(userId) {
+    if (!isCurrentUserOwner) return;
+    if (!confirm('Opravdu chcete tento účet trvale smazat?')) return;
+
+    cmsAccessStore.users = cmsAccessStore.users.filter(u => String(u.id) !== String(userId));
+
+    await commitFileToGithub(
+        USERS_DATA_FILE,
+        cmsAccessStore,
+        'CMS: Odebrán uživatelský účet'
+    );
+
+    await loadAndRenderUsers();
+}
+
+// ==========================================================================
+// PŘEPÍNÁNÍ JAZYKA A NAVIGACE V CMS
+// ==========================================================================
 function setAdminLanguage(lang) {
     currentAdminLang = lang;
     document.getElementById('lang-cz-btn').classList.toggle('active', lang === 'cz');
@@ -20,24 +600,9 @@ function setAdminLanguage(lang) {
     adjustProductFormLanguage();
 }
 
-function loadConfig() {
-    document.getElementById('gh-owner').value = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
-    document.getElementById('gh-repo').value = localStorage.getItem('sik_gh_repo') || 'sik-group';
-    document.getElementById('gh-branch').value = localStorage.getItem('sik_gh_branch') || 'main';
-    document.getElementById('gh-token').value = localStorage.getItem('sik_gh_token') || '';
-}
-
-saveConfigBtn.addEventListener('click', () => {
-    localStorage.setItem('sik_gh_owner', document.getElementById('gh-owner').value.trim());
-    localStorage.setItem('sik_gh_repo', document.getElementById('gh-repo').value.trim());
-    localStorage.setItem('sik_gh_branch', document.getElementById('gh-branch').value.trim());
-    localStorage.setItem('sik_gh_token', document.getElementById('gh-token').value.trim());
-    log('Konfigurace GitHubu uložena v prohlížeči.', 'success');
-    configPanel.classList.remove('open');
-});
-
 function log(msg, type = '') {
     const terminal = document.getElementById('terminal-log');
+    if (!terminal) return;
     const entry = document.createElement('div');
     entry.className = `log-entry ${type}`;
     entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
@@ -280,7 +845,6 @@ function renderProductsList() {
         const card = document.createElement('div');
         card.className = 'item-card';
 
-        // Opraveno: Správné složení cesty pro náhled v administraci
         let rawImg = p.image || 'img/drone.png';
         rawImg = rawImg.replace(/^\.\//, '').replace(/^public\//, '');
         const imgPath = '../public/' + rawImg;
@@ -365,13 +929,13 @@ function resetProductForm() {
 document.getElementById('cancel-edit-btn').addEventListener('click', resetProductForm);
 
 async function commitFileToGithub(filePath, contentObject, commitMessage) {
-    const owner = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
-    const repo = localStorage.getItem('sik_gh_repo') || 'sik-group';
-    const branch = localStorage.getItem('sik_gh_branch') || 'main';
-    const token = localStorage.getItem('sik_gh_token');
+    const { owner, repo, branch } = GITHUB_CONFIG;
+    const token = sessionStorage.getItem('sik_cms_token');
+    const author = sessionStorage.getItem('sik_cms_display') || 'CMS';
 
     if (!token || !owner || !repo) {
-        log('Upozornění: Není vyplněn GitHub token. Úpravy nebyly odeslány.', 'error');
+        log('Upozornění: Relace vypršela. Přihlaste se prosím znovu.', 'error');
+        showScreen('login');
         return;
     }
 
@@ -398,7 +962,7 @@ async function commitFileToGithub(filePath, contentObject, commitMessage) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: commitMessage,
+                message: `[${author}] ${commitMessage}`,
                 content: base64Content,
                 sha: sha || undefined,
                 branch: branch
@@ -413,13 +977,13 @@ async function commitFileToGithub(filePath, contentObject, commitMessage) {
 }
 
 async function uploadBinaryFileToGithub(filePath, base64Data, commitMessage) {
-    const owner = localStorage.getItem('sik_gh_owner') || 'JakubSimoncic';
-    const repo = localStorage.getItem('sik_gh_repo') || 'sik-group';
-    const branch = localStorage.getItem('sik_gh_branch') || 'main';
-    const token = localStorage.getItem('sik_gh_token');
+    const { owner, repo, branch } = GITHUB_CONFIG;
+    const token = sessionStorage.getItem('sik_cms_token');
+    const author = sessionStorage.getItem('sik_cms_display') || 'CMS';
 
     if (!token || !owner || !repo) {
-        log('Upozornění: Není vyplněn GitHub token.', 'error');
+        log('Upozornění: Relace vypršela. Přihlaste se prosím znovu.', 'error');
+        showScreen('login');
         return;
     }
 
@@ -443,7 +1007,7 @@ async function uploadBinaryFileToGithub(filePath, base64Data, commitMessage) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: commitMessage,
+                message: `[${author}] ${commitMessage}`,
                 content: base64Data,
                 sha: sha || undefined,
                 branch: branch
@@ -624,8 +1188,8 @@ async function deleteProduct(id) {
     await commitFileToGithub(filePath, fullShopData, `CMS: Smazán dron ${prod ? prod.title : id} (${itemLang.toUpperCase()})`);
 }
 
-loadConfig();
-initData();
+// Spuštění autentizace při otevření stránky
+bootCmsAuth();
 
 const cmsFieldLabels = {
     "mainTitle": "Hlavní nadpis e-shopu",
@@ -634,7 +1198,7 @@ const cmsFieldLabels = {
     "filterBtnShowText": "Text tlačítka pro zobrazení filtrů",
     "sortRecommended": "Text řazení: Doporučené",
     "sortPriceAsc": "Text řazení: Nejnižší > Nejvyšší",
-    "sortPriceDesc": "Text řazení: Nejvyšší > Nejnižší",
+    "sortPriceDesc": "Text řazení: Nejvyšší > Nejvyšší",
     "resetAllFiltersText": "Tlačítko: Resetovat všechny filtry",
     "captionCategories": "Nadpis sekce: Kategorie",
     "catCinematicText": "Kategorie: FPV Cinematic",
