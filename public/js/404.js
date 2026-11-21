@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnHomeEl) btnHomeEl.textContent = 'Zpět na úvod';
     } else {
         document.documentElement.lang = 'en';
-        if (titleEl) titleEl.textContent = "We don't shoot here :(";
+        if (titleEl) titleEl.textContent = "We don't film here :(";
         if (btnHomeEl) btnHomeEl.textContent = 'Back to home';
     }
 });
