@@ -1,0 +1,54 @@
+{
+  "badge": "EVENTY & FESTIVALY",
+  "title": "Velké eventy & Firemní akce",
+  "subtitle": "Konference, festivaly, závody, koncerty nebo firemní teambuildingy? Dostaneme kameru přesně tam, kde se tvoří atmosféra – kombinací FPV dronů, kino dronů a pozemních kamer.",
+  "ctaText": "Poptat natáčení akce",
+  "showreelTitle": "Event Showreel",
+  "showreelVideo": "public/video/drone-hero.mp4",
+  "showreelPoster": "public/img/hero-poster.jpg",
+  "galleryTitle": "Ukázky z akcí",
+  "videos": [
+    {
+      "tag": "AFTERMOVIE",
+      "title": "Festivaly a koncerty",
+      "description": "Dynamický sestřih energie publika, pódia a světelné show z ptačí perspektivy i z první řady.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "SPORT & ZÁVODY",
+      "title": "Sledování akce v rychlosti",
+      "description": "Rychlé FPV drony dokážou držet krok s auty, motorkami i sportovci v plném tempu.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "KONFERENCE & B2B",
+      "title": "Firemní eventy a veletrhy",
+      "description": "Reprezentativní záznam atmosféry, přednášek a klíčových momentů vaší firemní události.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    }
+  ],
+  "deliverablesTitle": "Jak probíhá spolupráce",
+  "deliverables": [
+    {
+      "number": "01",
+      "title": "Vícekamerový tým na místě",
+      "description": "Kombinujeme pozemní kameramany a certifikované piloty dronů, takže nám neunikne žádný klíčový moment."
+    },
+    {
+      "number": "02",
+      "title": "Rychlý výstup už během akce",
+      "description": "Po domluvě dodáme krátké sestřihy ještě v průběhu eventu, abyste je mohli sdílet na sítích za tepla."
+    },
+    {
+      "number": "03",
+      "title": "Hlavní aftermovie & teasery",
+      "description": "Kompletní sestřih celé akce pro partnery a sponzory plus upoutávky pro příští ročník."
+    }
+  ],
+  "bottomCtaTitle": "Chystáte akci, na kterou se nezapomene?",
+  "bottomCtaText": "Rezervujte si náš tým včas a získejte video obsah, který prodá i další ročník.",
+  "bottomCtaBtn": "Zkontrolovat termíny"
+}
