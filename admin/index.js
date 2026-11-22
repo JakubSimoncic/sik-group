@@ -739,7 +739,7 @@ function renderFlatFields(obj, prefix = '', container) {
 }
 
 // ==========================================================================
-// SPRÁVA KATEGORIÍ E-SHOPU (DYNAMICKÉ KATEGORIE + SYNCHRONIZACE)
+// SPRÁVA KATEGORIÍ E-SHOPU (DYNAMICKÉ KATEGORIE + INLINE EDITACE + SYNCHRONIZACE)
 // ==========================================================================
 function slugifyCategory(name) {
     return String(name)
@@ -792,22 +792,100 @@ function renderCategoriesManager() {
         const usedCount = productsData.filter(p => String(p.category).toLowerCase() === String(cat.id).toLowerCase()).length;
         const card = document.createElement('div');
         card.className = 'item-card';
+        card.id = `cat-card-${cat.id}`;
         card.style.padding = '12px 16px';
         card.innerHTML = `
-            <div class="item-info">
+            <div class="item-info" style="flex: 1;">
                 <div class="item-thumb" style="width: 38px; height: 38px; font-size: 1rem;">🏷️</div>
-                <div class="item-details">
-                    <h4>${escapeHtml(cat.label)}</h4>
+                <div class="item-details" style="flex: 1;">
+                    <h4 id="cat-title-${escapeHtml(cat.id)}">${escapeHtml(cat.label)}</h4>
+                    <div id="cat-edit-box-${escapeHtml(cat.id)}" style="display: none; align-items: center; gap: 10px; margin-bottom: 4px;">
+                        <input type="text" id="cat-input-${escapeHtml(cat.id)}" value="${escapeHtml(cat.label)}" style="max-width: 280px; padding: 7px 12px; font-size: 0.9rem;">
+                    </div>
                     <p>ID: ${escapeHtml(cat.id)} // Počet produktů: ${usedCount}</p>
                 </div>
             </div>
-            <div class="item-actions">
-                <button class="btn-secondary" onclick="renameCategory('${escapeHtml(cat.id)}')" type="button">Přejmenovat</button>
+            <div class="item-actions" id="cat-actions-${escapeHtml(cat.id)}">
+                <button class="btn-secondary" onclick="startCategoryEdit('${escapeHtml(cat.id)}')" type="button">Přejmenovat</button>
                 <button class="btn-delete" onclick="deleteCategory('${escapeHtml(cat.id)}')" type="button">Smazat</button>
             </div>
         `;
         container.appendChild(card);
+
+        const inputEl = card.querySelector(`#cat-input-${CSS.escape(cat.id)}`);
+        if (inputEl) {
+            inputEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    saveCategoryEdit(cat.id);
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    cancelCategoryEdit(cat.id);
+                }
+            });
+        }
     });
+}
+
+function startCategoryEdit(catId) {
+    const titleEl = document.getElementById(`cat-title-${catId}`);
+    const editBox = document.getElementById(`cat-edit-box-${catId}`);
+    const actionsEl = document.getElementById(`cat-actions-${catId}`);
+    const inputEl = document.getElementById(`cat-input-${catId}`);
+
+    if (!titleEl || !editBox || !actionsEl || !inputEl) return;
+
+    titleEl.style.display = 'none';
+    editBox.style.display = 'flex';
+    actionsEl.innerHTML = `
+        <button class="btn-primary" id="cat-save-btn-${escapeHtml(catId)}" onclick="saveCategoryEdit('${escapeHtml(catId)}')" type="button">Uložit</button>
+        <button class="btn-secondary" onclick="cancelCategoryEdit('${escapeHtml(catId)}')" type="button">Zrušit</button>
+    `;
+
+    inputEl.focus();
+    inputEl.select();
+}
+
+function cancelCategoryEdit(catId) {
+    renderCategoriesManager();
+}
+
+async function saveCategoryEdit(catId) {
+    const cat = categoriesData.find(c => c.id === catId);
+    const inputEl = document.getElementById(`cat-input-${catId}`);
+    if (!cat || !inputEl) return;
+
+    const newLabel = inputEl.value.trim();
+    if (!newLabel || newLabel === cat.label) {
+        renderCategoriesManager();
+        return;
+    }
+
+    const saveBtn = document.getElementById(`cat-save-btn-${catId}`);
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Ukládám...';
+    }
+    inputEl.disabled = true;
+
+    cat.label = newLabel;
+
+    // Aktualizace popisku u existujících produktů v této kategorii
+    productsData.forEach(p => {
+        if (String(p.category).toLowerCase() === String(catId).toLowerCase()) {
+            p.categoryLabel = cat.label;
+        }
+    });
+
+    fullShopData.categories = categoriesData;
+    fullShopData.products = productsData;
+
+    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
+
+    await commitFileToGithub(filePath, fullShopData, `CMS: Přejmenována kategorie na "${cat.label}" (${itemLang.toUpperCase()})`);
+    renderCategoriesManager();
+    renderProductsList();
 }
 
 document.getElementById('add-category-form').addEventListener('submit', async (e) => {
@@ -857,33 +935,6 @@ document.getElementById('add-category-form').addEventListener('submit', async (e
     btn.textContent = '+ Přidat kategorii';
     renderCategoriesManager();
 });
-
-async function renameCategory(catId) {
-    const cat = categoriesData.find(c => c.id === catId);
-    if (!cat) return;
-
-    const newLabel = prompt('Zadejte nový název kategorie:', cat.label);
-    if (!newLabel || !newLabel.trim() || newLabel.trim() === cat.label) return;
-
-    cat.label = newLabel.trim();
-
-    // Aktualizace popisku u existujících produktů v této kategorii
-    productsData.forEach(p => {
-        if (String(p.category).toLowerCase() === String(catId).toLowerCase()) {
-            p.categoryLabel = cat.label;
-        }
-    });
-
-    fullShopData.categories = categoriesData;
-    fullShopData.products = productsData;
-
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
-    const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
-
-    await commitFileToGithub(filePath, fullShopData, `CMS: Přejmenována kategorie na "${cat.label}" (${itemLang.toUpperCase()})`);
-    renderCategoriesManager();
-    renderProductsList();
-}
 
 async function deleteCategory(catId) {
     const cat = categoriesData.find(c => c.id === catId);
