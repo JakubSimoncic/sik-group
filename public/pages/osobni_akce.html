@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIK-GROUP | Osobní akce & Svatby</title>
+    <link rel="stylesheet" href="../css/sluzby.css">
+</head>
+<body data-service="osobni_akce">
+
+    <header class="service-navbar">
+        <div class="container service-nav-inner">
+            <a href="../../index.html" class="service-logo">SIK<span>-GROUP</span></a>
+            <nav class="service-nav-links">
+                <a href="../../index.html" data-nav-key="home">Úvod</a>
+                <a href="propagace.html" data-nav-key="propagace">Propagační videa</a>
+                <a href="firemni_akce.html" data-nav-key="firemni">Velké eventy</a>
+                <a href="osobni_akce.html" class="active" data-nav-key="osobni">Osobní akce</a>
+                <a href="e-shop.html" data-nav-key="eshop">E-shop</a>
+                <a href="kontakt.html" data-nav-key="kontakt">Kontakt</a>
+            </nav>
+            <div class="lang-switch-group">
+                <button type="button" class="lang-btn active" data-lang="cz" onclick="setServiceLanguage('cz')">CZ</button>
+                <button type="button" class="lang-btn" data-lang="en" onclick="setServiceLanguage('en')">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="service-hero">
+            <div class="container">
+                <span class="service-badge" id="srv-badge"></span>
+                <h1 id="srv-title"></h1>
+                <p id="srv-subtitle"></p>
+                <a href="../../index.html#booking" class="btn-accent" id="srv-cta-btn">Nezávazně poptat</a>
+            </div>
+        </section>
+
+        <section class="showreel-section">
+            <div class="container">
+                <h2 class="section-heading" id="srv-showreel-title"></h2>
+                <div class="showreel-frame" id="srv-showreel-container"></div>
+            </div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="container">
+                <h2 class="section-heading" id="srv-gallery-title"></h2>
+                <div class="video-grid" id="srv-video-grid"></div>
+            </div>
+        </section>
+
+        <section class="deliverables-section">
+            <div class="container">
+                <h2 class="section-heading" id="srv-deliverables-title"></h2>
+                <div class="deliverables-grid" id="srv-deliverables-grid"></div>
+            </div>
+        </section>
+
+        <section class="bottom-cta-section">
+            <div class="container">
+                <div class="bottom-cta-box">
+                    <h2 id="srv-bottom-title"></h2>
+                    <p id="srv-bottom-text"></p>
+                    <a href="../../index.html#booking" class="btn-accent" id="srv-bottom-btn">Rezervovat termín</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="video-modal" id="video-modal">
+        <div class="video-modal-content">
+            <button type="button" class="video-modal-close" id="video-modal-close" aria-label="Zavřít">✕</button>
+            <div class="video-modal-player" id="video-modal-player"></div>
+        </div>
+    </div>
+
+    <footer class="service-footer">
+        <div class="container">© 2026 SIK-GROUP. Všechna práva vyhrazena.</div>
+    </footer>
+
+    <script src="../js/sluzby.js"></script>
+</body>
+</html>
