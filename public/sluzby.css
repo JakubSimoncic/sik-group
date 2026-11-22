@@ -1,0 +1,425 @@
+:root {
+    --bg-dark: #090a0f;
+    --bg-card: #11131c;
+    --bg-card-hover: #171a26;
+    --accent: #00f5d4;
+    --accent-dim: rgba(0, 245, 212, 0.14);
+    --text-main: #f4f6fb;
+    --text-muted: #9aa3b8;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --radius-lg: 16px;
+    --radius-md: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Navigace */
+.service-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(9, 10, 15, 0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.service-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 74px;
+    gap: 16px;
+}
+
+.service-logo {
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 0.08em;
+    color: var(--text-main);
+    text-decoration: none;
+}
+
+.service-logo span {
+    color: var(--accent);
+}
+
+.service-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.service-nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.service-nav-links a:hover,
+.service-nav-links a.active {
+    color: var(--accent);
+}
+
+.lang-switch-group {
+    display: flex;
+    gap: 6px;
+}
+
+.lang-btn {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-btn.active,
+.lang-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+}
+
+/* Hero sekce služby */
+.service-hero {
+    padding: 72px 0 48px;
+    text-align: center;
+}
+
+.service-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0, 245, 212, 0.35);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.service-hero h1 {
+    font-size: clamp(2.1rem, 4.5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+}
+
+.service-hero p {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    color: var(--text-muted);
+    font-size: 1.08rem;
+}
+
+.btn-accent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #061114;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 245, 212, 0.28);
+}
+
+/* Showreel (hlavní video 16:9) */
+.showreel-section {
+    padding: 20px 0 64px;
+}
+
+.section-heading {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.showreel-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.showreel-frame video,
+.showreel-frame iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+    display: block;
+}
+
+/* Galerie ukázek */
+.gallery-section {
+    padding: 32px 0 72px;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.video-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 245, 212, 0.45);
+    background: var(--bg-card-hover);
+}
+
+.video-thumb-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #050608;
+    overflow: hidden;
+}
+
+.video-thumb-wrap img,
+.video-thumb-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+}
+
+.video-card:hover .video-thumb-wrap img,
+.video-card:hover .video-thumb-wrap video {
+    transform: scale(1.04);
+}
+
+.play-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 10, 15, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.video-card:hover .play-overlay {
+    background: rgba(9, 10, 15, 0.15);
+}
+
+.play-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(0, 245, 212, 0.92);
+    color: #051013;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    padding-left: 3px;
+    box-shadow: 0 8px 24px rgba(0, 245, 212, 0.35);
+}
+
+.video-card-body {
+    padding: 22px;
+    flex: 1;
+}
+
+.video-card-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.video-card-body h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+}
+
+.video-card-body p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+/* Co dodáváme (Deliverables) */
+.deliverables-section {
+    padding: 32px 0 72px;
+}
+
+.deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.deliverable-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 26px;
+}
+
+.deliverable-num {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.deliverable-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.deliverable-card p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+/* Spodní CTA banner */
+.bottom-cta-section {
+    padding: 20px 0 88px;
+}
+
+.bottom-cta-box {
+    background: linear-gradient(135deg, rgba(0, 245, 212, 0.1), rgba(17, 19, 28, 0.95));
+    border: 1px solid rgba(0, 245, 212, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 48px 32px;
+    text-align: center;
+}
+
+.bottom-cta-box h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    margin-bottom: 12px;
+}
+
+.bottom-cta-box p {
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 28px;
+}
+
+/* Lightbox modal pro přehrání videa */
+.video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(4, 5, 8, 0.92);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.video-modal.open {
+    display: flex;
+}
+
+.video-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 1040px;
+}
+
+.video-modal-close {
+    position: absolute;
+    top: -42px;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.video-modal-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+}
+
+.video-modal-player video,
+.video-modal-player iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* Patička */
+.service-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 32px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+@media (max-width: 768px) {
+    .service-nav-links {
+        display: none;
+    }
+}
