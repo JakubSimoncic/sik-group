@@ -155,13 +155,13 @@
       "title": "Sestavení na zakázku",
       "price": 635,
       "eurPrice": 12415326,
-      "category": "cinematic",
+      "category": "test",
       "tag": "",
       "tagEn": "",
       "description": "",
       "descriptionEn": "",
       "specs": {},
-      "categoryLabel": "FPV Cinematic",
+      "categoryLabel": "test",
       "stock": "skladem",
       "image": "../img/drone.png"
     }
