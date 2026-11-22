@@ -1,209 +1,229 @@
-const SERVICE_KEY = document.body.dataset.service || 'propagace';
-let currentServiceLang = localStorage.getItem('sik_lang') || 'cz';
+(() => {
+    const SERVICE_KEY = document.body.dataset.service || 'propagace';
+    let loadedVideos = [];
+    let activeCategory = 'ALL';
+    let filterAllLabel = 'Vše';
 
-function resolveMediaPath(rawPath) {
-    if (!rawPath) return '';
-    if (
-        rawPath.startsWith('http://') ||
-        rawPath.startsWith('https://') ||
-        rawPath.startsWith('data:') ||
-        rawPath.startsWith('blob:')
-    ) {
-        return rawPath;
+    function detectCurrentLanguage() {
+        const stored =
+            localStorage.getItem('selectedLang') ||
+            localStorage.getItem('lang') ||
+            localStorage.getItem('sik_lang') ||
+            document.documentElement.lang ||
+            'cz';
+        return stored.toLowerCase().startsWith('en') ? 'en' : 'cz';
     }
-    const clean = rawPath
-        .replace(/^(\.\.\/)+/, '')
-        .replace(/^\.\//, '')
-        .replace(/^public\//, '');
-    return '../' + clean;
-}
 
-function getExternalEmbedUrl(url) {
-    if (!url) return null;
-    // YouTube (watch, youtu.be, shorts, embed)
-    const ytMatch = url.match(
-        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    );
-    if (ytMatch) {
-        return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0`;
+    function extractYouTubeId(url) {
+        if (!url) return null;
+        const match = String(url).match(
+            /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+        );
+        return match ? match[1] : null;
     }
-    // Vimeo
-    const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-    if (vimeoMatch) {
-        return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+
+    function buildYouTubeEmbedUrl(url, autoplay = false) {
+        const id = extractYouTubeId(url);
+        if (!id) return url;
+        const autoParam = autoplay ? '1' : '0';
+        return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoParam}&rel=0&modestbranding=1&playsinline=1`;
     }
-    return null;
-}
 
-function getYouTubeThumb(url) {
-    if (!url) return null;
-    const ytMatch = url.match(
-        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    );
-    return ytMatch ? `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg` : null;
-}
-
-function setServiceLanguage(lang) {
-    currentServiceLang = lang === 'en' ? 'en' : 'cz';
-    localStorage.setItem('sik_lang', currentServiceLang);
-
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === currentServiceLang);
-    });
-
-    updateNavLabels();
-    loadServiceContent();
-}
-
-function updateNavLabels() {
-    const navMap = currentServiceLang === 'en'
-        ? {
-            home: 'Home',
-            propagace: 'Commercial & Brand',
-            firemni: 'Large Events',
-            osobni: 'Personal Events',
-            eshop: 'E-shop',
-            kontakt: 'Contact'
+    function getYouTubeThumbnail(url, customPoster = '') {
+        if (customPoster && !customPoster.includes('drone.png')) {
+            return customPoster.startsWith('http')
+                ? customPoster
+                : '../' + customPoster.replace(/^(\.\.\/)+/, '').replace(/^public\//, '');
         }
-        : {
-            home: 'Úvod',
-            propagace: 'Propagační videa',
-            firemni: 'Velké eventy',
-            osobni: 'Osobní akce',
-            eshop: 'E-shop',
-            kontakt: 'Kontakt'
+        const id = extractYouTubeId(url);
+        if (id) {
+            return `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+        }
+        return '../img/drone.png';
+    }
+
+    async function loadServiceData() {
+        const lang = detectCurrentLanguage();
+        const suffix = lang === 'en' ? '_en.json' : '.json';
+        const url = `../data/${SERVICE_KEY}${suffix}?t=${Date.now()}`;
+
+        try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            renderPage(data);
+        } catch (err) {
+            console.error('Chyba při načítání dat podstránky:', err);
+        }
+    }
+
+    function renderPage(data) {
+        const setElText = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val || '';
         };
 
-    document.querySelectorAll('[data-nav-key]').forEach(el => {
-        const key = el.dataset.navKey;
-        if (navMap[key]) el.textContent = navMap[key];
-    });
-}
+        setElText('srv-eyebrow', data.badge);
+        setElText('srv-title', data.title);
+        setElText('srv-subtitle', data.subtitle);
+        setElText('srv-cta-primary', data.ctaText);
+        setElText('srv-cta-secondary', data.galleryBtnText || 'Prohlédnout výběr děl');
 
-async function loadServiceContent() {
-    const suffix = currentServiceLang === 'en' ? '_en.json' : '.json';
-    const jsonUrl = `../data/${SERVICE_KEY}${suffix}?t=${Date.now()}`;
+        // Hlavní Showreel YouTube iframe
+        setElText('srv-stage-title', data.showreelTitle);
+        setElText('srv-stage-spec', data.showreelSpec || '4K MASTER // YOUTUBE');
+        const stageFrame = document.getElementById('srv-stage-frame');
+        if (stageFrame) {
+            const embedSrc = buildYouTubeEmbedUrl(data.showreelVideo, false);
+            stageFrame.innerHTML = `
+                <iframe
+                    src="${embedSrc}"
+                    title="${data.showreelTitle || 'Showreel'}"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+            `;
+        }
 
-    try {
-        const res = await fetch(jsonUrl);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        renderServicePage(data);
-    } catch (err) {
-        console.error('Chyba při načítání dat služby:', err);
+        // Výběr děl + dynamické filtry
+        setElText('srv-works-title', data.galleryTitle);
+        filterAllLabel = data.filterAllText || 'Vše';
+        loadedVideos = Array.isArray(data.videos) ? data.videos : [];
+        activeCategory = 'ALL';
+
+        renderFilterBar();
+        renderWorksGrid();
+
+        // Co dodáváme (Bento specifikace)
+        setElText('srv-specs-title', data.deliverablesTitle);
+        const specsGrid = document.getElementById('srv-specs-grid');
+        if (specsGrid) {
+            specsGrid.innerHTML = '';
+            (data.deliverables || []).forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'srv-spec-card';
+                card.innerHTML = `
+                    <span class="srv-spec-index">${item.number || ''}</span>
+                    <h3>${item.title || ''}</h3>
+                    <p>${item.description || ''}</p>
+                `;
+                specsGrid.appendChild(card);
+            });
+        }
+
+        // Spodní CTA
+        setElText('srv-bottom-title', data.bottomCtaTitle);
+        setElText('srv-bottom-text', data.bottomCtaText);
+        setElText('srv-bottom-btn', data.bottomCtaBtn);
     }
-}
 
-function renderServicePage(data) {
-    document.getElementById('srv-badge').textContent = data.badge || '';
-    document.getElementById('srv-title').textContent = data.title || '';
-    document.getElementById('srv-subtitle').textContent = data.subtitle || '';
-    document.getElementById('srv-cta-btn').textContent = data.ctaText || 'Nezávazně poptat';
+    function renderFilterBar() {
+        const bar = document.getElementById('srv-filter-bar');
+        if (!bar) return;
+        bar.innerHTML = '';
 
-    // Showreel (hlavní video)
-    document.getElementById('srv-showreel-title').textContent = data.showreelTitle || 'Showreel';
-    const showreelContainer = document.getElementById('srv-showreel-container');
-    const showreelEmbed = getExternalEmbedUrl(data.showreelVideo);
+        const categories = ['ALL', ...new Set(loadedVideos.map(v => v.category).filter(Boolean))];
 
-    if (showreelEmbed) {
-        const cleanEmbed = showreelEmbed.replace('autoplay=1', 'autoplay=0');
-        showreelContainer.innerHTML = `<iframe src="${cleanEmbed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-    } else {
-        const videoSrc = resolveMediaPath(data.showreelVideo || 'public/video/drone-hero.mp4');
-        const posterSrc = resolveMediaPath(data.showreelPoster || 'public/img/hero-poster.jpg');
-        showreelContainer.innerHTML = `
-            <video controls muted loop playsinline poster="${posterSrc}">
-                <source src="${videoSrc}" type="video/mp4">
-            </video>
-        `;
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'srv-filter-btn' + (activeCategory === cat ? ' active' : '');
+            btn.textContent = cat === 'ALL' ? filterAllLabel : cat;
+            btn.addEventListener('click', () => {
+                activeCategory = cat;
+                renderFilterBar();
+                renderWorksGrid();
+            });
+            bar.appendChild(btn);
+        });
     }
 
-    // Galerie videí
-    document.getElementById('srv-gallery-title').textContent = data.galleryTitle || 'Ukázky';
-    const grid = document.getElementById('srv-video-grid');
-    grid.innerHTML = '';
+    function renderWorksGrid() {
+        const grid = document.getElementById('srv-works-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
 
-    (data.videos || []).forEach(item => {
-        const card = document.createElement('article');
-        card.className = 'video-card';
+        const visibleVideos = activeCategory === 'ALL'
+            ? loadedVideos
+            : loadedVideos.filter(v => v.category === activeCategory);
 
-        const ytThumb = getYouTubeThumb(item.video);
-        const posterUrl = ytThumb || resolveMediaPath(item.poster || 'public/img/drone.png');
+        visibleVideos.forEach(item => {
+            const card = document.createElement('article');
+            card.className = 'srv-work-card';
 
-        card.innerHTML = `
-            <div class="video-thumb-wrap">
-                <img src="${posterUrl}" alt="${item.title || ''}" loading="lazy">
-                <div class="play-overlay">
-                    <div class="play-circle">▶</div>
+            const ytId = extractYouTubeId(item.video);
+            const thumbUrl = getYouTubeThumbnail(item.video, item.poster);
+
+            card.innerHTML = `
+                <div class="srv-work-media" role="button" tabindex="0" aria-label="Přehrát ${item.title || ''}">
+                    <img src="${thumbUrl}" alt="${item.title || ''}" loading="lazy">
+                    <div class="srv-play-trigger">
+                        <div class="srv-glass-play">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="video-card-body">
-                <span class="video-card-tag">${item.tag || ''}</span>
-                <h3>${item.title || ''}</h3>
-                <p>${item.description || ''}</p>
-            </div>
-        `;
+                <div class="srv-work-info">
+                    <div class="srv-work-meta-row">
+                        <span class="srv-work-cat">${item.category || ''}</span>
+                        <span class="srv-work-spec">${item.spec || ''}</span>
+                    </div>
+                    <h3 class="srv-work-title">${item.title || ''}</h3>
+                    <p class="srv-work-desc">${item.description || ''}</p>
+                </div>
+            `;
 
-        card.addEventListener('click', () => openVideoModal(item.video));
-        grid.appendChild(card);
-    });
+            const mediaBox = card.querySelector('.srv-work-media');
+            const imgEl = mediaBox.querySelector('img');
+            if (ytId && imgEl) {
+                imgEl.addEventListener('error', () => {
+                    if (!imgEl.dataset.fallbackApplied) {
+                        imgEl.dataset.fallbackApplied = '1';
+                        imgEl.src = `https://i.ytimg.com/vi/${ytId}/hqdefault.jpg`;
+                    }
+                });
+            }
 
-    // Co dodáváme (Deliverables)
-    document.getElementById('srv-deliverables-title').textContent = data.deliverablesTitle || '';
-    const delivGrid = document.getElementById('srv-deliverables-grid');
-    delivGrid.innerHTML = '';
+            const activateIframe = () => {
+                const embedSrc = buildYouTubeEmbedUrl(item.video, true);
+                mediaBox.innerHTML = `
+                    <iframe
+                        src="${embedSrc}"
+                        title="${item.title || 'YouTube video'}"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                `;
+                mediaBox.style.cursor = 'default';
+            };
 
-    (data.deliverables || []).forEach(del => {
-        const box = document.createElement('div');
-        box.className = 'deliverable-card';
-        box.innerHTML = `
-            <span class="deliverable-num">${del.number || ''}</span>
-            <h3>${del.title || ''}</h3>
-            <p>${del.description || ''}</p>
-        `;
-        delivGrid.appendChild(box);
-    });
+            mediaBox.addEventListener('click', activateIframe, { once: true });
+            mediaBox.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    activateIframe();
+                }
+            }, { once: true });
 
-    // Spodní CTA
-    document.getElementById('srv-bottom-title').textContent = data.bottomCtaTitle || '';
-    document.getElementById('srv-bottom-text').textContent = data.bottomCtaText || '';
-    document.getElementById('srv-bottom-btn').textContent = data.bottomCtaBtn || 'Rezervovat termín';
-}
-
-function openVideoModal(rawVideoUrl) {
-    const modal = document.getElementById('video-modal');
-    const playerWrap = document.getElementById('video-modal-player');
-    const embedUrl = getExternalEmbedUrl(rawVideoUrl);
-
-    if (embedUrl) {
-        playerWrap.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-    } else {
-        const src = resolveMediaPath(rawVideoUrl || 'public/video/drone-hero.mp4');
-        playerWrap.innerHTML = `
-            <video controls autoplay playsinline>
-                <source src="${src}" type="video/mp4">
-            </video>
-        `;
+            grid.appendChild(card);
+        });
     }
 
-    modal.classList.add('open');
-}
+    document.addEventListener('DOMContentLoaded', () => {
+        loadServiceData();
 
-function closeVideoModal() {
-    const modal = document.getElementById('video-modal');
-    const playerWrap = document.getElementById('video-modal-player');
-    modal.classList.remove('open');
-    playerWrap.innerHTML = '';
-}
+        // Reaguje na přepnutí jazyka ve vašem globálním script.js
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('[data-lang], .lang-btn, #lang-cz, #lang-en')) {
+                setTimeout(loadServiceData, 60);
+            }
+        });
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('video-modal-close').addEventListener('click', closeVideoModal);
-    document.getElementById('video-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'video-modal') closeVideoModal();
+        const langObserver = new MutationObserver(() => loadServiceData());
+        langObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['lang']
+        });
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeVideoModal();
-    });
-
-    setServiceLanguage(currentServiceLang);
-});
+})();
