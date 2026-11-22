@@ -1,54 +1,77 @@
 {
-  "badge": "SVATBY & OSLAVY",
+  "badge": "WEDDINGS & MILESTONES",
   "title": "Osobní akce & Vzpomínky",
-  "subtitle": "Svatba, výročí, maturitní ples nebo jiný výjimečný den, který si chcete uchovat navždy? Natočíme ho tak, abyste si ho mohli prožít znovu i po letech – od velkých emocí po nenápadné detaily.",
-  "ctaText": "Poptat svatební / osobní video",
-  "showreelTitle": "Ukázka svatební a osobní tvorby",
-  "showreelVideo": "public/video/drone-hero.mp4",
-  "showreelPoster": "public/img/hero-poster.jpg",
-  "galleryTitle": "Ukázky z osobních akcí",
+  "subtitle": "Svatba, výročí nebo maturitní ples. Zachytíme váš výjimečný den přirozeně, nenápadně a ve filmové kvalitě, ke které se budete rádi vracet.",
+  "ctaText": "Ověřit termín",
+  "galleryBtnText": "Výběr děl",
+  "showreelTitle": "SIK-GROUP // Weddings & Personal Showreel",
+  "showreelSpec": "4K CINEMA • GROUND & AERIAL",
+  "showreelVideo": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+  "galleryTitle": "Výběr děl",
+  "filterAllText": "Vše",
   "videos": [
     {
-      "tag": "SVATEBNÍ FILM",
+      "category": "Svatební filmy",
+      "spec": "FULL DAY • 4K",
       "title": "Celodenní svatební příběh",
-      "description": "Přirozené zachycení příprav, obřadu, prvního tance i večerní zábavy bez nuceného pózování.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "description": "Přirozené zachycení ranních příprav, obřadu, slibů i večerní oslavy bez nuceného pózování.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
     },
     {
-      "tag": "LETECKÉ ZÁBĚRY",
-      "title": "Svatební místo z ptačí perspektivy",
-      "description": "Jemné filmové průlety nad obřadním místem, zámkem nebo přírodou, které dodají videu hloubku.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Letecké záběry",
+      "spec": "AERIAL CINEMA • 4K",
+      "title": "Obřadní místo a krajina z výšky",
+      "description": "Jemné filmové průlety nad zámkem, statkem či přírodou, které zasadí příběh do prostředí.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     },
     {
-      "tag": "OSLAVY & PLESY",
-      "title": "Maturitní plesy a významná jubilea",
-      "description": "Vzpomínkové video plné atmosféry, proslovů a momentů s rodinou a přáteli.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Plesy & Oslavy",
+      "spec": "HIGHLIGHT • 4K",
+      "title": "Maturitní ples a slavnostní nástup",
+      "description": "Dynamický sestřih šerpování, předtančení i atmosféry celého večera.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Svatební filmy",
+      "spec": "TEASER • 4K",
+      "title": "Krátký svatební teaser",
+      "description": "Emotivní tříminutový sestřih nejkrásnějších okamžiků pro snadné sdílení s rodinou.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "category": "Letecké záběry",
+      "spec": "GOLDEN HOUR • 4K",
+      "title": "Párové natáčení při západu slunce",
+      "description": "Filmové záběry ve zlaté hodince kombinující pozemní stabilizátor a tichý dron.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Plesy & Oslavy",
+      "spec": "EVENT • 4K",
+      "title": "Významné jubileum a rodinné setkání",
+      "description": "Vzpomínkový záznam proslovů, gratulací a společných chvil.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     }
   ],
   "deliverablesTitle": "Co je součástí balíčku",
   "deliverables": [
     {
-      "number": "01",
-      "title": "Nenápadný a přirozený přístup",
-      "description": "Nepřekážíme a nenutíme vás do nepřirozených póz – zachycujeme skutečné emoce tak, jak přicházejí."
+      "number": "01 // PŘÍSTUP",
+      "title": "Nenápadné a přirozené natáčení",
+      "description": "Splyneme s hosty a zachycujeme autentické emoce tak, jak přirozeně přicházejí."
     },
     {
-      "number": "02",
-      "title": "Hlavní film + krátký klip pro sdílení",
-      "description": "Dostanete jak delší vzpomínkový film se zvukem slibů a proslovů, tak krátký sestřih pro rodinu a přátele."
+      "number": "02 // VÝSTUPY",
+      "title": "Hlavní film + krátký teaser",
+      "description": "Získáte jak kompletní vzpomínkový film se zvukem slibů, tak krátký sestřih pro rychlé sdílení."
     },
     {
-      "number": "03",
-      "title": "Záběry ze země i ze vzduchu",
-      "description": "Spojení detailních pozemních kamer a tichého dronu pro dokonalou atmosféru místa."
+      "number": "03 // TECHNIKA",
+      "title": "Pozemní kamery i tichý dron",
+      "description": "Kombinace detailních záběrů ze země a jemných leteckých pohledů na místo konání."
     }
   ],
   "bottomCtaTitle": "Čeká vás důležitý životní den?",
-  "bottomCtaText": "Napište nám termín a místo konání – rádi s vámi probereme vaše představy.",
-  "bottomCtaBtn": "Ověřit volný termín"
+  "bottomCtaText": "Napište nám termín a místo konání – rádi s vámi probereme detaily.",
+  "bottomCtaBtn": "Rezervovat termín"
 }
