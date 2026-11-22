@@ -2,6 +2,8 @@
   "heroTitle": "Jeden tým pro celý záběr",
   "heroBtnDrony": "Drony",
   "heroBtnFpv": "Náš Tým",
+  "heroVideo": "public/video/drone-hero.mp4",
+  "heroPoster": "public/img/hero-poster.jpg",
   "divisionsTitle": "Naše specializace",
   "divisions": [
     {
@@ -34,6 +36,12 @@
   ],
   "trustTitle": "Klienti a Partneři",
   "trustText": "Spolupracujeme s lidmi, firmami i projekty, které mají co ukázat. Budete další?",
+  "trustLogos": [
+    { "name": "hobbydrone", "image": "public/img/logos/hobbydrone.png" },
+    { "name": "ssps", "image": "public/img/logos/ssps.svg" },
+    { "name": "pilotix", "image": "public/img/logos/pilotix.png" },
+    { "name": "rotorama", "image": "public/img/logos/rotorama.png" }
+  ],
   "bookingTitle": "Domluvíme akci?",
   "bookingHeading": "Vyberte čas akce",
   "dateUnselectedText": "Žádné datum nebylo vybráno",
