@@ -24,12 +24,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let maxPrice = 50000;
     const priceGap = 1;
 
+    function getActiveLang() {
+        return (localStorage.getItem('sik_web_lang') || 'cz').toLowerCase();
+    }
+
     function parseSafeNumber(val, fallback = 0) {
-        if (val === null || val === undefined) return fallback;
+        if (val === null || val === undefined || val === '') return fallback;
         if (typeof val === 'number') return isNaN(val) ? fallback : val;
-        const cleaned = String(val).replace(/\s+/g, '').replace(',', '.');
+        const cleaned = String(val).replace(/[^\d.,-]/g, '').replace(',', '.');
         const parsed = parseFloat(cleaned);
         return isNaN(parsed) ? fallback : parsed;
+    }
+
+    // Vrátí hlavní cenu produktu striktně podle aktivního jazyka (EN = eurPrice, CZ = price)
+    function getProductActivePrice(product, lang = getActiveLang()) {
+        const czk = parseSafeNumber(product.price, 0);
+        const eur = parseSafeNumber(product.eurPrice, Math.round(czk / 25));
+        return lang === 'en' ? eur : czk;
     }
 
     // ==========================================================================
@@ -37,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     async function loadCommonData() {
         try {
-            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const activeLang = getActiveLang();
             const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
             const jsonPath = `../data/${fileName}`;
 
@@ -155,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         categoryFilterList.innerHTML = '';
 
-        // 1. Položka "Všechny" / "All" (ve výchozím stavu aktivní)
         const allLi = document.createElement('li');
         allLi.innerHTML = `
             <label class="tech-checkbox-label">
@@ -165,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         categoryFilterList.appendChild(allLi);
 
-        // 2. Všechny dynamické kategorie z JSONu
         categories.forEach(cat => {
             const li = document.createElement('li');
             li.innerHTML = `
@@ -210,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     async function fetchAllShopData() {
         try {
-            const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+            const activeLang = getActiveLang();
             const fileName = activeLang === 'en' ? 'e-shop_en.json' : 'e-shop.json';
             const jsonPath = `../data/${fileName}`;
 
@@ -298,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!productGrid) return;
         productGrid.innerHTML = '';
 
-        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+        const activeLang = getActiveLang();
 
         if (!items || items.length === 0) {
             productGrid.innerHTML = `<p style="color: #666; padding: 40px 0;">${activeLang === 'en' ? 'No products match the selected filters.' : 'Žádné produkty neodpovídají zvoleným filtrům.'}</p>`;
@@ -312,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cleanPrice = parseSafeNumber(product.price, 0);
             const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
 
-            const mainPriceToUse = activeLang === 'en' ? cleanEurPrice : cleanPrice;
+            const mainPriceToUse = getProductActivePrice(product, activeLang);
             const secondaryPriceToUse = activeLang === 'en' ? cleanPrice : cleanEurPrice;
             const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
 
@@ -356,30 +365,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. INICIALIZACE CENOVÉHO FILTRU (PODLE AKTIVNÍ MĚNY)
     // ==========================================================================
     function initShop() {
+        const activeLang = getActiveLang();
         renderProducts(productsData);
 
-        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
-
         if (productsData.length > 0) {
-            const validPrices = productsData.map(p => {
-                const cleanP = parseSafeNumber(p.price, 0);
-                return activeLang === 'en' ? parseSafeNumber(p.eurPrice, Math.round(cleanP / 25)) : cleanP;
-            });
+            const validPrices = productsData.map(p => getProductActivePrice(p, activeLang));
             minPrice = Math.min(...validPrices);
             maxPrice = Math.max(...validPrices);
 
-            if (maxPrice <= minPrice) maxPrice = minPrice + (activeLang === 'en' ? 400 : 10000);
+            if (maxPrice <= minPrice) {
+                maxPrice = minPrice + (activeLang === 'en' ? 400 : 10000);
+            }
+        } else {
+            minPrice = 0;
+            maxPrice = activeLang === 'en' ? 2000 : 50000;
         }
 
         if (minRange && maxRange) {
-            minRange.min = minPrice; 
-            minRange.max = maxPrice; 
-            minRange.value = minPrice;
+            minRange.min = String(minPrice);
+            minRange.max = String(maxPrice);
+            minRange.value = String(minPrice);
             minRange.step = "1";
 
-            maxRange.min = minPrice; 
-            maxRange.max = maxPrice; 
-            maxRange.value = maxPrice;
+            maxRange.min = String(minPrice);
+            maxRange.max = String(maxPrice);
+            maxRange.value = String(maxPrice);
             maxRange.step = "1";
 
             if (priceMinLabel) priceMinLabel.textContent = `${minPrice.toLocaleString('cs-CZ')} ${currencyTextGlobal}`;
@@ -450,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+        const activeLang = getActiveLang();
         let countText = '';
         if (activeLang === 'en') {
             if (visibleCount === 1) countText = `(1 product)`;
@@ -531,11 +541,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal(product, resolvedImagePath) {
         if (!modal) return;
 
-        const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
+        const activeLang = getActiveLang();
         const cleanPrice = parseSafeNumber(product.price, 0);
         const cleanEurPrice = parseSafeNumber(product.eurPrice, Math.round(cleanPrice / 25));
 
-        const mainPriceToUse = activeLang === 'en' ? cleanEurPrice : cleanPrice;
+        const mainPriceToUse = getProductActivePrice(product, activeLang);
         const secondaryPriceToUse = activeLang === 'en' ? cleanPrice : cleanEurPrice;
         const secondaryCurrency = activeLang === 'en' ? 'CZK' : 'EUR';
 
