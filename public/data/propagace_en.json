@@ -1,0 +1,54 @@
+{
+  "badge": "DRONES & FPV",
+  "title": "Commercial & Brand Content",
+  "subtitle": "Want to showcase your work from above and up close? From dynamic indoor FPV fly-throughs to crisp aerial shots, we handle full production from initial concept to final cut.",
+  "ctaText": "Request a shoot",
+  "showreelTitle": "Featured Showreel",
+  "showreelVideo": "public/video/drone-hero.mp4",
+  "showreelPoster": "public/img/hero-poster.jpg",
+  "galleryTitle": "Sample Shots",
+  "videos": [
+    {
+      "tag": "FPV FLY-THROUGH",
+      "title": "Dynamic Indoor One-Take",
+      "description": "Smooth single-take FPV flight that pulls viewers right into the heart of your venue or production floor.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "4K CINEMA DRONE",
+      "title": "Aerial Exterior & Real Estate",
+      "description": "Stabilized high-resolution cinema footage for real estate, construction sites, and industrial complexes.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "SOCIAL MEDIA & REELS",
+      "title": "Short High-Impact Spots",
+      "description": "Punchy edits tailored for Instagram Reels, TikTok, and performance ad campaigns.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    }
+  ],
+  "deliverablesTitle": "What We Deliver",
+  "deliverables": [
+    {
+      "number": "01",
+      "title": "Turnkey Video Production",
+      "description": "We plan the storyboard, handle flight permits, film the footage, and deliver a ready-to-publish video."
+    },
+    {
+      "number": "02",
+      "title": "Web & Social Media Formats",
+      "description": "Alongside the main 16:9 master, we deliver vertical 9:16 cuts optimized for Reels, TikTok, and Shorts."
+    },
+    {
+      "number": "03",
+      "title": "Color Grading & Sound Design",
+      "description": "Professional color grading, custom sound effects, and licensed music for a true cinematic feel."
+    }
+  ],
+  "bottomCtaTitle": "Have a project worth showcasing?",
+  "bottomCtaText": "Pick an available date in our calendar and let's plan your shoot.",
+  "bottomCtaBtn": "Book a date"
+}
