@@ -21,6 +21,10 @@
     {
       "id": "freestyle",
       "label": "Freestyle"
+    },
+    {
+      "id": "test",
+      "label": "test"
     }
   ],
   "captionPriceRange": "Price range",
