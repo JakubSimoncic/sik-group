@@ -155,13 +155,13 @@
       "title": "Custom Build",
       "price": 635,
       "eurPrice": 12415326,
-      "category": "cinematic",
+      "category": "test",
       "tag": "",
       "tagEn": "",
       "description": "",
       "descriptionEn": "",
       "specs": {},
-      "categoryLabel": "FPV Cinematic",
+      "categoryLabel": "test",
       "stock": "in stock",
       "image": "../img/drone.png"
     }
