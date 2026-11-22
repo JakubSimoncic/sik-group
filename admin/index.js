@@ -826,7 +826,7 @@ function renderFlatFields(obj, prefix = '', container) {
                 const fileHint = document.createElement('div');
                 fileHint.style.fontSize = '12px';
                 fileHint.style.color = 'var(--text-muted, #aaa)';
-                fileHint.innerHTML = `Nahrát nový obrázek nebo video (MP4/WebM): `;
+                fileHint.innerHTML = `Nahrát nový obrázek (png/WebP/svg) nebo video (MP4/WebM): `;
 
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
