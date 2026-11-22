@@ -1,54 +1,77 @@
 {
   "badge": "EVENTS & FESTIVALS",
   "title": "Large Events & Corporate Shows",
-  "subtitle": "Conferences, festivals, races, concerts, or corporate gatherings? We place the camera right in the middle of the action by combining FPV drones, cinema drones, and ground crews.",
+  "subtitle": "Conferences, festivals, motorsport, and concerts. We combine high-speed FPV drones, cinema drones, and ground crews to capture the energy from every angle.",
   "ctaText": "Book event coverage",
-  "showreelTitle": "Event Showreel",
-  "showreelVideo": "public/video/drone-hero.mp4",
-  "showreelPoster": "public/img/hero-poster.jpg",
-  "galleryTitle": "Event Highlights",
+  "galleryBtnText": "Selected works",
+  "showreelTitle": "SIK-GROUP // Events & Action Showreel",
+  "showreelSpec": "4K MULTI-CAM • FPV & GROUND",
+  "showreelVideo": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+  "galleryTitle": "Selected Works",
+  "filterAllText": "All",
   "videos": [
     {
-      "tag": "AFTERMOVIE",
-      "title": "Festivals & Concerts",
-      "description": "High-energy edits capturing crowd atmosphere, stage production, and light shows from air and ground.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Festivals & Concerts",
+      "spec": "AFTERMOVIE • 4K",
+      "title": "Main Stage & Crowd Energy",
+      "description": "Dynamic fly-overs across the crowd and stage paired with intimate front-row cinematography.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
     },
     {
-      "tag": "SPORTS & RACING",
-      "title": "High-Speed Action Tracking",
-      "description": "Agile FPV drones keep pace with cars, bikes, and athletes at full speed.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Motorsport & Sports",
+      "spec": "HIGH-SPEED FPV • 4K",
+      "title": "High-Speed Vehicle Tracking",
+      "description": "Racing FPV drones keeping pace with cars and bikes through every corner.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     },
     {
-      "tag": "CONFERENCES & B2B",
-      "title": "Corporate Events & Expos",
-      "description": "Polished coverage of keynote speeches, networking, and brand presence at your event.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Corporate Conferences",
+      "spec": "B2B EVENT • 4K",
+      "title": "Annual Summit & Gala Evening",
+      "description": "Polished coverage of keynote speeches, stage design, and executive networking.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Festivals & Concerts",
+      "spec": "NIGHT SHOW • 4K",
+      "title": "Night Light Production & Pyrotechnics",
+      "description": "Aerial perspectives of evening stage lighting and headline performances.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "category": "Motorsport & Sports",
+      "spec": "EXTREME ACTION • 4K",
+      "title": "Off-Road Track Action",
+      "description": "Low-altitude tracking shots right alongside competing riders.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Corporate Conferences",
+      "spec": "EXPO & TRADE SHOWS • 4K",
+      "title": "International Expo Brand Showcase",
+      "description": "Full coverage of booth presence, product demos, and visitor engagement.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     }
   ],
-  "deliverablesTitle": "How We Work",
+  "deliverablesTitle": "How We Operate",
   "deliverables": [
     {
-      "number": "01",
-      "title": "Multi-Camera On-Site Crew",
-      "description": "We combine ground camera operators and certified drone pilots so no key moment is ever missed."
+      "number": "01 // ON-SITE CREW",
+      "title": "Multi-Camera Production",
+      "description": "Ground camera operators and certified drone pilots working in sync with your event schedule."
     },
     {
-      "number": "02",
-      "title": "Same-Day Social Edits",
-      "description": "On request, we deliver quick highlight clips during the event for real-time social media posting."
+      "number": "02 // SAME-DAY EDIT",
+      "title": "Live Event Cutdowns",
+      "description": "On request, we edit highlight clips on-site for immediate social media publishing."
     },
     {
-      "number": "03",
-      "title": "Full Aftermovie & Teasers",
-      "description": "A complete recap film for sponsors and partners plus promo teasers for your next edition."
+      "number": "03 // AFTERMOVIE",
+      "title": "Hero Recap & Sponsor Edits",
+      "description": "Full-length aftermovie paired with promo teasers to sell out your next edition."
     }
   ],
   "bottomCtaTitle": "Planning a major event?",
-  "bottomCtaText": "Reserve our crew early and get video content that sells out your next event.",
+  "bottomCtaText": "Check our crew availability in the booking calendar.",
   "bottomCtaBtn": "Check availability"
 }
