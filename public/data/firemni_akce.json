@@ -1,54 +1,77 @@
 {
-  "badge": "EVENTY & FESTIVALY",
+  "badge": "EVENTS & FESTIVALS",
   "title": "Velké eventy & Firemní akce",
-  "subtitle": "Konference, festivaly, závody, koncerty nebo firemní teambuildingy? Dostaneme kameru přesně tam, kde se tvoří atmosféra – kombinací FPV dronů, kino dronů a pozemních kamer.",
+  "subtitle": "Konference, festivaly, motorsport i koncerty. Kombinujeme rychlé FPV drony, kino drony a pozemní kamery pro zachycení atmosféry z každého úhlu.",
   "ctaText": "Poptat natáčení akce",
-  "showreelTitle": "Event Showreel",
-  "showreelVideo": "public/video/drone-hero.mp4",
-  "showreelPoster": "public/img/hero-poster.jpg",
-  "galleryTitle": "Ukázky z akcí",
+  "galleryBtnText": "Výběr děl",
+  "showreelTitle": "SIK-GROUP // Events & Action Showreel",
+  "showreelSpec": "4K MULTI-CAM • FPV & GROUND",
+  "showreelVideo": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+  "galleryTitle": "Výběr děl",
+  "filterAllText": "Vše",
   "videos": [
     {
-      "tag": "AFTERMOVIE",
-      "title": "Festivaly a koncerty",
-      "description": "Dynamický sestřih energie publika, pódia a světelné show z ptačí perspektivy i z první řady.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Festivaly & Koncerty",
+      "spec": "AFTERMOVIE • 4K",
+      "title": "Hlavní stage a energie publika",
+      "description": "Dynamické průlety nad davem a pódiem v kombinaci s detailními záběry z první řady.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
     },
     {
-      "tag": "SPORT & ZÁVODY",
-      "title": "Sledování akce v rychlosti",
-      "description": "Rychlé FPV drony dokážou držet krok s auty, motorkami i sportovci v plném tempu.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Motorsport & Sport",
+      "spec": "HIGH-SPEED FPV • 4K",
+      "title": "Sledování vozů v plné rychlosti",
+      "description": "Závodní FPV drony držící krok s auty a motorkami v zatáčkách i na rovinkách.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     },
     {
-      "tag": "KONFERENCE & B2B",
-      "title": "Firemní eventy a veletrhy",
-      "description": "Reprezentativní záznam atmosféry, přednášek a klíčových momentů vaší firemní události.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Firemní konference",
+      "spec": "B2B EVENT • 4K",
+      "title": "Výroční konference a gala večer",
+      "description": "Reprezentativní záznam klíčových vystoupení, programu a networkingu pro partnery.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Festivaly & Koncerty",
+      "spec": "NIGHT SHOW • 4K",
+      "title": "Noční světelná show a pyrotechnika",
+      "description": "Záběry světelné produkce a atmosféry večerního programu z ptačí perspektivy.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "category": "Motorsport & Sport",
+      "spec": "EXTREME ACTION • 4K",
+      "title": "Adrenalinové závody v terénu",
+      "description": "Nízké průlety nad tratí a bezprostřední blízkost jezdců.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Firemní konference",
+      "spec": "EXPO & VELETRHY • 4K",
+      "title": "Prezentace značky na mezinárodním veletrhu",
+      "description": "Kompletní pokrytí expozice, rozhovorů a návštěvnosti stánku.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     }
   ],
-  "deliverablesTitle": "Jak probíhá spolupráce",
+  "deliverablesTitle": "Jak probíhá realizace",
   "deliverables": [
     {
-      "number": "01",
-      "title": "Vícekamerový tým na místě",
-      "description": "Kombinujeme pozemní kameramany a certifikované piloty dronů, takže nám neunikne žádný klíčový moment."
+      "number": "01 // TÝM NA MÍSTĚ",
+      "title": "Vícekamerová produkce",
+      "description": "Pozemní kameramani a certifikovaní piloti dronů pracují synchronizovaně podle harmonogramu akce."
     },
     {
-      "number": "02",
-      "title": "Rychlý výstup už během akce",
-      "description": "Po domluvě dodáme krátké sestřihy ještě v průběhu eventu, abyste je mohli sdílet na sítích za tepla."
+      "number": "02 // SAME-DAY EDIT",
+      "title": "Rychlé výstupy během akce",
+      "description": "Po domluvě stříháme krátké klipy přímo na místě pro okamžité sdílení na sociálních sítích."
     },
     {
-      "number": "03",
-      "title": "Hlavní aftermovie & teasery",
-      "description": "Kompletní sestřih celé akce pro partnery a sponzory plus upoutávky pro příští ročník."
+      "number": "03 // AFTERMOVIE",
+      "title": "Hlavní film & sponzorské sestřihy",
+      "description": "Finální aftermovie v plné kvalitě doplněné o teasery pro propagaci dalšího ročníku."
     }
   ],
-  "bottomCtaTitle": "Chystáte akci, na kterou se nezapomene?",
-  "bottomCtaText": "Rezervujte si náš tým včas a získejte video obsah, který prodá i další ročník.",
+  "bottomCtaTitle": "Chystáte akci, která si zaslouží špičkový záznam?",
+  "bottomCtaText": "Ověřte si dostupnost našeho týmu v rezervačním kalendáři.",
   "bottomCtaBtn": "Zkontrolovat termíny"
 }
