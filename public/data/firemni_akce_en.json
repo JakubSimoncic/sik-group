@@ -1,0 +1,54 @@
+{
+  "badge": "EVENTS & FESTIVALS",
+  "title": "Large Events & Corporate Shows",
+  "subtitle": "Conferences, festivals, races, concerts, or corporate gatherings? We place the camera right in the middle of the action by combining FPV drones, cinema drones, and ground crews.",
+  "ctaText": "Book event coverage",
+  "showreelTitle": "Event Showreel",
+  "showreelVideo": "public/video/drone-hero.mp4",
+  "showreelPoster": "public/img/hero-poster.jpg",
+  "galleryTitle": "Event Highlights",
+  "videos": [
+    {
+      "tag": "AFTERMOVIE",
+      "title": "Festivals & Concerts",
+      "description": "High-energy edits capturing crowd atmosphere, stage production, and light shows from air and ground.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "SPORTS & RACING",
+      "title": "High-Speed Action Tracking",
+      "description": "Agile FPV drones keep pace with cars, bikes, and athletes at full speed.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "CONFERENCES & B2B",
+      "title": "Corporate Events & Expos",
+      "description": "Polished coverage of keynote speeches, networking, and brand presence at your event.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    }
+  ],
+  "deliverablesTitle": "How We Work",
+  "deliverables": [
+    {
+      "number": "01",
+      "title": "Multi-Camera On-Site Crew",
+      "description": "We combine ground camera operators and certified drone pilots so no key moment is ever missed."
+    },
+    {
+      "number": "02",
+      "title": "Same-Day Social Edits",
+      "description": "On request, we deliver quick highlight clips during the event for real-time social media posting."
+    },
+    {
+      "number": "03",
+      "title": "Full Aftermovie & Teasers",
+      "description": "A complete recap film for sponsors and partners plus promo teasers for your next edition."
+    }
+  ],
+  "bottomCtaTitle": "Planning a major event?",
+  "bottomCtaText": "Reserve our crew early and get video content that sells out your next event.",
+  "bottomCtaBtn": "Check availability"
+}
