@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) return;
             const data = await res.json();
 
-            // Hero sekce
+            // Hero sekce (texty + video + poster)
             const heroEl = document.getElementById('hero-title');
             if (heroEl && data.heroTitle) heroEl.textContent = data.heroTitle;
 
@@ -136,7 +136,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnFpv = document.getElementById('hero-btn-fpv');
             if (btnFpv && data.heroBtnFpv) btnFpv.textContent = data.heroBtnFpv;
 
-            // Divize / specializace
+            const heroVideoEl = document.getElementById('heroVideo');
+            if (heroVideoEl) {
+                if (data.heroPoster) {
+                    heroVideoEl.poster = data.heroPoster;
+                }
+                if (data.heroVideo) {
+                    const sourceEl = heroVideoEl.querySelector('source');
+                    if (sourceEl && sourceEl.getAttribute('src') !== data.heroVideo) {
+                        sourceEl.setAttribute('src', data.heroVideo);
+                        heroVideoEl.load();
+                        heroVideoEl.play().catch(() => {});
+                    } else if (!sourceEl && heroVideoEl.getAttribute('src') !== data.heroVideo) {
+                        heroVideoEl.setAttribute('src', data.heroVideo);
+                        heroVideoEl.load();
+                        heroVideoEl.play().catch(() => {});
+                    }
+                }
+            }
+
+            // Divize / specializace (podporuje obrázky i videa)
             const divSectionTitle = document.getElementById('divisions-section-title');
             if (divSectionTitle && data.divisionsTitle) divSectionTitle.textContent = data.divisionsTitle;
 
@@ -146,13 +165,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.divisions.forEach((div, index) => {
                     const isReverse = index % 2 === 1;
                     const rowClass = isReverse ? 'showcase-row row-reverse' : 'showcase-row';
+                    const mediaSrc = div.image || 'public/img/drone.png';
+                    const isVideo = /\.(mp4|webm|mov)$/i.test(mediaSrc);
+
+                    const mediaHtml = isVideo
+                        ? `<video src="${mediaSrc}" class="media-bg-img" autoplay muted loop playsinline></video>`
+                        : `<img src="${mediaSrc}" alt="${div.title}" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">`;
 
                     const row = document.createElement('div');
                     row.className = rowClass;
                     row.innerHTML = `
                         <div class="showcase-media">
                             <a href="${div.link}" class="media-container">
-                                <img src="${div.image}" alt="${div.title}" class="media-bg-img" loading="lazy" decoding="async" width="800" height="450">
+                                ${mediaHtml}
                                 <div class="media-overlay"></div>
                                 <span class="media-badge">${div.badge}</span>
                             </a>
@@ -171,12 +196,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // Trust / Partneři
+            // Trust / Partneři (texty + loga z CMS)
             const trustTitleEl = document.getElementById('trust-section-title');
             if (trustTitleEl && data.trustTitle) trustTitleEl.textContent = data.trustTitle;
 
             const trustEl = document.getElementById('trust-text');
             if (trustEl && data.trustText) trustEl.textContent = data.trustText;
+
+            const trustLogosGrid = document.querySelector('.trust-logos-grid');
+            if (trustLogosGrid && Array.isArray(data.trustLogos) && data.trustLogos.length > 0) {
+                trustLogosGrid.innerHTML = data.trustLogos.map(logo => `
+                    <div class="logo-wrapper">
+                        <img src="${logo.image}" alt="${logo.name || 'Partner'}" loading="lazy" decoding="async" width="120" height="60">
+                    </div>
+                `).join('');
+            }
 
             // Booking / Rezervace texty
             const bookingTitleEl = document.getElementById('booking-section-title');
