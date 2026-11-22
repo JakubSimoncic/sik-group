@@ -4,12 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIK-GROUP | Velké eventy & Festivaly</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/sluzby.css">
 </head>
 <body data-service="firemni_akce">
+    <header>
+        <div id="nav-wrapper">
+            <nav id="main-nav" class="global-container">
+                <div class="logo">
+                    <a href="../../index.html" id="header-logo-link">
+                        <img src="../img/logo.svg" alt="SIK-GROUP" width="160" height="40" decoding="async">
+                    </a>
+                </div>
+                
+                <div class="nav-right-controls">
+                    <div class="lang-switcher" id="dynamic-lang-switcher"></div>
+                    
+                    <div class="menu-toggle" id="mobile-menu">
+                        <span class="bar b1"></span>
+                        <span class="bar b2"></span>
+                    </div>
+                </div>
+            </nav>
 
-    <header id="navbar" class="navbar"></header>
+            <div class="nav-drop-panel" id="nav-panel">
+                <div class="panel-grid">
+                    <div class="panel-main">
+                        <ul class="nav-list" id="dynamic-nav-list">
+                            <!-- Dynamicky naplněno z common.json -->
+                        </ul>
+                    </div>
+                    
+                    <div class="panel-side">
+                        <div class="side-block">
+                            <span id="label-header-email">Email</span>
+                            <a href="#" class="side-email" id="header-email"></a>
+                            <span id="label-header-phone">Telefon</span>
+                            <a href="#" class="side-phone" id="header-phone"></a>
+                        </div>
+                        <div class="side-block">
+                            <span id="label-header-socials">Sociální sítě</span>
+                            <div class="side-socials" id="header-socials">
+                                <!-- Dynamicky naplněno z common.json -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nav-dim-overlay" id="nav-overlay"></div>
+    </header>
 
     <main class="srv-page">
         <section class="srv-hero">
@@ -62,9 +111,20 @@
         </section>
     </main>
 
-    <footer id="footer" class="footer"></footer>
+    <footer class="main-footer">
+        <div class="global-container">
+            <div class="footer-grid" id="dynamic-footer-grid">
+                <!-- Dynamicky naplněno z common.json -->
+            </div>
+            <div class="footer-bottom">
+                <p id="footer-copyright">&copy; 2026 SIK-GROUP.</p>
+            </div>
+        </div>
+    </footer>
 
-    <script src="../js/script.js"></script>
-    <script src="../js/sluzby.js"></script>
+    <!-- Globální script -->
+    <script src="../js/script.js" defer></script>
+    <!-- Stránkový script -->
+    <script src="../js/sluzby.js" defer></script>
 </body>
 </html>
