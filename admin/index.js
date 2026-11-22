@@ -588,6 +588,19 @@ function setAdminLanguage(lang) {
     log(`Přepnuto CMS na jazyk: ${lang.toUpperCase()}`, 'success');
     renderDashboard();
     adjustProductFormLanguage();
+
+    if (document.getElementById('view-products').classList.contains('active')) {
+        resetProductForm();
+        const targetEshopSection = pagesData.find(p => p.type === 'products' && (p.lang || (p.id.endsWith('-en') ? 'en' : 'cz')) === lang);
+        openSection(targetEshopSection ? targetEshopSection.id : (lang === 'en' ? 'eshop-products-en' : 'eshop-products-cz'));
+    } else if (document.getElementById('view-page-editor').classList.contains('active') && currentActiveItem) {
+        const targetId = lang === 'en'
+            ? currentActiveItem.id.replace('-cz', '-en')
+            : currentActiveItem.id.replace('-en', '-cz');
+        if (pagesData.some(p => p.id === targetId)) {
+            openSection(targetId);
+        }
+    }
 }
 
 function log(msg, type = '') {
@@ -880,7 +893,7 @@ async function saveCategoryEdit(catId) {
     fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const itemLang = currentAdminLang;
     const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
 
     await commitFileToGithub(filePath, fullShopData, `CMS: Přejmenována kategorie na "${cat.label}" (${itemLang.toUpperCase()})`);
@@ -908,7 +921,7 @@ document.getElementById('add-category-form').addEventListener('submit', async (e
     fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const itemLang = currentAdminLang;
     const primaryFile = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
     const secondaryFile = itemLang === 'en' ? 'public/data/e-shop.json' : 'public/data/e-shop_en.json';
 
@@ -951,7 +964,7 @@ async function deleteCategory(catId) {
     fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const itemLang = currentAdminLang;
     const primaryFile = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
     const secondaryFile = itemLang === 'en' ? 'public/data/e-shop.json' : 'public/data/e-shop_en.json';
 
@@ -1289,7 +1302,7 @@ document.getElementById('save-shop-texts-btn').addEventListener('click', async (
     fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const itemLang = currentAdminLang;
     const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
 
     await commitFileToGithub(filePath, fullShopData, `CMS: Aktualizovány texty e-shopu (${itemLang.toUpperCase()})`);
@@ -1414,7 +1427,7 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const itemLang = currentAdminLang;
     const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
 
     await commitFileToGithub(filePath, fullShopData, `CMS: Uložen produkt ${title} (${itemLang.toUpperCase()})`);
@@ -1431,7 +1444,7 @@ async function deleteProduct(id) {
     fullShopData.categories = categoriesData;
     fullShopData.products = productsData;
 
-    const itemLang = currentActiveItem ? (currentActiveItem.lang || 'cz') : currentAdminLang;
+    const itemLang = currentAdminLang;
     const filePath = itemLang === 'en' ? 'public/data/e-shop_en.json' : 'public/data/e-shop.json';
 
     await commitFileToGithub(filePath, fullShopData, `CMS: Smazán produkt ${prod ? prod.title : id} (${itemLang.toUpperCase()})`);
