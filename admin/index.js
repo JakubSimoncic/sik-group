@@ -704,6 +704,46 @@ function renderDashboard() {
     });
 }
 
+// ==========================================================================
+// DETEKCE MÉDIÍ A ŽIVÉ NÁHLEDY OBRÁZKŮ I VIDEÍ V EDITORU STRÁNEK
+// ==========================================================================
+function isMediaFieldOrValue(fullKey, val) {
+    const lowerKey = fullKey.toLowerCase();
+    const keyMatches = [
+        'image', 'img', 'video', 'poster', 'thumb', 'thumbnail',
+        'banner', 'bg', 'background', 'photo', 'avatar', 'logo', 'icon', 'media'
+    ].some(k => lowerKey.includes(k));
+
+    if (keyMatches && !lowerKey.includes('title') && !lowerKey.includes('text') && !lowerKey.includes('alt')) {
+        return true;
+    }
+
+    if (typeof val === 'string') {
+        const lowerVal = val.trim().toLowerCase();
+        if (
+            lowerVal.startsWith('img/') ||
+            lowerVal.startsWith('video/') ||
+            lowerVal.startsWith('../img/') ||
+            lowerVal.startsWith('../video/') ||
+            lowerVal.startsWith('public/img/') ||
+            lowerVal.startsWith('public/video/') ||
+            /\.(png|jpe?g|webp|gif|svg|mp4|webm|mov)$/i.test(lowerVal)
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function resolveCmsPreviewUrl(rawPath) {
+    if (!rawPath) return '';
+    if (rawPath.startsWith('http://') || rawPath.startsWith('https://') || rawPath.startsWith('data:') || rawPath.startsWith('blob:')) {
+        return rawPath;
+    }
+    const clean = rawPath.replace(/^(\.\.\/)+/, '').replace(/^\.\//, '').replace(/^public\//, '');
+    return '../public/' + clean;
+}
+
 function renderFlatFields(obj, prefix = '', container) {
     if (obj === null || obj === undefined) return;
 
@@ -718,8 +758,15 @@ function renderFlatFields(obj, prefix = '', container) {
             fieldGroup.className = 'field-group';
 
             const friendlyName = getFriendlyCmsLabel(fullKey);
-            const lowerKey = fullKey.toLowerCase();
-            const isMediaField = lowerKey.includes('image') || lowerKey.includes('video') || lowerKey.endsWith('img');
+            const labelEl = document.createElement('label');
+            labelEl.textContent = friendlyName;
+            labelEl.style.display = 'block';
+            labelEl.style.marginBottom = '6px';
+            labelEl.style.fontSize = '0.82rem';
+            labelEl.style.color = 'var(--text-muted, #aaa)';
+            fieldGroup.appendChild(labelEl);
+
+            const isMediaField = isMediaFieldOrValue(fullKey, val);
 
             let input;
             if (typeof val === 'string' && val.length > 60 && !isMediaField) {
@@ -738,12 +785,74 @@ function renderFlatFields(obj, prefix = '', container) {
             fieldGroup.appendChild(input);
 
             if (isMediaField) {
+                const mediaWrapper = document.createElement('div');
+                mediaWrapper.style.marginTop = '8px';
+                mediaWrapper.style.padding = '10px 12px';
+                mediaWrapper.style.border = '1px solid rgba(255,255,255,0.08)';
+                mediaWrapper.style.borderRadius = '8px';
+                mediaWrapper.style.background = 'rgba(255,255,255,0.02)';
+
+                const previewContainer = document.createElement('div');
+                previewContainer.style.marginBottom = '8px';
+
+                const updatePreview = (src, forceVideo = false) => {
+                    previewContainer.innerHTML = '';
+                    if (!src) return;
+                    if (forceVideo || /\.(mp4|webm|mov)(\?.*)?$/i.test(src)) {
+                        const vid = document.createElement('video');
+                        vid.src = src;
+                        vid.controls = true;
+                        vid.muted = true;
+                        vid.style.maxWidth = '280px';
+                        vid.style.maxHeight = '160px';
+                        vid.style.borderRadius = '6px';
+                        vid.style.display = 'block';
+                        previewContainer.appendChild(vid);
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.style.maxWidth = '200px';
+                        img.style.maxHeight = '120px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '6px';
+                        img.style.display = 'block';
+                        img.onerror = () => { img.style.display = 'none'; };
+                        previewContainer.appendChild(img);
+                    }
+                };
+
+                updatePreview(resolveCmsPreviewUrl(String(val || '')), false);
+
                 const fileHint = document.createElement('div');
                 fileHint.style.fontSize = '12px';
                 fileHint.style.color = 'var(--text-muted, #aaa)';
-                fileHint.style.marginTop = '4px';
-                fileHint.innerHTML = `Nebo nahrát nový soubor: <input type="file" class="page-file-input" data-key-path="${fullKey}" accept="image/*,video/*" style="margin-top: 4px; color: inherit;">`;
-                fieldGroup.appendChild(fileHint);
+                fileHint.innerHTML = `Nahrát nový obrázek nebo video (MP4/WebM): `;
+
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.className = 'page-file-input';
+                fileInput.dataset.keyPath = fullKey;
+                fileInput.accept = 'image/*,video/mp4,video/webm,video/quicktime';
+                fileInput.style.marginTop = '4px';
+                fileInput.style.color = 'inherit';
+
+                fileInput.addEventListener('change', () => {
+                    if (fileInput.files && fileInput.files[0]) {
+                        const selectedFile = fileInput.files[0];
+                        const objectUrl = URL.createObjectURL(selectedFile);
+                        const isVid = selectedFile.type.startsWith('video/') || /\.(mp4|webm|mov)$/i.test(selectedFile.name);
+                        updatePreview(objectUrl, isVid);
+                    }
+                });
+
+                input.addEventListener('input', () => {
+                    updatePreview(resolveCmsPreviewUrl(input.value.trim()), false);
+                });
+
+                fileHint.appendChild(fileInput);
+                mediaWrapper.appendChild(previewContainer);
+                mediaWrapper.appendChild(fileHint);
+                fieldGroup.appendChild(mediaWrapper);
             }
 
             container.appendChild(fieldGroup);
@@ -883,7 +992,6 @@ async function saveCategoryEdit(catId) {
 
     cat.label = newLabel;
 
-    // Aktualizace popisku u existujících produktů v této kategorii
     productsData.forEach(p => {
         if (String(p.category).toLowerCase() === String(catId).toLowerCase()) {
             p.categoryLabel = cat.label;
@@ -927,7 +1035,6 @@ document.getElementById('add-category-form').addEventListener('submit', async (e
 
     await commitFileToGithub(primaryFile, fullShopData, `CMS: Přidána kategorie "${label}" (${itemLang.toUpperCase()})`);
 
-    // Automatická synchronizace nové kategorie i do druhého jazykového souboru e-shopu
     try {
         const secRes = await fetch(`../${secondaryFile}?t=${Date.now()}`);
         if (secRes.ok) {
@@ -1092,6 +1199,7 @@ function renderProductsList() {
         let rawImg = p.image || 'img/drone.png';
         rawImg = rawImg.replace(/^\.\//, '').replace(/^public\//, '');
         const imgPath = '../public/' + rawImg;
+        const isVideo = /\.(mp4|webm|mov)$/i.test(rawImg);
 
         const formattedPrice = p.price ? p.price.toLocaleString('cs-CZ') : 0;
         const eurPrice = p.eurPrice ? p.eurPrice.toLocaleString('cs-CZ') : Math.round((p.price || 0) / 25);
@@ -1099,9 +1207,13 @@ function renderProductsList() {
         const matchedCat = categoriesData.find(c => c.id === p.category);
         const catDisplay = matchedCat ? matchedCat.label : (p.categoryLabel || p.category);
 
+        const thumbHtml = isVideo
+            ? `<div class="item-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🎬</div>`
+            : `<img src="${imgPath}" alt="${p.title}" class="item-thumb" style="object-fit: cover;">`;
+
         card.innerHTML = `
             <div class="item-info">
-                <img src="${imgPath}" alt="${p.title}" class="item-thumb" style="object-fit: cover;">
+                ${thumbHtml}
                 <div class="item-details">
                     <h4>${p.title}</h4>
                     <p>${escapeHtml(catDisplay)} // ${formattedPrice} Kč / ${eurPrice} EUR</p>
@@ -1308,6 +1420,9 @@ document.getElementById('save-shop-texts-btn').addEventListener('click', async (
     await commitFileToGithub(filePath, fullShopData, `CMS: Aktualizovány texty e-shopu (${itemLang.toUpperCase()})`);
 });
 
+// ==========================================================================
+// ULOŽENÍ STRÁNKY VČETNĚ OBRÁZKŮ A VIDEÍ SE SPRÁVNOU CESTOU
+// ==========================================================================
 document.getElementById('page-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -1327,11 +1442,27 @@ document.getElementById('page-form').addEventListener('submit', async (e) => {
             const file = fileInput.files[0];
             const keyPath = fileInput.dataset.keyPath;
 
-            let folder = 'public/img/';
-            if (file.type.startsWith('video/') || file.name.endsWith('.mp4')) {
-                folder = 'public/video/';
+            const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov)$/i.test(file.name);
+            const matchingTextInput = document.querySelector(`.page-field-input[data-key-path="${CSS.escape(keyPath)}"]`);
+            const currentVal = String(matchingTextInput ? matchingTextInput.value : '').trim();
+
+            // Zachová případnou podsložku (např. img/team/ nebo img/logos/), pokud se nahrává obrázek
+            let subFolder = isVideo ? 'video/' : 'img/';
+            if (!isVideo) {
+                if (currentVal.includes('img/team/')) subFolder = 'img/team/';
+                else if (currentVal.includes('img/logos/')) subFolder = 'img/logos/';
             }
-            const targetFilePath = folder + file.name;
+
+            const targetFilePath = 'public/' + subFolder + file.name;
+
+            // Zachová prefix cesty, který daný JSON soubor používá (např. "public/", "../" nebo bez prefixu)
+            let prefix = '';
+            if (currentVal.startsWith('public/')) {
+                prefix = 'public/';
+            } else if (currentVal.startsWith('../')) {
+                prefix = '../';
+            }
+            const savedJsonPath = prefix + subFolder + file.name;
 
             const base64Data = await new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1340,9 +1471,9 @@ document.getElementById('page-form').addEventListener('submit', async (e) => {
                 reader.readAsDataURL(file);
             });
 
-            log(`Nahrávám soubor ${file.name}...`);
+            log(`Nahrávám soubor ${file.name} do ${targetFilePath}...`);
             await uploadBinaryFileToGithub(targetFilePath, base64Data, `CMS: Nahrán soubor ${file.name}`);
-            setNestedValue(updatedData, keyPath, 'img/' + file.name);
+            setNestedValue(updatedData, keyPath, savedJsonPath);
         }
     }
 
@@ -1370,12 +1501,9 @@ document.getElementById('product-form').addEventListener('submit', async (e) => 
     const imgFile = document.getElementById('prod-image-file');
     if (imgFile && imgFile.files && imgFile.files[0]) {
         const file = imgFile.files[0];
-        let folder = 'public/img/';
-        let subFolder = 'img/';
-        if (file.type.startsWith('video/') || file.name.endsWith('.mp4')) {
-            folder = 'public/video/';
-            subFolder = 'video/';
-        }
+        const isVideo = file.type.startsWith('video/') || /\.(mp4|webm|mov)$/i.test(file.name);
+        const folder = isVideo ? 'public/video/' : 'public/img/';
+        const subFolder = isVideo ? 'video/' : 'img/';
         
         const fullUploadPath = folder + file.name;
         imagePath = subFolder + file.name;
@@ -1478,13 +1606,15 @@ const cmsFieldLabels = {
 
     "heroTitle": "Úvodní stránka – Hlavní nadpis",
     "heroBtnDrony": "Úvodní stránka – Text tlačítka 'Drony'",
-    "heroBtnFpv": "Úvodní stránka – Text tlačítka 'FPV'",
+    "heroBtnFpv": "Úvodní stránka – Text tlačítka 'Náš Tým'",
+    "heroVideo": "Úvodní stránka – Video na pozadí (Hero MP4)",
+    "heroPoster": "Úvodní stránka – Náhledový obrázek videa (Hero Poster)",
     "divisionsTitle": "Úvodní stránka – Nadpis sekce specializací",
     "trustTitle": "Úvodní stránka – Nadpis partnerů",
     "trustText": "Úvodní stránka – Text u partnerů",
     "bookingTitle": "Úvodní stránka – Nadpis rezervací",
     "bookingHeading": "Úvodní stránka – Podnadpis kalendáře",
-    "dateUnselectedText": "Úvodní stránka – Text před vývěrem data",
+    "dateUnselectedText": "Úvodní stránka – Text před výběrem data",
     "formPlaceholderName": "Formulář – Placeholder pro Jméno/Firmu",
     "formPlaceholderEmail": "Formulář – Placeholder pro Email",
     "formPlaceholderPhone": "Formulář – Placeholder pro Telefon",
@@ -1520,15 +1650,21 @@ function getFriendlyCmsLabel(key) {
         if (key.endsWith('.title')) return `Divize č. ${index} – Název specializace`;
         if (key.endsWith('.description')) return `Divize č. ${index} – Popis specializace`;
         if (key.endsWith('.btnText')) return `Divize č. ${index} – Text tlačítka`;
-        if (key.endsWith('.image')) return `Divize č. ${index} – Cesta k obrázku`;
+        if (key.endsWith('.image')) return `Divize č. ${index} – Obrázek nebo video`;
         if (key.endsWith('.link')) return `Divize č. ${index} – Odkaz na podstránku`;
+    }
+
+    if (key.startsWith('trustLogos.')) {
+        const index = parseInt(key.split('.')[1], 10) + 1;
+        if (key.endsWith('.name')) return `Partner č. ${index} – Název (alt text)`;
+        if (key.endsWith('.image')) return `Partner č. ${index} – Logo`;
     }
 
     if (key.startsWith('team.')) {
         const index = parseInt(key.split('.')[1], 10) + 1;
         if (key.endsWith('.name')) return `Člen týmu č. ${index} – Jméno`;
         if (key.endsWith('.role')) return `Člen týmu č. ${index} – Pozice / Role`;
-        if (key.endsWith('.image')) return `Člen týmu č. ${index} – Cesta k fotce`;
+        if (key.endsWith('.image')) return `Člen týmu č. ${index} – Fotka`;
         if (key.endsWith('.bio')) return `Člen týmu č. ${index} – Popis / Bio`;
         if (key.includes('.tags.')) return `Člen týmu č. ${index} – Štítek dovednosti`;
     }
