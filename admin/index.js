@@ -708,13 +708,13 @@ function renderDashboard() {
 // DETEKCE MÉDIÍ A ŽIVÉ NÁHLEDY OBRÁZKŮ I VIDEÍ V EDITORU STRÁNEK
 // ==========================================================================
 function isMediaFieldOrValue(fullKey, val) {
-    const lowerKey = fullKey.toLowerCase();
+    const leafKey = fullKey.split('.').pop().toLowerCase();
     const keyMatches = [
         'image', 'img', 'video', 'poster', 'thumb', 'thumbnail',
         'banner', 'bg', 'background', 'photo', 'avatar', 'logo', 'icon', 'media'
-    ].some(k => lowerKey.includes(k));
+    ].some(k => leafKey.includes(k));
 
-    if (keyMatches && !lowerKey.includes('title') && !lowerKey.includes('text') && !lowerKey.includes('alt')) {
+    if (keyMatches && !leafKey.includes('title') && !leafKey.includes('text') && !leafKey.includes('alt') && !leafKey.includes('name')) {
         return true;
     }
 
@@ -758,14 +758,6 @@ function renderFlatFields(obj, prefix = '', container) {
             fieldGroup.className = 'field-group';
 
             const friendlyName = getFriendlyCmsLabel(fullKey);
-            const labelEl = document.createElement('label');
-            labelEl.textContent = friendlyName;
-            labelEl.style.display = 'block';
-            labelEl.style.marginBottom = '6px';
-            labelEl.style.fontSize = '0.82rem';
-            labelEl.style.color = 'var(--text-muted, #aaa)';
-            fieldGroup.appendChild(labelEl);
-
             const isMediaField = isMediaFieldOrValue(fullKey, val);
 
             let input;
@@ -826,7 +818,7 @@ function renderFlatFields(obj, prefix = '', container) {
                 const fileHint = document.createElement('div');
                 fileHint.style.fontSize = '12px';
                 fileHint.style.color = 'var(--text-muted, #aaa)';
-                fileHint.innerHTML = `Nahrát nový obrázek (png/WebP/svg) nebo video (MP4/WebM): `;
+                fileHint.innerHTML = `Nahrát nový obrázek nebo video (MP4/WebM): `;
 
                 const fileInput = document.createElement('input');
                 fileInput.type = 'file';
