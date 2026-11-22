@@ -1,54 +1,77 @@
 {
-  "badge": "WEDDINGS & CELEBRATIONS",
+  "badge": "WEDDINGS & MILESTONES",
   "title": "Personal Events & Memories",
-  "subtitle": "A wedding, anniversary, prom, or another special day you want to remember forever? We film it so you can relive it years later—from the big emotions to the subtle details.",
-  "ctaText": "Inquire about your date",
-  "showreelTitle": "Weddings & Personal Showreel",
-  "showreelVideo": "public/video/drone-hero.mp4",
-  "showreelPoster": "public/img/hero-poster.jpg",
-  "galleryTitle": "Personal Event Highlights",
+  "subtitle": "Weddings, anniversaries, or graduation balls. We capture your special day naturally, discreetly, and in timeless cinema quality.",
+  "ctaText": "Check your date",
+  "galleryBtnText": "Selected works",
+  "showreelTitle": "SIK-GROUP // Weddings & Personal Showreel",
+  "showreelSpec": "4K CINEMA • GROUND & AERIAL",
+  "showreelVideo": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+  "galleryTitle": "Selected Works",
+  "filterAllText": "All",
   "videos": [
     {
-      "tag": "WEDDING FILM",
+      "category": "Wedding Films",
+      "spec": "FULL DAY • 4K",
       "title": "Full-Day Wedding Story",
-      "description": "Authentic coverage of morning preparations, ceremony, first dance, and evening celebration without stiff posing.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "description": "Authentic coverage of morning preparations, ceremony, vows, and evening celebration without stiff posing.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
     },
     {
-      "tag": "AERIAL PERSPECTIVE",
+      "category": "Aerial Shots",
+      "spec": "AERIAL CINEMA • 4K",
       "title": "Venue & Landscape from Above",
-      "description": "Gentle cinematic drone shots of your venue and surroundings that elevate the story.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "description": "Gentle cinematic drone sweeps over your venue and surrounding countryside.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     },
     {
-      "tag": "PROMS & MILESTONES",
-      "title": "Graduations & Family Celebrations",
-      "description": "Memorable highlight films capturing speeches, laughter, and moments with loved ones.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Balls & Celebrations",
+      "spec": "HIGHLIGHT • 4K",
+      "title": "Graduation Ball & Grand Entrance",
+      "description": "Dynamic highlight film capturing performances, speeches, and the energy of the night.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Wedding Films",
+      "spec": "TEASER • 4K",
+      "title": "Short Wedding Teaser",
+      "description": "An emotional three-minute cut of the best moments made for sharing with family and friends.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "category": "Aerial Shots",
+      "spec": "GOLDEN HOUR • 4K",
+      "title": "Golden Hour Couple Session",
+      "description": "Cinematic sunset portraits blending stabilized ground cameras with quiet aerial shots.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Balls & Celebrations",
+      "spec": "EVENT • 4K",
+      "title": "Milestone Anniversary & Gathering",
+      "description": "Keepsake film preserving toasts, laughter, and moments with loved ones.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     }
   ],
   "deliverablesTitle": "What's Included",
   "deliverables": [
     {
-      "number": "01",
-      "title": "Discreet & Natural Approach",
-      "description": "We blend into the background and capture genuine emotions as they naturally unfold."
+      "number": "01 // APPROACH",
+      "title": "Discreet & Natural Filming",
+      "description": "We blend into the background and capture genuine emotions as they unfold."
     },
     {
-      "number": "02",
-      "title": "Feature Film + Shareable Highlight",
-      "description": "You receive both a full-length keepsake film with vows and speeches, plus a short teaser to share."
+      "number": "02 // DELIVERABLES",
+      "title": "Feature Film + Short Teaser",
+      "description": "You receive both the full keepsake film with vows and a short highlight cut to share."
     },
     {
-      "number": "03",
-      "title": "Ground & Aerial Coverage",
-      "description": "Combining intimate ground cinematography with smooth aerial footage of your venue."
+      "number": "03 // GEAR",
+      "title": "Ground & Aerial Cinematography",
+      "description": "Combining intimate ground shots with smooth aerial perspectives of your venue."
     }
   ],
   "bottomCtaTitle": "Planning a special milestone?",
   "bottomCtaText": "Send us your date and venue—we would love to hear about your plans.",
-  "bottomCtaBtn": "Check your date"
+  "bottomCtaBtn": "Book a date"
 }
