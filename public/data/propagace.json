@@ -1,54 +1,77 @@
 {
-  "badge": "DRONY & FPV",
+  "badge": "DRONES & FPV CINEMA",
   "title": "Propagační videa & Brand Content",
-  "subtitle": "Chcete ukázat svou práci z výšky i zblízka? Od dynamických FPV průletů interiérem až po precizní letecké záběry – postaráme se o kompletní produkci od prvního nápadu po finální střih.",
-  "ctaText": "Nezávazně poptat natáčení",
-  "showreelTitle": "Hlavní ukázka (Showreel)",
-  "showreelVideo": "public/video/drone-hero.mp4",
-  "showreelPoster": "public/img/hero-poster.jpg",
-  "galleryTitle": "Ukázky záběrů",
+  "subtitle": "Od precizních interiérových FPV průletů na jeden zátah až po letecké 4K záběry areálů. Tvoříme vizuální obsah, který okamžitě odliší vaši značku.",
+  "ctaText": "Nezávazně poptat",
+  "galleryBtnText": "Výběr děl",
+  "showreelTitle": "SIK-GROUP // Commercial & FPV Showreel",
+  "showreelSpec": "4K 60FPS • FPV & CINEMA",
+  "showreelVideo": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+  "galleryTitle": "Výběr děl",
+  "filterAllText": "Vše",
   "videos": [
     {
-      "tag": "FPV PRŮLET",
-      "title": "Dynamický průlet prostory",
-      "description": "Plynulý záběr na jeden zátah, který diváka vtáhne přímo do centra dění vaší firmy nebo provozu.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "FPV Průlety",
+      "spec": "ONE-TAKE FPV • 4K",
+      "title": "Interiérový průlet výrobní halou",
+      "description": "Plynulý průlet celým provozem bez jediného střihu s důrazem na detail technologií.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
     },
     {
-      "tag": "4K KINO DRON",
-      "title": "Letecké záběry areálu a exteriéru",
-      "description": "Stabilizované filmové záběry ve vysokém rozlišení pro prezentaci nemovitostí, staveb i výroby.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Kino Dron",
+      "spec": "DJI INSPIRE • 4K",
+      "title": "Architektura a komerční areály",
+      "description": "Stabilizované filmové záběry ze vzduchu pro prezentaci developerských a průmyslových projektů.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     },
     {
-      "tag": "SOCIAL MEDIA & REELS",
-      "title": "Krátké dynamické spoty",
-      "description": "Úderné formáty připravené přímo pro Instagram Reels, TikTok a výkonnostní kampaně.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Komplexní produkce",
+      "spec": "FPV + GROUND • 4K",
+      "title": "Brand video pro technologickou firmu",
+      "description": "Kombinace dynamického FPV a detailních pozemních kamer pro hlavní webovou prezentaci.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "FPV Průlety",
+      "spec": "CINEWHOOP • 4K",
+      "title": "Showroom a moderní kanceláře",
+      "description": "Bezpečný let v těsné blízkosti lidí a vybavení pro moderní představení firemního prostředí.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "category": "Kino Dron",
+      "spec": "AERIAL • 4K",
+      "title": "Logistické centrum z ptačí perspektivy",
+      "description": "Přehledné letecké záběry infrastruktury a návaznosti dopravy.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Komplexní produkce",
+      "spec": "16:9 + 9:16 REELS",
+      "title": "Produktový spot & Social Media balíček",
+      "description": "Hlavní kampaňové video doplněné o sérii vertikálních střihů pro sociální sítě.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     }
   ],
-  "deliverablesTitle": "Co od nás dostanete",
+  "deliverablesTitle": "Standard produkce",
   "deliverables": [
     {
-      "number": "01",
-      "title": "Kompletní produkce na klíč",
-      "description": "Vymyslíme scénář, zajistíme povolení k letu, natočíme materiál a dodáme hotové video připravené k publikaci."
+      "number": "01 // PRODUKCE",
+      "title": "Kompletní realizace na klíč",
+      "description": "Od úvodního konceptu a zajištění letových povolení až po finální střih připravený k nasazení."
     },
     {
-      "number": "02",
-      "title": "Formáty pro web i sociální sítě",
-      "description": "Kromě hlavního videa v 16:9 připravíme i vertikální střihy 9:16 pro Reels, TikTok nebo YouTube Shorts."
+      "number": "02 // FORMÁTY",
+      "title": "Master 16:9 i vertikální 9:16",
+      "description": "Dodáváme jak hlavní filmový formát pro web a YouTube, tak dynamické výřezy pro Reels a TikTok."
     },
     {
-      "number": "03",
+      "number": "03 // POSTPRODUKCE",
       "title": "Color grading & sound design",
-      "description": "Profesionální barevné ladění, zvukové efekty a licencovaná hudba pro maximální filmový dojem."
+      "description": "Filmové barevné ladění, prostorové zvukové efekty a licencovaná hudba."
     }
   ],
-  "bottomCtaTitle": "Máte v hlavě projekt, který stojí za to ukázat?",
-  "bottomCtaText": "Vyberte si volný termín v kalendáři a společně doladíme podobu vašeho videa.",
+  "bottomCtaTitle": "Máte projekt, který stojí za to ukázat?",
+  "bottomCtaText": "Vyberte si termín v kalendáři a společně připravíme koncept natáčení.",
   "bottomCtaBtn": "Rezervovat termín"
 }
