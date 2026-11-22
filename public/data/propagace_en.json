@@ -1,51 +1,74 @@
 {
-  "badge": "DRONES & FPV",
+  "badge": "DRONES & FPV CINEMA",
   "title": "Commercial & Brand Content",
-  "subtitle": "Want to showcase your work from above and up close? From dynamic indoor FPV fly-throughs to crisp aerial shots, we handle full production from initial concept to final cut.",
+  "subtitle": "From precision single-take indoor FPV fly-throughs to 4K aerial cinematography. We craft visual stories that immediately set your brand apart.",
   "ctaText": "Request a shoot",
-  "showreelTitle": "Featured Showreel",
-  "showreelVideo": "public/video/drone-hero.mp4",
-  "showreelPoster": "public/img/hero-poster.jpg",
-  "galleryTitle": "Sample Shots",
+  "galleryBtnText": "Selected works",
+  "showreelTitle": "SIK-GROUP // Commercial & FPV Showreel",
+  "showreelSpec": "4K 60FPS • FPV & CINEMA",
+  "showreelVideo": "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+  "galleryTitle": "Selected Works",
+  "filterAllText": "All",
   "videos": [
     {
-      "tag": "FPV FLY-THROUGH",
-      "title": "Dynamic Indoor One-Take",
-      "description": "Smooth single-take FPV flight that pulls viewers right into the heart of your venue or production floor.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "FPV Fly-Throughs",
+      "spec": "ONE-TAKE FPV • 4K",
+      "title": "Production Facility One-Take",
+      "description": "Seamless single-take flight through the entire facility highlighting precision engineering.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
     },
     {
-      "tag": "4K CINEMA DRONE",
-      "title": "Aerial Exterior & Real Estate",
-      "description": "Stabilized high-resolution cinema footage for real estate, construction sites, and industrial complexes.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Cinema Drone",
+      "spec": "DJI INSPIRE • 4K",
+      "title": "Architecture & Commercial Estates",
+      "description": "Stabilized aerial cinema shots for real estate developments and industrial complexes.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     },
     {
-      "tag": "SOCIAL MEDIA & REELS",
-      "title": "Short High-Impact Spots",
-      "description": "Punchy edits tailored for Instagram Reels, TikTok, and performance ad campaigns.",
-      "video": "public/video/drone-hero.mp4",
-      "poster": "public/img/drone.png"
+      "category": "Full Production",
+      "spec": "FPV + GROUND • 4K",
+      "title": "Tech Company Brand Film",
+      "description": "Combining dynamic FPV flights with crisp ground cinematography for flagship web presence.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "FPV Fly-Throughs",
+      "spec": "CINEWHOOP • 4K",
+      "title": "Showroom & Modern Workspace",
+      "description": "Safe close-proximity indoor flight showcasing modern offices and team culture.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+    },
+    {
+      "category": "Cinema Drone",
+      "spec": "AERIAL • 4K",
+      "title": "Logistics Hub Aerial Overview",
+      "description": "High-altitude perspectives capturing scale, infrastructure, and transport links.",
+      "video": "https://www.youtube.com/watch?v=LXb3EKWsInQ"
+    },
+    {
+      "category": "Full Production",
+      "spec": "16:9 + 9:16 REELS",
+      "title": "Product Spot & Social Media Pack",
+      "description": "Hero campaign film paired with vertical cutdowns tailored for social platforms.",
+      "video": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
     }
   ],
-  "deliverablesTitle": "What We Deliver",
+  "deliverablesTitle": "Production Standard",
   "deliverables": [
     {
-      "number": "01",
-      "title": "Turnkey Video Production",
-      "description": "We plan the storyboard, handle flight permits, film the footage, and deliver a ready-to-publish video."
+      "number": "01 // PRODUCTION",
+      "title": "Turnkey Execution",
+      "description": "From creative storyboard and flight permits to final edited delivery ready for launch."
     },
     {
-      "number": "02",
-      "title": "Web & Social Media Formats",
-      "description": "Alongside the main 16:9 master, we deliver vertical 9:16 cuts optimized for Reels, TikTok, and Shorts."
+      "number": "02 // FORMATS",
+      "title": "16:9 Master & 9:16 Vertical",
+      "description": "We deliver both the widescreen master for web/YouTube and vertical edits for Reels and TikTok."
     },
     {
-      "number": "03",
+      "number": "03 // POST-PRODUCTION",
       "title": "Color Grading & Sound Design",
-      "description": "Professional color grading, custom sound effects, and licensed music for a true cinematic feel."
+      "description": "Cinema-grade color pipeline, bespoke sound design, and fully licensed music."
     }
   ],
   "bottomCtaTitle": "Have a project worth showcasing?",
