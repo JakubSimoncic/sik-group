@@ -25,6 +25,33 @@
     "lang": "cz"
   },
   {
+    "id": "propagace-cz",
+    "title": "Propagační videa",
+    "type": "page",
+    "file": "public/pages/propagace.html",
+    "dataFile": "public/data/propagace.json",
+    "icon": "📄",
+    "lang": "cz"
+  },
+  {
+    "id": "firemni-akce-cz",
+    "title": "Velké eventy",
+    "type": "page",
+    "file": "public/pages/firemni_akce.html",
+    "dataFile": "public/data/firemni_akce.json",
+    "icon": "📄",
+    "lang": "cz"
+  },
+  {
+    "id": "osobni-akce-cz",
+    "title": "Osobní akce",
+    "type": "page",
+    "file": "public/pages/osobni_akce.html",
+    "dataFile": "public/data/osobni_akce.json",
+    "icon": "📄",
+    "lang": "cz"
+  },
+  {
     "id": "contact-cz",
     "title": "Kontakt a Tým",
     "type": "page",
@@ -64,6 +91,33 @@
     "type": "page",
     "file": "index.html",
     "dataFile": "public/data/index_en.json",
+    "icon": "📄",
+    "lang": "en"
+  },
+  {
+    "id": "propagace-en",
+    "title": "Propagační videa [EN]",
+    "type": "page",
+    "file": "public/pages/propagace.html",
+    "dataFile": "public/data/propagace_en.json",
+    "icon": "📄",
+    "lang": "en"
+  },
+  {
+    "id": "firemni-akce-en",
+    "title": "Velké eventy [EN]",
+    "type": "page",
+    "file": "public/pages/firemni_akce.html",
+    "dataFile": "public/data/firemni_akce_en.json",
+    "icon": "📄",
+    "lang": "en"
+  },
+  {
+    "id": "osobni-akce-en",
+    "title": "Osobní akce [EN]",
+    "type": "page",
+    "file": "public/pages/osobni_akce.html",
+    "dataFile": "public/data/osobni_akce_en.json",
     "icon": "📄",
     "lang": "en"
   },
