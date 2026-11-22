@@ -1,0 +1,54 @@
+{
+  "badge": "DRONY & FPV",
+  "title": "Propagační videa & Brand Content",
+  "subtitle": "Chcete ukázat svou práci z výšky i zblízka? Od dynamických FPV průletů interiérem až po precizní letecké záběry – postaráme se o kompletní produkci od prvního nápadu po finální střih.",
+  "ctaText": "Nezávazně poptat natáčení",
+  "showreelTitle": "Hlavní ukázka (Showreel)",
+  "showreelVideo": "public/video/drone-hero.mp4",
+  "showreelPoster": "public/img/hero-poster.jpg",
+  "galleryTitle": "Ukázky záběrů",
+  "videos": [
+    {
+      "tag": "FPV PRŮLET",
+      "title": "Dynamický průlet prostory",
+      "description": "Plynulý záběr na jeden zátah, který diváka vtáhne přímo do centra dění vaší firmy nebo provozu.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "4K KINO DRON",
+      "title": "Letecké záběry areálu a exteriéru",
+      "description": "Stabilizované filmové záběry ve vysokém rozlišení pro prezentaci nemovitostí, staveb i výroby.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    },
+    {
+      "tag": "SOCIAL MEDIA & REELS",
+      "title": "Krátké dynamické spoty",
+      "description": "Úderné formáty připravené přímo pro Instagram Reels, TikTok a výkonnostní kampaně.",
+      "video": "public/video/drone-hero.mp4",
+      "poster": "public/img/drone.png"
+    }
+  ],
+  "deliverablesTitle": "Co od nás dostanete",
+  "deliverables": [
+    {
+      "number": "01",
+      "title": "Kompletní produkce na klíč",
+      "description": "Vymyslíme scénář, zajistíme povolení k letu, natočíme materiál a dodáme hotové video připravené k publikaci."
+    },
+    {
+      "number": "02",
+      "title": "Formáty pro web i sociální sítě",
+      "description": "Kromě hlavního videa v 16:9 připravíme i vertikální střihy 9:16 pro Reels, TikTok nebo YouTube Shorts."
+    },
+    {
+      "number": "03",
+      "title": "Color grading & sound design",
+      "description": "Profesionální barevné ladění, zvukové efekty a licencovaná hudba pro maximální filmový dojem."
+    }
+  ],
+  "bottomCtaTitle": "Máte v hlavě projekt, který stojí za to ukázat?",
+  "bottomCtaText": "Vyberte si volný termín v kalendáři a společně doladíme podobu vašeho videa.",
+  "bottomCtaBtn": "Rezervovat termín"
+}
