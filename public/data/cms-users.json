@@ -5,5 +5,15 @@
     "encryptedTokenByRecovery": "fWmS4VnTZrjJ4q2jvIBubm2TcrdrBbwwlWswOUKfk8S6vmmlBfyJrHQsU92cJ1wfEJOVQiQolQDbj+AxczuYoK2sPo+JxGGZE8AmYNDZJVGkzPR5itie+h4LdF98qZSShGelG84uZG3BQWjWEGD5eY6KronvxOahEHEyiCBFUBKVDr4fSPVv5/8=",
     "encryptedRecoveryPin": "s2D30GzybjMRCzdDZT4GvxgCCq9RJLQxZwWYUHpqzptPgf0vinulAK22uwddWIwzQjqw"
   },
-  "users": []
+  "users": [
+    {
+      "id": "1795451676782",
+      "loginHash": "4e7914b0df8068b79cdc10d387f294c12a245d3982ab6fb8ae57c19e62713e41",
+      "encryptedLabel": "CgQPBlB50gro/3kdAaK3rKhkCTZxohVj7RVd6OmnkO020HvCuLx5raRcXaxTZZ4m+hUaZKo=",
+      "encryptedLoginName": "6FXorpV5gUufCHil3Wbw2TeGZE+6CXYOwXk3orSXe59Ro4YsqnJMU08Uwcyys7vk",
+      "encryptedResetPin": "C7e6J808zimv69X6V6Ct0XlhzwxCA5IvFwqXFLGvn1naUCfNaOZpd3X3eIORaxV/lIsG",
+      "encryptedTokenByResetPin": "Nt02qjzXUHsowdT/TFuiZBZy2WHvGlmucjG5uDq0khztQDzX5luPfDYmdZzhClvOUcx6zMSJic4erCNdn68m4CsdoPDQVJviw7PUKb0U42CAqdvsYlAY6jF7JpaLSyeyOKKYH/7fKAH71xh4L1w3F/rurIafIs+mZhOK3zovzOYuglwpPoWR17w=",
+      "encryptedTokenByPassword": null
+    }
+  ]
 }
