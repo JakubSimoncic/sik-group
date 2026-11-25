@@ -34,13 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const threshold = 40; 
     const scrollCloseLimit = 80; 
 
-    if (menuToggle && navPanel && dimOverlay) {
-        function closeMenu() {
-            menuToggle.classList.remove('active');
-            navPanel.classList.remove('active');
-            dimOverlay.classList.remove('active');
-        }
+    function closeMenu() {
+        if (menuToggle) menuToggle.classList.remove('active');
+        if (navPanel) navPanel.classList.remove('active');
+        if (dimOverlay) dimOverlay.classList.remove('active');
+    }
 
+    if (menuToggle && navPanel && dimOverlay) {
         function toggleMenu() {
             const isOpening = !navPanel.classList.contains('active');
             if (isOpening) {
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================================================
-    // 3. DYNAMICKÉ NAČÍTÁNÍ COMMON.JSON A PŘEPÍNAČE JAZYKŮ
+    // 3. DYNAMICKÉ NAČÍTÁNÍ COMMON.JSON (HLAVIČKA, PŘEPÍNAČ JAZYKŮ, PATIČKA)
     // ==========================================================================
     async function initGlobalElements() {
         const activeLang = localStorage.getItem('sik_web_lang') || 'cz';
@@ -143,25 +143,123 @@ document.addEventListener('DOMContentLoaded', () => {
             menuToggle.parentNode.insertBefore(langSwitcherContainer, menuToggle);
         }
 
-        const isInSubfolder = window.location.pathname.includes('/public/pages/');
+        const pathname = window.location.pathname;
+        const isInPagesFolder = pathname.includes('/pages/');
+        const pathPrefix = isInPagesFolder ? '../../' : '';
         const fileName = activeLang === 'en' ? 'common_en.json' : 'common.json';
-        const jsonPath = isInSubfolder ? `../data/${fileName}` : `public/data/${fileName}`;
+        const jsonPath = isInPagesFolder ? `../data/${fileName}` : `public/data/${fileName}`;
 
         try {
             const response = await fetch(jsonPath + '?t=' + Date.now());
             if (!response.ok) throw new Error(`Chyba při načítání ${fileName}`);
             
-            const data = await response.json();
+            const cData = await response.json();
             
-            if (data.header && langSwitcherContainer) {
-                const czText = data.header.langCzText || 'CZ';
-                const enText = data.header.langEnText || 'EN';
+            // Přepínač jazyků
+            if (cData.header && langSwitcherContainer) {
+                const czText = cData.header.langCzText || 'CZ';
+                const enText = cData.header.langEnText || 'EN';
 
                 langSwitcherContainer.innerHTML = `
                     <button type="button" id="lang-cz-btn" class="lang-switch-btn ${activeLang === 'cz' ? 'active' : ''}" onclick="switchWebsiteLang('cz')">${czText}</button>
                     <button type="button" id="lang-en-btn" class="lang-switch-btn ${activeLang === 'en' ? 'active' : ''}" onclick="switchWebsiteLang('en')">${enText}</button>
                 `;
             }
+
+            // Logo
+            const logoLink = document.getElementById('header-logo-link');
+            if (logoLink) logoLink.href = pathPrefix + 'index.html';
+
+            // Štítky / Popisky v hlavičce
+            if (cData.header) {
+                if (document.getElementById('label-header-email') && cData.header.labelEmail) {
+                    document.getElementById('label-header-email').textContent = cData.header.labelEmail;
+                }
+                if (document.getElementById('label-header-phone') && cData.header.labelPhone) {
+                    document.getElementById('label-header-phone').textContent = cData.header.labelPhone;
+                }
+                if (document.getElementById('label-header-socials') && cData.header.labelSocials) {
+                    document.getElementById('label-header-socials').textContent = cData.header.labelSocials;
+                }
+
+                // Email & Telefon
+                const emailEl = document.getElementById('header-email');
+                if (emailEl && cData.header.email) {
+                    emailEl.textContent = cData.header.email;
+                    emailEl.href = 'mailto:' + cData.header.email;
+                }
+
+                const phoneEl = document.getElementById('header-phone');
+                if (phoneEl && cData.header.phone) {
+                    phoneEl.textContent = cData.header.phone;
+                    phoneEl.href = 'tel:' + cData.header.phone.replace(/\s+/g, '');
+                }
+
+                // Sociální sítě
+                const socialsContainer = document.getElementById('header-socials');
+                if (socialsContainer && cData.header.instagram) {
+                    socialsContainer.innerHTML = `
+                        <a href="${cData.header.instagram}" target="_blank">Instagram</a>
+                        <a href="${cData.header.facebook}" target="_blank">Facebook</a>
+                        <a href="${cData.header.youtube}" target="_blank">YouTube</a>
+                    `;
+                }
+
+                // Navigační lišta
+                const navList = document.getElementById('dynamic-nav-list');
+                if (navList && cData.header.navLinks) {
+                    navList.innerHTML = cData.header.navLinks.map((link, idx) => {
+                        let finalUrl = link.url;
+                        if (!finalUrl.startsWith('http') && !finalUrl.startsWith('#')) {
+                            finalUrl = pathPrefix + finalUrl.replace(/^(\.\.\/)+/, '');
+                        }
+                        const cleanTarget = link.url.replace(/^(\.\.\/)+/, '');
+                        const isActive = (idx === 0 && (pathname.endsWith('index.html') || pathname.endsWith('/'))) || pathname.endsWith(cleanTarget)
+                            ? 'class="active"'
+                            : '';
+                        return `<li ${isActive}><a href="${finalUrl}">${link.text}</a></li>`;
+                    }).join('');
+                }
+            }
+
+            // Patička
+            const footerGrid = document.getElementById('dynamic-footer-grid');
+            if (footerGrid && cData.footer && cData.footer.columns) {
+                let brandHtml = `
+                    <div class="footer-brand">
+                        <h3>${cData.footer.brandTitle}</h3>
+                        <p>${cData.footer.tagline}</p>
+                    </div>
+                `;
+
+                let colsHtml = cData.footer.columns.map(col => {
+                    let linksList = col.links.map(l => {
+                        let fUrl = l.url;
+                        if (!fUrl.startsWith('http') && !fUrl.startsWith('#')) {
+                            fUrl = pathPrefix + fUrl.replace(/^(\.\.\/)+/, '');
+                        }
+                        return `<li><a href="${fUrl}">${l.text}</a></li>`;
+                    }).join('');
+
+                    return `
+                        <div class="footer-column">
+                            <h4>${col.title}</h4>
+                            <ul>${linksList}</ul>
+                        </div>
+                    `;
+                }).join('');
+
+                footerGrid.innerHTML = brandHtml + colsHtml;
+            }
+
+            const copyrightEl = document.getElementById('footer-copyright');
+            if (copyrightEl && cData.footer && cData.footer.copyright) {
+                copyrightEl.textContent = cData.footer.copyright;
+            }
+
+            document.querySelectorAll('.nav-list a, .side-socials a').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
         } catch (err) {
             console.error('Nelze načíst globální prvky:', err);
         }
