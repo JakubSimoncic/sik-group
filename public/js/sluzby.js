@@ -6,6 +6,7 @@
 
     function detectCurrentLanguage() {
         const stored =
+            localStorage.getItem('sik_web_lang') ||
             localStorage.getItem('selectedLang') ||
             localStorage.getItem('lang') ||
             localStorage.getItem('sik_lang') ||
@@ -215,7 +216,7 @@
 
         // Reaguje na přepnutí jazyka ve vašem globálním script.js
         document.addEventListener('click', (e) => {
-            if (e.target.closest('[data-lang], .lang-btn, #lang-cz, #lang-en')) {
+            if (e.target.closest('[data-lang], .lang-btn, #lang-cz, #lang-en, #lang-cz-btn, #lang-en-btn')) {
                 setTimeout(loadServiceData, 60);
             }
         });
